@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Harry Zhao - 个人博客</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --gold: #d4af37;
+      --gold-light: #f4d03f;
+      --gold-dark: #b8960c;
+      --bg: #0a0a0a;
+      --bg-card: #151515;
+      --bg-card-hover: #1a1a1a;
+      --text: #e8e8e8;
+      --text-muted: #888;
+      --border: rgba(212, 175, 55, 0.2);
+    }
+    body {
+      font-family: 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+      min-height: 100vh;
+    }
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      padding: 1rem 2rem;
+      background: rgba(10, 10, 10, 0.95);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+      z-index: 100;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .nav-logo {
+      font-size: 1.5rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, var(--gold), var(--gold-light));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .nav-links { display: flex; gap: 2rem; list-style: none; }
+    .nav-links a { color: var(--text-muted); text-decoration: none; transition: color 0.3s; font-size: 0.95rem; }
+    .nav-links a:hover { color: var(--gold); }
+    #particles {
+      position: fixed; top: 0; left: 0;
+      width: 100%; height: 100%;
+      pointer-events: none; z-index: 0;
+    }
+    main { position: relative; z-index: 1; }
+    .hero {
+      min-height: 100vh;
+      display: flex; align-items: center; justify-content: center;
+      padding: 6rem 2rem; text-align: center;
+    }
+    .hero-content { max-width: 700px; }
+    .hero-avatar {
+      width: 140px; height: 140px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--gold-dark), var(--gold), var(--gold-light));
+      margin: 0 auto 2rem;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 4rem;
+      box-shadow: 0 0 60px rgba(212, 175, 55, 0.3);
+      animation: float 3s ease-in-out infinite;
+      border: 3px solid var(--gold);
+    }
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+    .hero h1 {
+      font-size: 3rem; font-weight: 700; margin-bottom: 1rem;
+      background: linear-gradient(135deg, var(--gold-light), var(--gold));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    }
+    .hero-subtitle { font-size: 1.3rem; color: var(--text-muted); margin-bottom: 2rem; }
+    .hero-tags { display: flex; gap: 0.75rem; justify-content: center; flex-wrap: wrap; margin-bottom: 2.5rem; }
+    .tag { padding: 0.5rem 1rem; background: rgba(212, 175, 55, 0.1); border: 1px solid var(--border); border-radius: 20px; font-size: 0.85rem; color: var(--gold-light); }
+    .hero-buttons { display: flex; gap: 1rem; justify-content: center; }
+    .btn { padding: 0.875rem 2rem; border-radius: 12px; font-size: 1rem; font-weight: 600; text-decoration: none; transition: all 0.3s; cursor: pointer; border: none; }
+    .btn-primary { background: linear-gradient(135deg, var(--gold-dark), var(--gold)); color: #000; box-shadow: 0 4px 20px rgba(212, 175, 55, 0.3); }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 6px 30px rgba(212, 175, 55, 0.5); }
+    .btn-secondary { background: transparent; color: var(--gold); border: 1px solid var(--border); }
+    .btn-secondary:hover { border-color: var(--gold); background: rgba(212, 175, 55, 0.1); }
+    section { padding: 5rem 2rem; max-width: 1100px; margin: 0 auto; }
+    .section-title { font-size: 2rem; font-weight: 700; margin-bottom: 3rem; text-align: center; color: var(--gold); }
+    .about-content { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: center; }
+    .about-text p { color: var(--text-muted); margin-bottom: 1.5rem; font-size: 1.05rem; }
+    .about-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; margin-top: 2rem; }
+    .stat { text-align: center; padding: 1.5rem; background: var(--bg-card); border-radius: 16px; border: 1px solid var(--border); }
+    .stat-number { font-size: 2rem; font-weight: 700; color: var(--gold); }
+    .stat-label { font-size: 0.9rem; color: var(--text-muted); margin-top: 0.25rem; }
+    .code-block { background: var(--bg-card); border-radius: 16px; padding: 2rem; border: 1px solid var(--border); font-family: 'Fira Code', 'Consolas', monospace; font-size: 0.9rem; line-height: 1.8; }
+    .code-block .keyword { color: var(--gold); }
+    .code-block .string { color: #98c379; }
+    .code-block .comment { color: #666; }
+    .posts-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 2rem; }
+    .post-card { background: var(--bg-card); border-radius: 20px; overflow: hidden; border: 1px solid var(--border); transition: all 0.3s; cursor: pointer; }
+    .post-card:hover { transform: translateY(-8px); border-color: var(--gold); box-shadow: 0 20px 40px rgba(212, 175, 55, 0.1); }
+    .post-image { height: 200px; background: linear-gradient(135deg, rgba(212, 175, 55, 0.2), rgba(212, 175, 55, 0.05)); display: flex; align-items: center; justify-content: center; font-size: 4rem; }
+    .post-content { padding: 1.75rem; }
+    .post-meta { display: flex; gap: 1rem; font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1rem; }
+    .post-category { color: var(--gold); }
+    .post-card h3 { font-size: 1.3rem; margin-bottom: 0.75rem; line-height: 1.4; }
+    .post-card p { color: var(--text-muted); font-size: 0.95rem; }
+    .contact-wrapper { max-width: 600px; margin: 0 auto; text-align: center; }
+    .contact-text { color: var(--text-muted); margin-bottom: 2.5rem; font-size: 1.1rem; }
+    .contact-links { display: flex; gap: 1.5rem; justify-content: center; flex-wrap: wrap; }
+    .contact-link { display: flex; align-items: center; gap: 0.5rem; padding: 1rem 1.5rem; background: var(--bg-card); border-radius: 12px; color: var(--text); text-decoration: none; border: 1px solid var(--border); transition: all 0.3s; font-size: 1rem; }
+    .contact-link:hover { border-color: var(--gold); color: var(--gold); transform: translateY(-2px); }
+    .contact-link span { font-size: 1.5rem; }
+    .wechat-qr { margin-top: 2rem; padding: 1.5rem; background: var(--bg-card); border-radius: 16px; border: 1px solid var(--border); }
+    .wechat-id { color: var(--gold); font-weight: 600; font-size: 1.2rem; margin-top: 0.5rem; }
+    footer { text-align: center; padding: 3rem 2rem; border-top: 1px solid var(--border); color: var(--text-muted); font-size: 0.9rem; }
+    footer .social-links { display: flex; gap: 1.5rem; justify-content: center; margin-bottom: 1.5rem; }
+    footer .social-links a { font-size: 1.5rem; transition: transform 0.3s; text-decoration: none; }
+    footer .social-links a:hover { transform: scale(1.2); }
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+      .hero h1 { font-size: 2.2rem; }
+      .about-content { grid-template-columns: 1fr; }
+      .about-stats { grid-template-columns: repeat(3, 1fr); }
+      .posts-grid { grid-template-columns: 1fr; }
+      section { padding: 3rem 1rem; }
+    }
+    .fade-in { opacity: 0; transform: translateY(30px); transition: all 0.8s ease-out; }
+    .fade-in.visible { opacity: 1; transform: translateY(0); }
+  </style>
+</head>
+<body>
+  <nav>
+    <div class="nav-logo">Harry's Blog</div>
+    <ul class="nav-links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#posts">Posts</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
+  <canvas id="particles"></canvas>
+  <main>
+    <section class="hero" id="home">
+      <div class="hero-content">
+        <div class="hero-avatar">👨‍💻</div>
+        <h1>Harry Zhao 赵虹杰</h1>
+        <p class="hero-subtitle">热爱 AI 与新技术的开发者 · 持续学习者</p>
+        <div class="hero-tags">
+          <span class="tag">🤖 AI</span>
+          <span class="tag">💻 Dev</span>
+          <span class="tag">📝 Write</span>
+        </div>
+        <div class="hero-buttons">
+          <a href="#posts" class="btn btn-primary">Read Posts</a>
+          <a href="#contact" class="btn btn-secondary">Contact Me</a>
+        </div>
+      </div>
+    </section>
+    <section id="about">
+      <h2 class="section-title">About Me</h2>
+      <div class="about-content">
+        <div class="about-text">
+          <p>嗨！我是赵虹杰，英文名 Harry。一名热爱技术的开发者，对人工智能和新技术充满热情。</p>
+          <p>我相信技术可以改变世界，也享受用代码创造价值的过程。在这个博客里，我会分享学习心得、技术教程和成长感悟。</p>
+          <p>如果你也热爱技术，欢迎联系我！</p>
+        </div>
+        <div>
+          <div class="about-stats">
+            <div class="stat"><div class="stat-number">3+</div><div class="stat-label">Years Coding</div></div>
+            <div class="stat"><div class="stat-number">50+</div><div class="stat-label">Articles</div></div>
+            <div class="stat"><div class="stat-number">∞</div><div class="stat-label">Learning</div></div>
+          </div>
+          <div class="code-block">
+<span class="keyword">const</span> harry = {<br>
+&nbsp;&nbsp;<span class="keyword">name:</span> <span class="string">'Harry Zhao'</span>,<br>
+&nbsp;&nbsp;<span class="keyword">chinese:</span> <span class="string">'赵虹杰'</span>,<br>
+&nbsp;&nbsp;<span class="keyword">passion:</span> <span class="string">'AI & Tech'</span>,<br>
+&nbsp;&nbsp;<span class="keyword">skills:</span> [<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="string">'Python'</span>,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="string">'JavaScript'</span>,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="string">'AI/ML'</span><br>
+&nbsp;&nbsp;],<br>
+&nbsp;&nbsp;<span class="keyword">goal:</span> <span class="string">'Keep Learning'</span><br>
+};<br>
+<span class="comment">// 持续成长 ✨</span>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section id="posts">
+      <h2 class="section-title">Latest Posts</h2>
+      <div class="posts-grid">
+        <article class="post-card">
+          <div class="post-image">🤖</div>
+          <div class="post-content">
+            <div class="post-meta"><span class="post-category">AI</span><span>2026-04-10</span></div>
+            <h3>AI 时代：如何利用大语言模型提升效率</h3>
+            <p>探索如何将 ChatGPT、Claude 等 AI 工具融入日常工作流程...</p>
+          </div>
+        </article>
+        <article class="post-card">
+          <div class="post-image">💡</div>
+          <div class="post-content">
+            <div class="post-meta"><span class="post-category">Tips</span><span>2026-04-05</span></div>
+            <h3>10 个让你效率翻倍的命令行技巧</h3>
+            <p>熟练使用命令行可以极大提升工作效率，这些技巧你用过几个？</p>
+          </div>
+        </article>
+        <article class="post-card">
+          <div class="post-image">🚀</div>
+          <div class="post-content">
+            <div class="post-meta"><span class="post-category">Dev</span><span>2026-03-28</span></div>
+            <h3>从零搭建一个现代化的 React 项目</h3>
+            <p>使用 Vite、TypeScript、Tailwind CSS 快速搭建高性能 React 应用...</p>
+          </div>
+        </article>
+      </div>
+    </section>
+    <section id="contact">
+      <h2 class="section-title">Contact Me</h2>
+      <div class="contact-wrapper">
+        <p class="contact-text">有任何问题或合作意向，欢迎联系我！<br>Let's connect and grow together!</p>
+        <div class="contact-links">
+          <a href="mailto:example@example.com" class="contact-link"><span>📧</span> Email</a>
+          <a href="#" class="contact-link"><span>💬</span> WeChat</a>
+          <a href="#" class="contact-link"><span>🐦</span> Twitter</a>
+          <a href="https://github.com/jiegeneedcode" class="contact-link"><span>💼</span> GitHub</a>
+        </div>
+        <div class="wechat-qr">
+          <p>微信号 / WeChat ID</p>
+          <p class="wechat-id">z3551576273</p>
+        </div>
+      </div>
+    </section>
+  </main>
+  <footer>
+    <div class="social-links">
+      <a href="#">📧</a><a href="#">💬</a><a href="#">🐦</a><a href="https://github.com/jiegeneedcode">💼</a>
+    </div>
+    <p>© 2026 Harry Zhao. Made with ❤️</p>
+  </footer>
+  <script>
+    const canvas = document.getElementById('particles');
+    const ctx = canvas.getContext('2d');
+    function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+    resize();
+    window.addEventListener('resize', resize);
+    const particles = [];
+    for (let i = 0; i < 60; i++) {
+      particles.push({ x: Math.random()*canvas.width, y: Math.random()*canvas.height, radius: Math.random()*1.5+0.5, vx: (Math.random()-0.5)*0.3, vy: (Math.random()-0.5)*0.3, opacity: Math.random()*0.4+0.1 });
+    }
+    function animate() {
+      ctx.clearRect(0,0,canvas.width,canvas.height);
+      particles.forEach((p,i) => {
+        p.x += p.vx; p.y += p.vy;
+        if(p.x<0||p.x>canvas.width) p.vx *= -1;
+        if(p.y<0||p.y>canvas.height) p.vy *= -1;
+        ctx.beginPath(); ctx.arc(p.x,p.y,p.radius,0,Math.PI*2);
+        ctx.fillStyle = `rgba(212,175,55,${p.opacity})`; ctx.fill();
+        for(let j=i+1;j<particles.length;j++){
+          const dx=particles[j].x-p.x, dy=particles[j].y-p.y, dist=Math.sqrt(dx*dx+dy*dy);
+          if(dist<150){ ctx.beginPath(); ctx.moveTo(p.x,p.y); ctx.lineTo(particles[j].x,particles[j].y); ctx.strokeStyle=`rgba(212,175,55,${0.08*(1-dist/150)})`; ctx.stroke(); }
+        }
+      });
+      requestAnimationFrame(animate);
+    }
+    animate();
+    const observer = new IntersectionObserver(e => e.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); }), {threshold:0.1});
+    document.querySelectorAll('section').forEach(s => { s.classList.add('fade-in'); observer.observe(s); });
+    document.querySelectorAll('a[href^="#"]').forEach(a => { a.addEventListener('click', e => { e.preventDefault(); const t = document.querySelector(a.getAttribute('href')); if(t) t.scrollIntoView({behavior:'smooth'}); }); });
+  </script>
+</body>
+</html>
