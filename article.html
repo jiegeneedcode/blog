@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>文章详情 - Harry's Blog</title>
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --gold: #d4af37;
+      --gold-light: #f4d03f;
+      --gold-dark: #b8960c;
+      --bg: #0a0a0a;
+      --bg-card: #151515;
+      --text: #e8e8e8;
+      --text-muted: #888;
+      --border: rgba(212, 175, 55, 0.2);
+    }
+    body {
+      font-family: 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.8;
+      min-height: 100vh;
+      background-image: radial-gradient(circle at 1px 1px, rgba(212,175,55,0.08) 1px, transparent 0);
+      background-size: 32px 32px;
+    }
+
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      padding: 1.2rem 2.5rem;
+      background: rgba(10, 10, 10, 0.85);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+      z-index: 100;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .nav-logo {
+      font-size: 1.4rem;
+      font-weight: 800;
+      letter-spacing: 4px;
+      background: linear-gradient(135deg, var(--gold), var(--gold-light));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      cursor: pointer;
+      text-decoration: none;
+    }
+    .nav-center {
+      display: flex;
+      gap: 2.5rem;
+    }
+    .nav-center a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.9rem;
+      transition: color 0.3s;
+    }
+    .nav-center a:hover { color: var(--gold); }
+
+    .article-container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 8rem 2rem 5rem;
+    }
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.9rem;
+      margin-bottom: 2rem;
+      transition: color 0.3s;
+    }
+    .back-link:hover { color: var(--gold); }
+
+    .article-header {
+      margin-bottom: 3rem;
+      padding-bottom: 2rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .article-category {
+      display: inline-block;
+      padding: 0.3rem 0.8rem;
+      border-radius: 12px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+    }
+    .category-ai { background: rgba(139,92,246,0.2); color: #a78bfa; }
+    .category-dev { background: rgba(59,130,246,0.2); color: #60a5fa; }
+    .category-tips { background: rgba(34,197,94,0.2); color: #4ade80; }
+
+    .article-title {
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      line-height: 1.3;
+      background: linear-gradient(135deg, var(--gold), var(--gold-light));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .article-meta {
+      display: flex;
+      gap: 1.5rem;
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      flex-wrap: wrap;
+    }
+    .article-meta span {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .article-cover {
+      height: 300px;
+      background: linear-gradient(135deg, rgba(212,175,55,0.2), rgba(212,175,55,0.05));
+      border-radius: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 6rem;
+      margin-bottom: 3rem;
+      border: 1px solid var(--border);
+    }
+
+    .article-content {
+      font-size: 1.1rem;
+      color: var(--text);
+    }
+    .article-content h2 {
+      font-size: 1.6rem;
+      color: var(--gold);
+      margin: 2.5rem 0 1rem;
+      padding-left: 1rem;
+      border-left: 3px solid var(--gold);
+    }
+    .article-content h3 {
+      font-size: 1.3rem;
+      color: var(--text);
+      margin: 2rem 0 0.8rem;
+    }
+    .article-content p {
+      margin-bottom: 1.5rem;
+      color: var(--text);
+    }
+    .article-content ul, .article-content ol {
+      margin: 1.5rem 0;
+      padding-left: 2rem;
+    }
+    .article-content li {
+      margin-bottom: 0.8rem;
+      color: var(--text);
+    }
+    .article-content li::marker {
+      color: var(--gold);
+    }
+    .article-content strong {
+      color: var(--gold-light);
+      font-weight: 600;
+    }
+    .article-content em {
+      color: var(--text-muted);
+      font-style: italic;
+    }
+
+    .code-block {
+      background: var(--bg-card);
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin: 1.5rem 0;
+      border: 1px solid var(--border);
+      overflow-x: auto;
+      font-family: 'Fira Code', 'Consolas', 'Monaco', monospace;
+      font-size: 0.9rem;
+      line-height: 1.6;
+    }
+    .code-block .keyword { color: var(--gold); }
+    .code-block .string { color: #98c379; }
+    .code-block .comment { color: #555; }
+    .code-block .function { color: #61afef; }
+    .code-block .number { color: #d19a66; }
+
+    .tip-box {
+      background: rgba(212, 175, 55, 0.1);
+      border-left: 4px solid var(--gold);
+      padding: 1.5rem;
+      border-radius: 0 12px 12px 0;
+      margin: 1.5rem 0;
+    }
+    .tip-box strong {
+      color: var(--gold);
+    }
+
+    .article-footer {
+      margin-top: 4rem;
+      padding-top: 2rem;
+      border-top: 1px solid var(--border);
+    }
+    .tags {
+      display: flex;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+      margin-bottom: 2rem;
+    }
+    .tag {
+      padding: 0.4rem 1rem;
+      background: rgba(212,175,55,0.1);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      font-size: 0.85rem;
+      color: var(--gold-light);
+    }
+
+    footer {
+      text-align: center;
+      padding: 3rem 2rem;
+      border-top: 1px solid var(--border);
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      margin-top: 3rem;
+    }
+
+    @media (max-width: 768px) {
+      .nav-center { display: none; }
+      .article-title { font-size: 1.8rem; }
+      .article-container { padding: 6rem 1rem 3rem; }
+      .article-cover { height: 200px; font-size: 4rem; }
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <a href="index.html" class="nav-logo">HARRY</a>
+    <div class="nav-center">
+      <a href="index.html">Home</a>
+      <a href="posts.html">Posts</a>
+      <a href="diary.html">Diary</a>
+      <a href="index.html#about">About</a>
+    </div>
+  </nav>
+
+  <article class="article-container" id="articleContainer">
+    <a href="posts.html" class="back-link">← 返回文章列表</a>
+    <div id="articleContent"></div>
+  </article>
+
+  <footer>
+    <p>© 2026 Harry. Made with ❤️</p>
+  </footer>
+
+  <script>
+    const articles = {
+      'ai-agent': {
+        id: 'ai-agent',
+        title: 'AI Agent实战：国企投资岗位的智能化转型',
+        category: 'AI',
+        date: '2026-04-10',
+        readTime: '10 min',
+        icon: '🤖',
+        tags: ['AI Agent', 'Claude', '效率提升', '国企数字化'],
+        content: '<h2>写在前面</h2><p>作为一名国企投资岗位的工作人员，我每天需要处理大量的文档、报表、研报和会议纪要。自从接触了 AI Agent，我的工作方式发生了翻天覆地的变化。今天来分享一下我在实际工作中使用 AI Agent 的经验。</p><h2>什么是 AI Agent？</h2><p>简单来说，AI Agent 是能够自主规划、执行任务并调用工具的智能系统。与普通的对话式 AI 不同，Agent 不仅能回答问题，还能：</p><ul><li>理解复杂任务并拆解为可执行的步骤</li><li>调用外部工具（搜索、代码执行、文件读写等）</li><li>根据反馈调整策略直到完成任务</li><li>记忆上下文，支持多轮交互</li></ul><h2>我的日常工作场景</h2><h3>1. 投资报告快速分析</h3><p>以前阅读一份50页的投资研报需要2-3小时，现在借助 Claude + Agent 框架，我可以：</p><ul><li>让 Agent 先通读全文，提取关键数据和结论</li><li>针对特定问题进行深度追问</li><li>自动生成摘要和要点列表</li></ul><div class="code-block"><span class="comment">// 示例：使用 Claude 分析投资报告</span><span class="keyword">const</span> analysisPrompt = <span class="string">\`请分析以下投资研报，提取：1. 核心投资逻辑 2. 关键财务数据 3. 风险提示 4. 投资建议\`</span>;</div><h3>2. 会议纪要自动化</h3><p>投资决策会议经常一开就是2-3个小时，手动整理纪要费时费力。现在我使用语音转文字+AI整理的组合：</p><ol><li>会议录音 → 语音转文字</li><li>文字稿 → AI 提取关键决策和待办事项</li><li>自动生成格式化的会议纪要</li></ol><h3>3. 数据表格处理</h3><p>投资岗位离不开 Excel，但复杂的数据透视和公式经常让人头疼。AI Agent 可以帮我：</p><ul><li>解释复杂公式的逻辑</li><li>编写 VBA 宏实现自动化</li><li>根据需求生成数据可视化图表</li></ul><div class="tip-box"><strong>💡 实战技巧：</strong> 在国企场景下，数据安全和隐私是首要考虑。建议使用本地部署的模型（如 Ollama）处理敏感信息，联网模型仅用于非敏感内容的辅助写作。</div><h2>工具推荐</h2><p>基于我的实际使用经验，推荐以下工具组合：</p><ul><li><strong>Claude</strong> - 主力写作和分析工具，逻辑能力强</li><li><strong>Claude Code</strong> - 代码编写和自动化脚本</li><li><strong>MCP 协议</strong> - 连接本地文件和数据源</li><li><strong>Dify</strong> - 搭建团队内部的 AI 工作流</li></ul><h2>总结</h2><p>AI Agent 不是要取代我们的工作，而是帮助我们从繁琐的重复性工作中解放出来，有更多时间专注于真正的价值创造——投资判断和决策。在国企数字化转型的大背景下，掌握这些工具将成为职场竞争的重要优势。</p>'
+      },
+      'claude-code': {
+        id: 'claude-code',
+        title: '从0到1：用Claude Code构建个人知识库',
+        category: 'Dev',
+        date: '2026-04-08',
+        readTime: '12 min',
+        icon: '📚',
+        tags: ['Claude Code', '知识管理', 'AI编程', '笔记系统'],
+        content: '<h2>为什么需要个人知识库？</h2><p>在国企投资岗位工作，每天接收的信息量巨大：行业报告、政策文件、会议纪要、研究资料...如果没有一个好的知识管理系统，这些信息很快就会变得杂乱无章，难以复用。</p><p>最近我用 Claude Code + Markdown + Obsidian 搭建了一套个人知识管理系统，效果出乎意料的好。</p><h2>系统架构</h2><p>整体架构分为三个层次：</p><ul><li><strong>输入层</strong>：文档、图片、网页、语音等原始资料</li><li><strong>处理层</strong>：Claude Code 进行内容提取、分类、摘要</li><li><strong>存储层</strong>：Obsidian 知识库 + 本地文件</li></ul><h2>快速开始</h2><h3>第一步：创建项目结构</h3><div class="code-block"><span class="comment"># 创建知识库目录结构</span>mkdir -p knowledge-base/<span class="cd">cd</span> knowledge-base\nmkdir -p {<span class="string">inbox</span>,<span class="string">projects</span>,<span class="string">areas</span>,<span class="string">resources</span>}</div><h3>第二步：配置 Claude Code</h3><p>在项目根目录创建 CLAUDE.md，定义知识库的管理规则：</p><div class="code-block"><span class="comment"># CLAUDE.md - Claude Code 知识库配置</span>## 项目角色你是一个知识管理助手，帮助用户：- 整理和分类新收集的资料- 从文档中提取关键信息- 建立知识之间的关联- 生成定期的知识总结</div><h3>第三步：自动化处理流程</h3><p>创建一个自动化脚本，用于批量处理 inbox 中的新资料：</p><div class="code-block"><span class="keyword">#!/bin/bash</span><span class="comment"># process_inbox.sh - 处理收件箱中的新资料</span><span class="keyword">for</span> file <span class="keyword">in</span> inbox/*; <span class="keyword">do</span>  <span class="keyword">if</span> [ -f <span class="string">"$file"</span> ]; <span class="keyword">then</span>    <span class="comment"># 调用 Claude 分析文档</span>    claude --print <span class="string">"分析这个文件：$file"</span>  <span class="keyword">fi</span><span class="keyword">done</span></div><h2>实际效果</h2><p>使用这套系统后，我的改变：</p><ul><li>资料归档时间从每天 1 小时减少到 15 分钟</li><li>知识检索效率提升 3 倍以上</li><li>定期自动生成知识总结和待办清单</li><li>建立了跨文档的知识关联网络</li></ul><div class="tip-box"><strong>💡 小贴士：</strong> 知识库的价值在于持续更新和定期回顾。建议设置每周五下午为"知识整理时间"，对一周收集的资料进行回顾和总结。</div><h2>进阶玩法</h2><p>如果你想进一步提升，可以考虑：</p><ul><li>接入向量数据库实现语义搜索</li><li>使用 Obsidian 的 Dataview 插件建立自动化视图</li><li>配置定时任务自动同步云端</li><li>与团队共享知识库实现协同</li></ul><h2>总结</h2><p>个人知识库不是一天建成的，关键是要坚持下去。从简单的文件夹管理开始，逐步引入 AI 辅助，你会发现知识管理变得越来越轻松。</p>'
+      },
+      'mcp-protocol': {
+        id: 'mcp-protocol',
+        title: 'MCP协议：让AI真正理解你的需求',
+        category: 'AI',
+        date: '2026-04-05',
+        readTime: '8 min',
+        icon: '🔗',
+        tags: ['MCP', 'Claude', 'AI集成', '工具调用'],
+        content: '<h2>MCP 是什么？</h2><p>MCP（Model Context Protocol，模型上下文协议）是由 Anthropic 推出的开放协议，旨在让 AI 模型能够安全、标准化地与外部工具和数据源连接。</p><p>简单来说，MCP 就是 AI 世界的"USB 接口"——统一的、标准化的方式来扩展 AI 的能力边界。</p><h2>为什么需要 MCP？</h2><p>传统方式下，让 AI 访问本地文件、调用 API 或操作数据库需要：</p><ul><li>编写复杂的提示词工程</li><li>手动处理各种 API 调用的细节</li><li>担心数据安全和隐私问题</li></ul><p>MCP 改变了这一切，它提供了：</p><ul><li><strong>标准化接口</strong>：统一的工具定义和调用方式</li><li><strong>安全隔离</strong>：敏感数据本地处理，不上传云端</li><li><strong>可扩展性</strong>：轻松添加新的工具和数据源</li></ul><h2>快速上手</h2><h3>安装 Claude Code MCP 支持</h3><div class="code-block"><span class="comment"># 安装文件系统 MCP 服务器</span>npm install -g @anthropic-ai/mcp-server-fs<span class="comment"># 或使用 npx 直接运行</span>npx @anthropic-ai/mcp-server-fs --path /path/to/your/data</div><h3>配置 MCP 服务器</h3><p>在项目目录创建 .mcp.json 配置文件：</p><div class="code-block">{"mcpServers": {"filesystem": {"command": "npx","args": ["@anthropic-ai/mcp-server-fs"],"env": {"ALLOWED_PATHS": "/workspace/projects/data"}}}} </div><h3>使用示例</h3><p>配置完成后，可以直接让 Claude Code 帮你完成各种任务：</p><div class="code-block"><span class="comment"># 直接询问关于本地文件的问题</span>claude "请总结一下目录下所有投资报告的核心观点"</div><h2>MCP 在国企工作中的应用</h2><p>结合我的实际工作场景，MCP 可以这样使用：</p><h3>场景一：投资数据分析</h3><p>让 Claude 直接读取和分析本地的 Excel 数据文件：</p><ul><li>读取投资项目的财务数据</li><li>自动计算关键指标（IRR、NVP 等）</li><li>生成数据可视化图表</li></ul><h3>场景二：文档智能检索</h3><p>建立内部文档的 MCP 服务，实现语义搜索。</p><div class="tip-box"><strong>💡 安全提示：</strong> 在国企环境中使用 MCP 时，务必确保：敏感数据仅在本地处理、API 密钥妥善保管、定期审计 MCP 服务器的访问权限。</div><h2>社区 MCP 资源</h2><p>目前已有大量社区开发的 MCP 服务器：</p><ul><li><strong>文件系统</strong>：读写本地文件</li><li><strong>浏览器控制</strong>：网页自动化</li><li><strong>数据库</strong>：SQL 查询和数据操作</li><li><strong>Git</strong>：版本控制操作</li><li><strong>Slack/飞书</strong>：团队协作集成</li></ul><h2>总结</h2><p>MCP 协议代表了 AI 应用的新范式——从"单一模型"到"工具生态"。对于需要处理大量数据和文档的职场人士来说，掌握 MCP 将大大提升工作效率，同时也是理解 AI Agent 架构的最佳实践。</p>'
+      },
+      'state-enterprise-ai': {
+        id: 'state-enterprise-ai',
+        title: '国企数字化转型：AI能做什么？',
+        category: 'AI',
+        date: '2026-04-02',
+        readTime: '10 min',
+        icon: '🏢',
+        tags: ['国企转型', '数字化', 'AI应用', '企业级'],
+        content: '<h2>数字化转型不是选择题，而是生存题</h2><p>在国企工作了这么多年，我深刻感受到：数字化转型已经不是"要不要做"的问题，而是"怎么做"的问题。尤其是随着 AI 技术的成熟，那些率先拥抱变化的企业将获得显著的竞争优势。</p><p>今天结合我的观察和实践，聊聊 AI 在国企场景下能做什么。</p><h2>常见的应用场景</h2><h3>1. 智能文档处理</h3><p>国企日常工作中，文档处理占据了大量时间：</p><ul><li><strong>合同审核</strong>：AI 自动识别关键条款，标注风险点</li><li><strong>报告撰写</strong>：基于模板和数据自动生成初稿</li><li><strong>资料检索</strong>：从海量文档中快速找到需要的信息</li><li><strong>格式转换</strong>：PDF 转 Word、图片文字识别等</li></ul><h3>2. 数据分析与决策支持</h3><p>投资决策需要大量数据支撑：</p><div class="code-block"><span class="comment"># 投资分析数据处理示例</span><span class="keyword">import</span> pandas <span class="keyword">as</span> pd<span class="keyword">import</span> numpy <span class="keyword">as</span> np<span class="comment"># 加载项目数据</span>data = pd.read_csv(<span class="string">"investment_projects.csv"</span>)<span class="function">print</span>(analysis_result)</div><h3>3. 智能客服与员工服务</h3><p>内部员工咨询、政策解读、流程指引等场景都可以用 AI 提升效率：</p><ul><li>政策文件智能问答</li><li>报销流程自动指引</li><li>IT 问题初步诊断</li><li>会议安排智能协调</li></ul><h3>4. 会议与沟通效率提升</h3><p>国企会议多、沟通成本高：</p><ul><li>会议纪要自动生成</li><li>待办事项自动提取和派发</li><li>跨部门沟通的智能翻译</li><li>邮件和消息的智能分类与优先级排序</li></ul><h2>落地的关键挑战</h2><p>虽然 AI 潜力巨大，但在国企落地仍面临一些挑战：</p><h3>数据安全与合规</h3><p>这是最核心的问题。国企的数据往往涉及商业机密甚至国家安全，必须确保：</p><ul><li>敏感数据不出网、不上云</li><li>境外 AI 服务需要谨慎评估</li><li>建立完善的数据分级分类制度</li></ul><h3>系统集成难度</h3><p>国企的 IT 系统往往历史悠久、架构复杂，AI 集成需要充分的接口改造和适配。</p><div class="tip-box"><strong>💡 实践建议：</strong> 从小场景、低风险、高价值的地方切入，比如先从内部知识库问答、文档格式转换等场景开始试点，积累经验后再逐步扩大范围。</div><h2>可行的实施路径</h2><p>基于我的观察和实践，建议按以下步骤推进：</p><ol><li><strong>场景调研</strong>：梳理高频、低风险的 AI 适用场景</li><li><strong>技术选型</strong>：根据数据安全要求选择合适的部署方式</li><li><strong>试点先行</strong>：选择1-2个部门或场景进行试点</li><li><strong>迭代优化</strong>：根据反馈持续改进，形成最佳实践</li><li><strong>规模推广</strong>：成功后再向其他场景推广</li></ol><h2>总结</h2><p>AI 不是万能药，但在很多场景下确实能显著提升效率。关键是要找准切入点，循序渐进。国企的数字化转型需要技术更需要智慧，而 AI 正是那个能够加速这一进程的强大工具。</p>'
+      },
+      'efficiency-tools': {
+        id: 'efficiency-tools',
+        title: '效率提升工具箱：我常用的5个AI工具',
+        category: 'Tips',
+        date: '2026-03-28',
+        readTime: '6 min',
+        icon: '🧰',
+        tags: ['效率工具', 'AI助手', '工作流', '推荐'],
+        content: '<h2>工具选型的重要性</h2><p>在国企工作这么多年，我用过无数效率工具，但真正能坚持下来的不多。最近一年 AI 工具爆发式增长，让我重新思考效率工具的选择标准：</p><ul><li><strong>够用就好</strong>：不追求功能最全，只选最适合自己的</li><li><strong>能嵌入工作流</strong>：必须能和现有工具链无缝衔接</li><li><strong>学习成本低</strong>：花最少的时间上手，产生最大的价值</li><li><strong>数据安全</strong>：尤其重要，必须可控</li></ul><h2>1. Claude - 主力写作与思考伙伴</h2><p><strong>使用场景</strong>：报告撰写、方案策划、内容润色、逻辑分析</p><p>Claude 是我目前用得最多的 AI 工具，尤其擅长：</p><ul><li>长文写作和深度分析</li><li>代码解释和优化建议</li><li>复杂问题的拆解和解答</li></ul><div class="tip-box"><strong>💡 提示</strong>：在 Claude 中设置 system prompt，让它更懂你的工作背景和专业术语，回答会更精准。</div><h2>2. Claude Code - 编程与自动化助手</h2><p><strong>使用场景</strong>：代码编写、数据处理、文件批量操作、自动化脚本</p><p>Claude Code 是我近半年最惊喜的发现：</p><ul><li>用自然语言描述需求，自动生成代码</li><li>批量处理文件和数据</li><li>搭建个人知识库和工作流</li></ul><div class="code-block"><span class="comment"># 示例：批量重命名文件</span><span class="string">"请将当前目录下所有文件按日期_原名称的格式重命名"</span><span class="comment"># 示例：数据清洗</span><span class="string">"帮我处理这个 CSV 文件，删除重复行并按金额排序"</span></div><h2>3. 飞书/Notion - 知识管理与协作</h2><p><strong>使用场景</strong>：团队协作、文档管理、项目跟进、会议纪要</p><p>我目前用飞书作为团队协作平台，配合 AI 功能：</p><ul><li>智能文档续写和总结</li><li>多维表格的自动化处理</li><li>会议纪要自动生成待办</li></ul><h2>4. Obsidian - 个人知识库</h2><p><strong>使用场景</strong>：知识沉淀、笔记整理、双向链接、长期积累</p><p>Obsidian 是我构建个人知识体系的核心：</p><ul><li>Markdown 格式，永久可用</li><li>双向链接，发现知识关联</li><li>本地存储，数据完全可控</li><li>配合 AI 实现语义搜索</li></ul><h2>5. 浏览器插件 - 随时可用的 AI</h2><p><strong>使用场景</strong>：网页阅读辅助、信息提取、快捷查询</p><p>推荐几款实用的浏览器 AI 插件：</p><ul><li><strong>Monica</strong>：网页 AI 助手，随时提问</li><li><strong>Reader Mode</strong>：去除广告，专注阅读</li><li><strong>简悦</strong>：中文阅读体验优化</li></ul><h2>我的工作流</h2><p>分享一下这些工具如何配合使用：</p><ol><li><strong>信息收集</strong>：浏览器插件 + 飞书剪藏</li><li><strong>阅读整理</strong>：Claude 摘要 + Obsidian 归档</li><li><strong>写作输出</strong>：Claude 辅助 + 飞书协作</li><li><strong>代码处理</strong>：Claude Code + VS Code</li><li><strong>知识沉淀</strong>：Obsidian 双向链接 + AI 检索</li></ol><h2>工具不在多，在于用好</h2><p>最后想说，工具只是手段，不是目的。建议：</p><ul><li>选 2-3 个核心工具深入使用</li><li>建立自己的工作流并持续优化</li><li>定期回顾，淘汰低效工具</li><li>保持开放，持续关注新工具</li></ul><p>如果你们有其他好用的工具推荐，欢迎评论区交流！</p>'
+      }
+    };
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const articleId = urlParams.get('id');
+
+    function renderArticle(article) {
+      const container = document.getElementById('articleContent');
+      container.innerHTML = '<header class="article-header"><span class="article-category category-' + article.category.toLowerCase() + '">' + article.category + '</span><h1 class="article-title">' + article.title + '</h1><div class="article-meta"><span>📅 ' + article.date + '</span><span>⏱️ ' + article.readTime + '</span></div></header><div class="article-cover">' + article.icon + '</div><div class="article-content">' + article.content + '</div><footer class="article-footer"><div class="tags">' + article.tags.map(tag => '<span class="tag"># ' + tag + '</span>').join('') + '</div></footer>';
+      document.title = article.title + ' - Harry\'s Blog';
+    }
+
+    if (articleId && articles[articleId]) {
+      renderArticle(articles[articleId]);
+    } else {
+      document.getElementById('articleContent').innerHTML = '<div style="text-align: center; padding: 4rem 0;"><h2 style="color: var(--gold); margin-bottom: 1rem;">文章未找到</h2><p style="color: var(--text-muted); margin-bottom: 2rem;">抱歉，找不到这篇文章。</p><a href="posts.html" class="btn btn-primary" style="display: inline-block; padding: 0.875rem 2rem; background: linear-gradient(135deg, var(--gold-dark), var(--gold)); color: #000; text-decoration: none; border-radius: 12px; font-weight: 600;">返回文章列表</a></div>';
+    }
+  </script>
+</body>
+</html>

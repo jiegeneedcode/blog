@@ -137,6 +137,9 @@
       border: 1px solid var(--border);
       transition: all 0.3s;
       cursor: pointer;
+      text-decoration: none;
+      color: inherit;
+      display: block;
     }
     .post-card:hover {
       transform: translateY(-8px);
@@ -241,75 +244,75 @@
 
   <main class="posts-container">
     <div class="posts-grid">
-      <article class="post-card" data-category="AI">
+      <a href="article.html?id=ai-agent" class="post-card" data-category="AI">
         <div class="post-image">🤖</div>
         <div class="post-content">
           <div class="post-meta">
             <span class="post-category category-ai">AI</span>
             <span>2026-04-10</span>
-            <span class="read-time">⏱️ 8 min</span>
+            <span class="read-time">⏱️ 10 min</span>
           </div>
-          <h3>AI 时代：如何利用大语言模型提升效率</h3>
-          <p>探索如何将 ChatGPT、Claude 等 AI 工具融入日常工作流程，从提示词工程到自动化脚本，全面提升生产力。</p>
+          <h3>AI Agent实战：国企投资岗位的智能化转型</h3>
+          <p>作为一名国企投资岗位的工作人员，我每天需要处理大量的文档、报表、研报和会议纪要。自从接触了 AI Agent，我的工作方式发生了翻天覆地的变化...</p>
           <span class="read-more">阅读全文 →</span>
         </div>
-      </article>
+      </a>
 
-      <article class="post-card" data-category="Dev">
-        <div class="post-image">⚛️</div>
+      <a href="article.html?id=claude-code" class="post-card" data-category="Dev">
+        <div class="post-image">📚</div>
         <div class="post-content">
           <div class="post-meta">
             <span class="post-category category-dev">Dev</span>
-            <span>2026-04-05</span>
+            <span>2026-04-08</span>
             <span class="read-time">⏱️ 12 min</span>
           </div>
-          <h3>从零搭建一个现代化的 React 项目</h3>
-          <p>使用 Vite、TypeScript、Tailwind CSS 快速搭建高性能 React 应用，包含最佳实践与工程化配置。</p>
+          <h3>从0到1：用Claude Code构建个人知识库</h3>
+          <p>在国企投资岗位工作，每天接收的信息量巨大：行业报告、政策文件、会议纪要、研究资料...最近我用 Claude Code + Markdown + Obsidian 搭建了一套个人知识管理系统...</p>
           <span class="read-more">阅读全文 →</span>
         </div>
-      </article>
+      </a>
 
-      <article class="post-card" data-category="Tips">
-        <div class="post-image">💡</div>
+      <a href="article.html?id=mcp-protocol" class="post-card" data-category="AI">
+        <div class="post-image">🔗</div>
+        <div class="post-content">
+          <div class="post-meta">
+            <span class="post-category category-ai">AI</span>
+            <span>2026-04-05</span>
+            <span class="read-time">⏱️ 8 min</span>
+          </div>
+          <h3>MCP协议：让AI真正理解你的需求</h3>
+          <p>MCP（Model Context Protocol，模型上下文协议）是由 Anthropic 推出的开放协议，旨在让 AI 模型能够安全、标准化地与外部工具和数据源连接...</p>
+          <span class="read-more">阅读全文 →</span>
+        </div>
+      </a>
+
+      <a href="article.html?id=state-enterprise-ai" class="post-card" data-category="AI">
+        <div class="post-image">🏢</div>
+        <div class="post-content">
+          <div class="post-meta">
+            <span class="post-category category-ai">AI</span>
+            <span>2026-04-02</span>
+            <span class="read-time">⏱️ 10 min</span>
+          </div>
+          <h3>国企数字化转型：AI能做什么？</h3>
+          <p>数字化转型已经不是"要不要做"的问题，而是"怎么做"的问题。今天结合我的观察和实践，聊聊 AI 在国企场景下能做什么...</p>
+          <span class="read-more">阅读全文 →</span>
+        </div>
+      </a>
+
+      <a href="article.html?id=efficiency-tools" class="post-card" data-category="Tips">
+        <div class="post-image">🧰</div>
         <div class="post-content">
           <div class="post-meta">
             <span class="post-category category-tips">Tips</span>
             <span>2026-03-28</span>
-            <span class="read-time">⏱️ 5 min</span>
+            <span class="read-time">⏱️ 6 min</span>
           </div>
-          <h3>10 个让你效率翻倍的命令行技巧</h3>
-          <p>熟练使用命令行可以极大提升工作效率，这些技巧你用过几个？zsh、tmux、fzf 组合使用指南。</p>
+          <h3>效率提升工具箱：我常用的5个AI工具</h3>
+          <p>在国企工作这么多年，我用过无数效率工具，但真正能坚持下来的不多。最近一年 AI 工具爆发式增长，让我重新思考效率工具的选择标准...</p>
           <span class="read-more">阅读全文 →</span>
         </div>
-      </article>
-
-      <article class="post-card" data-category="AI">
-        <div class="post-image">🧠</div>
-        <div class="post-content">
-          <div class="post-meta">
-            <span class="post-category category-ai">AI</span>
-            <span>2026-03-20</span>
-            <span class="read-time">⏱️ 10 min</span>
-          </div>
-          <h3>Prompt Engineering 入门指南</h3>
-          <p>掌握与 AI 高效沟通的技巧，从基础语法到高级策略，让 AI 输出更符合预期。</p>
-          <span class="read-more">阅读全文 →</span>
-        </div>
-      </article>
-
-      <article class="post-card" data-category="Dev">
-        <div class="post-image">🐳</div>
-        <div class="post-content">
-          <div class="post-meta">
-            <span class="post-category category-dev">Dev</span>
-            <span>2026-03-15</span>
-            <span class="read-time">⏱️ 15 min</span>
-          </div>
-          <h3>Docker 容器化实战：从入门到精通</h3>
-          <p>手把手带你掌握 Docker 核心概念，docker-compose 编排，以及生产环境部署最佳实践。</p>
-          <span class="read-more">阅读全文 →</span>
-        </div>
-      </article>
+      </a>
     </div>
   </main>
 
