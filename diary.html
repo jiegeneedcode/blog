@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Learning Diary - Harry's Blog</title>
+  <meta name="description" content="AI Agents 学习日记 - 记录每一天的成长与收获">
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --gold: #d4af37;
+      --gold-light: #f4d03f;
+      --gold-dark: #b8960c;
+      --bg: #0a0a0a;
+      --bg-card: #151515;
+      --text: #e8e8e8;
+      --text-muted: #888;
+      --border: rgba(212, 175, 55, 0.2);
+    }
+    body {
+      font-family: 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+      min-height: 100vh;
+      overflow-x: hidden;
+      background-image: radial-gradient(circle at 1px 1px, rgba(212,175,55,0.08) 1px, transparent 0);
+      background-size: 32px 32px;
+    }
+
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      padding: 1.2rem 2.5rem;
+      background: rgba(10, 10, 10, 0.85);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+      z-index: 100;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .nav-logo {
+      font-size: 1.4rem;
+      font-weight: 800;
+      letter-spacing: 4px;
+      background: linear-gradient(135deg, var(--gold), var(--gold-light));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      cursor: pointer;
+      text-decoration: none;
+    }
+    .nav-center {
+      display: flex;
+      gap: 2.5rem;
+    }
+    .nav-center a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.9rem;
+      transition: color 0.3s;
+    }
+    .nav-center a:hover { color: var(--gold); }
+    .nav-center a.active { color: var(--gold); font-weight: 600; }
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+    }
+    .nav-contact { display: flex; gap: 0.75rem; }
+    .nav-contact a { font-size: 1rem; text-decoration: none; transition: transform 0.3s; }
+    .nav-contact a:hover { transform: scale(1.3); }
+
+    .page-header {
+      padding: 8rem 2rem 4rem;
+      text-align: center;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    .page-header .badge {
+      display: inline-block;
+      padding: 0.4rem 1rem;
+      background: rgba(212,175,55,0.1);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      font-size: 0.85rem;
+      color: var(--gold-light);
+      margin-bottom: 1.5rem;
+    }
+    .page-header h1 {
+      font-size: 2.8rem;
+      margin-bottom: 1rem;
+      font-family: 'Caveat', cursive;
+      font-weight: 700;
+      background: linear-gradient(135deg, var(--gold), var(--gold-light));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .page-header p {
+      color: var(--text-muted);
+      font-size: 1.1rem;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .diary-container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 2rem 5rem;
+    }
+
+    .diary-entry {
+      background: var(--bg-card);
+      border-radius: 24px;
+      padding: 2.5rem;
+      margin-bottom: 2.5rem;
+      border: 1px solid var(--border);
+      position: relative;
+      transition: all 0.3s;
+    }
+    .diary-entry:hover {
+      border-color: rgba(212,175,55,0.4);
+      box-shadow: 0 10px 40px rgba(212,175,55,0.05);
+    }
+
+    .entry-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 1.5rem;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+    .entry-title-wrap { display: flex; align-items: center; gap: 1rem; }
+    .entry-day {
+      width: 60px;
+      height: 60px;
+      background: linear-gradient(135deg, var(--gold-dark), var(--gold));
+      border-radius: 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: #000;
+      font-weight: 700;
+    }
+    .entry-day span:first-child { font-size: 1.5rem; line-height: 1; }
+    .entry-day span:last-child { font-size: 0.7rem; text-transform: uppercase; }
+    .entry-title {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: var(--text);
+    }
+    .entry-date {
+      padding: 0.4rem 1rem;
+      background: rgba(212,175,55,0.1);
+      border-radius: 20px;
+      font-size: 0.85rem;
+      color: var(--gold-light);
+    }
+
+    .entry-stats {
+      display: flex;
+      gap: 1.5rem;
+      margin-bottom: 1.5rem;
+      flex-wrap: wrap;
+    }
+    .stat-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.9rem;
+      color: var(--text-muted);
+    }
+    .stat-item span:first-child { font-size: 1.2rem; }
+
+    .entry-content {
+      color: var(--text-muted);
+      font-size: 1rem;
+      margin-bottom: 1.5rem;
+      line-height: 1.8;
+    }
+
+    .key-points {
+      background: rgba(212,175,55,0.05);
+      border-radius: 16px;
+      padding: 1.5rem;
+      border-left: 3px solid var(--gold);
+    }
+    .key-points h4 {
+      color: var(--gold);
+      font-size: 0.95rem;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .key-points ul {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+    .key-points li {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75rem;
+      font-size: 0.95rem;
+      color: var(--text);
+    }
+    .key-points li::before {
+      content: '✦';
+      color: var(--gold);
+      flex-shrink: 0;
+      margin-top: 0.1rem;
+    }
+
+    footer {
+      text-align: center;
+      padding: 3rem 2rem;
+      border-top: 1px solid var(--border);
+      color: var(--text-muted);
+      font-size: 0.9rem;
+    }
+
+    @media (max-width: 768px) {
+      .nav-center { display: none; }
+      .page-header h1 { font-size: 2rem; }
+      .diary-entry { padding: 1.5rem; }
+      .entry-header { flex-direction: column; }
+      .entry-stats { gap: 1rem; }
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <a href="index.html" class="nav-logo">HARRY</a>
+    <div class="nav-center">
+      <a href="index.html">Home</a>
+      <a href="posts.html">Posts</a>
+      <a href="diary.html" class="active">Diary</a>
+      <a href="index.html#about">About</a>
+    </div>
+    <div class="nav-right">
+      <div class="nav-contact">
+        <a href="https://github.com/jiegeneedcode" target="_blank" title="GitHub">💼</a>
+        <a href="mailto:example@example.com" title="Email">📧</a>
+      </div>
+    </div>
+  </nav>
+
+  <header class="page-header">
+    <span class="badge">📝 AI Agents 学习记录</span>
+    <h1>Learning Diary</h1>
+    <p>记录 AI Agents 学习的每一天，从基础概念到实战应用，见证成长的每一步</p>
+  </header>
+
+  <main class="diary-container">
+    <article class="diary-entry">
+      <div class="entry-header">
+        <div class="entry-title-wrap">
+          <div class="entry-day">
+            <span>01</span>
+            <span>Day</span>
+          </div>
+          <h2 class="entry-title">初识 AI Agents</h2>
+        </div>
+        <span class="entry-date">2026-04-15</span>
+      </div>
+      <div class="entry-stats">
+        <div class="stat-item"><span>⏱️</span> 3.5 小时</div>
+        <div class="stat-item"><span>📚</span> 5 篇文章</div>
+        <div class="stat-item"><span>💻</span> 2 个Demo</div>
+      </div>
+      <div class="entry-content">
+        今天正式开启 AI Agents 的学习之旅！从最基础的概念开始，了解什么是 Agent、它与传统 AI 助手的区别、以及为什么 Agent 是 AI 发展的下一个重要方向。通过阅读 OpenAI 的文档和 Andrew Ng 的课程，建立了对 Agent 工作流的基本认知。
+      </div>
+      <div class="key-points">
+        <h4>💡 核心要点</h4>
+        <ul>
+          <li>Agent = LLM + 工具调用 + 记忆 + 规划能力</li>
+          <li>ReAct 模式：思考 → 行动 → 观察 → 迭代</li>
+          <li>Agent 擅长处理复杂、多步骤的任务</li>
+        </ul>
+      </div>
+    </article>
+
+    <article class="diary-entry">
+      <div class="entry-header">
+        <div class="entry-title-wrap">
+          <div class="entry-day">
+            <span>02</span>
+            <span>Day</span>
+          </div>
+          <h2 class="entry-title">LangChain 快速上手</h2>
+        </div>
+        <span class="entry-date">2026-04-16</span>
+      </div>
+      <div class="entry-stats">
+        <div class="stat-item"><span>⏱️</span> 5 小时</div>
+        <div class="stat-item"><span>📚</span> 8 篇文章</div>
+        <div class="stat-item"><span>💻</span> 4 个Demo</div>
+      </div>
+      <div class="entry-content">
+        学习了 LangChain 的核心组件：Chains、Agents、Memory。动手实现了第一个带工具调用的 Agent，可以自动搜索网页、计算数学问题。最兴奋的是成功接入了 Claude API，让 Agent 具备了更强大的推理能力。
+      </div>
+      <div class="key-points">
+        <h4>💡 核心要点</h4>
+        <ul>
+          <li>LangChain Expression Language (LCEL) 简化链式调用</li>
+          <li>Tool Calling 是 Agent 与外界交互的关键</li>
+          <li>Memory 模块让 Agent 保持对话上下文</li>
+        </ul>
+      </div>
+    </article>
+
+    <article class="diary-entry">
+      <div class="entry-header">
+        <div class="entry-title-wrap">
+          <div class="entry-day">
+            <span>03</span>
+            <span>Day</span>
+          </div>
+          <h2 class="entry-title">RAG 技术深入</h2>
+        </div>
+        <span class="entry-date">2026-04-17</span>
+      </div>
+      <div class="entry-stats">
+        <div class="stat-item"><span>⏱️</span> 6 小时</div>
+        <div class="stat-item"><span>📚</span> 6 篇文章</div>
+        <div class="stat-item"><span>💻</span> 3 个Demo</div>
+      </div>
+      <div class="entry-content">
+        今天深入学习了 RAG（检索增强生成）技术。从文档切分策略、向量数据库选择（ChromaDB vs Pinecone）、到混合检索实现，完整搭建了一个本地知识库问答系统。理解了 Embedding 的本质：把文本转化为向量，在向量空间中捕捉语义相似性。
+      </div>
+      <div class="key-points">
+        <h4>💡 核心要点</h4>
+        <ul>
+          <li>Chunk Size 影响检索精度，需要根据场景调优</li>
+          <li>语义分块比固定长度分块效果更好</li>
+          <li>Reranking 可以进一步提升相关性</li>
+        </ul>
+      </div>
+    </article>
+
+    <article class="diary-entry">
+      <div class="entry-header">
+        <div class="entry-title-wrap">
+          <div class="entry-day">
+            <span>04</span>
+            <span>Day</span>
+          </div>
+          <h2 class="entry-title">Multi-Agent 系统</h2>
+        </div>
+        <span class="entry-date">2026-04-18</span>
+      </div>
+      <div class="entry-stats">
+        <div class="stat-item"><span>⏱️</span> 7 小时</div>
+        <div class="stat-item"><span>📚</span> 4 篇文章</div>
+        <div class="stat-item"><span>💻</span> 2 个项目</div>
+      </div>
+      <div class="entry-content">
+        今天挑战了更复杂的 Multi-Agent 架构！实现了一个由 Planner Agent、Researcher Agent、Coder Agent、Reviewer Agent 组成的协作系统。每个 Agent 有明确的角色和分工，通过消息传递实现协作。第一次感受到"AI 社会"的魅力——不同的 Agent 像不同的专家一样各司其职。
+      </div>
+      <div class="key-points">
+        <h4>💡 核心要点</h4>
+        <ul>
+          <li>Agent 间的通信协议设计至关重要</li>
+          <li>适当的 System Prompt 是定义角色行为的关键</li>
+          <li>错误处理和重试机制保证系统稳定性</li>
+        </ul>
+      </div>
+    </article>
+  </main>
+
+  <footer>
+    <p>© 2026 Harry. Made with ❤️ | 学习日记持续更新中...</p>
+  </footer>
+</body>
+</html>

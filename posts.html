@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Posts - Harry's Blog</title>
+  <meta name="description" content="技术文章、学习笔记与开发心得 - AI / Dev / Tips">
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --gold: #d4af37;
+      --gold-light: #f4d03f;
+      --gold-dark: #b8960c;
+      --bg: #0a0a0a;
+      --bg-card: #151515;
+      --text: #e8e8e8;
+      --text-muted: #888;
+      --border: rgba(212, 175, 55, 0.2);
+    }
+    body {
+      font-family: 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+      min-height: 100vh;
+      overflow-x: hidden;
+      background-image: radial-gradient(circle at 1px 1px, rgba(212,175,55,0.08) 1px, transparent 0);
+      background-size: 32px 32px;
+    }
+
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      padding: 1.2rem 2.5rem;
+      background: rgba(10, 10, 10, 0.85);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+      z-index: 100;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .nav-logo {
+      font-size: 1.4rem;
+      font-weight: 800;
+      letter-spacing: 4px;
+      background: linear-gradient(135deg, var(--gold), var(--gold-light));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      cursor: pointer;
+      text-decoration: none;
+    }
+    .nav-center {
+      display: flex;
+      gap: 2.5rem;
+    }
+    .nav-center a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.9rem;
+      transition: color 0.3s;
+    }
+    .nav-center a:hover { color: var(--gold); }
+    .nav-center a.active { color: var(--gold); font-weight: 600; }
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+    }
+    .nav-contact { display: flex; gap: 0.75rem; }
+    .nav-contact a { font-size: 1rem; text-decoration: none; transition: transform 0.3s; }
+    .nav-contact a:hover { transform: scale(1.3); }
+
+    .page-header {
+      padding: 8rem 2rem 4rem;
+      text-align: center;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+    .page-header h1 {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+      background: linear-gradient(135deg, var(--gold), var(--gold-light));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .page-header p {
+      color: var(--text-muted);
+      font-size: 1.1rem;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .filters {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      padding: 0 2rem 3rem;
+      flex-wrap: wrap;
+    }
+    .filter-btn {
+      padding: 0.6rem 1.5rem;
+      border-radius: 25px;
+      border: 1px solid var(--border);
+      background: var(--bg-card);
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    .filter-btn:hover {
+      border-color: var(--gold);
+      color: var(--gold);
+    }
+    .filter-btn.active {
+      background: linear-gradient(135deg, var(--gold-dark), var(--gold));
+      color: #000;
+      border-color: var(--gold);
+      font-weight: 600;
+    }
+
+    .posts-container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 2rem 5rem;
+    }
+    .posts-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+      gap: 2rem;
+    }
+    .post-card {
+      background: var(--bg-card);
+      border-radius: 20px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      transition: all 0.3s;
+      cursor: pointer;
+    }
+    .post-card:hover {
+      transform: translateY(-8px);
+      border-color: var(--gold);
+      box-shadow: 0 20px 40px rgba(212,175,55,0.1);
+    }
+    .post-card.hidden { display: none; }
+    .post-image {
+      height: 180px;
+      background: linear-gradient(135deg, rgba(212,175,55,0.2), rgba(212,175,55,0.05));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 4rem;
+    }
+    .post-content { padding: 1.5rem; }
+    .post-meta {
+      display: flex;
+      gap: 1rem;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-bottom: 1rem;
+      flex-wrap: wrap;
+    }
+    .post-category {
+      padding: 0.2rem 0.6rem;
+      border-radius: 12px;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+    .category-ai { background: rgba(139,92,246,0.2); color: #a78bfa; }
+    .category-dev { background: rgba(59,130,246,0.2); color: #60a5fa; }
+    .category-tips { background: rgba(34,197,94,0.2); color: #4ade80; }
+    .read-time { display: flex; align-items: center; gap: 0.3rem; }
+    .post-card h3 {
+      font-size: 1.25rem;
+      margin-bottom: 0.75rem;
+      line-height: 1.4;
+      color: var(--text);
+    }
+    .post-card p {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      margin-bottom: 1rem;
+    }
+    .read-more {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--gold);
+      font-size: 0.9rem;
+      font-weight: 500;
+      transition: gap 0.3s;
+    }
+    .post-card:hover .read-more { gap: 0.8rem; }
+
+    footer {
+      text-align: center;
+      padding: 3rem 2rem;
+      border-top: 1px solid var(--border);
+      color: var(--text-muted);
+      font-size: 0.9rem;
+    }
+
+    @media (max-width: 768px) {
+      .nav-center { display: none; }
+      .page-header h1 { font-size: 2rem; }
+      .posts-grid { grid-template-columns: 1fr; }
+      .filters { gap: 0.5rem; }
+      .filter-btn { padding: 0.5rem 1rem; font-size: 0.85rem; }
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <a href="index.html" class="nav-logo">HARRY</a>
+    <div class="nav-center">
+      <a href="index.html">Home</a>
+      <a href="posts.html" class="active">Posts</a>
+      <a href="diary.html">Diary</a>
+      <a href="index.html#about">About</a>
+    </div>
+    <div class="nav-right">
+      <div class="nav-contact">
+        <a href="https://github.com/jiegeneedcode" target="_blank" title="GitHub">💼</a>
+        <a href="mailto:example@example.com" title="Email">📧</a>
+      </div>
+    </div>
+  </nav>
+
+  <header class="page-header">
+    <h1>Posts</h1>
+    <p>技术文章、学习笔记与开发心得，涵盖 AI、开发技巧与效率工具</p>
+  </header>
+
+  <div class="filters">
+    <button class="filter-btn active" data-filter="all">All</button>
+    <button class="filter-btn" data-filter="AI">AI</button>
+    <button class="filter-btn" data-filter="Dev">Dev</button>
+    <button class="filter-btn" data-filter="Tips">Tips</button>
+  </div>
+
+  <main class="posts-container">
+    <div class="posts-grid">
+      <article class="post-card" data-category="AI">
+        <div class="post-image">🤖</div>
+        <div class="post-content">
+          <div class="post-meta">
+            <span class="post-category category-ai">AI</span>
+            <span>2026-04-10</span>
+            <span class="read-time">⏱️ 8 min</span>
+          </div>
+          <h3>AI 时代：如何利用大语言模型提升效率</h3>
+          <p>探索如何将 ChatGPT、Claude 等 AI 工具融入日常工作流程，从提示词工程到自动化脚本，全面提升生产力。</p>
+          <span class="read-more">阅读全文 →</span>
+        </div>
+      </article>
+
+      <article class="post-card" data-category="Dev">
+        <div class="post-image">⚛️</div>
+        <div class="post-content">
+          <div class="post-meta">
+            <span class="post-category category-dev">Dev</span>
+            <span>2026-04-05</span>
+            <span class="read-time">⏱️ 12 min</span>
+          </div>
+          <h3>从零搭建一个现代化的 React 项目</h3>
+          <p>使用 Vite、TypeScript、Tailwind CSS 快速搭建高性能 React 应用，包含最佳实践与工程化配置。</p>
+          <span class="read-more">阅读全文 →</span>
+        </div>
+      </article>
+
+      <article class="post-card" data-category="Tips">
+        <div class="post-image">💡</div>
+        <div class="post-content">
+          <div class="post-meta">
+            <span class="post-category category-tips">Tips</span>
+            <span>2026-03-28</span>
+            <span class="read-time">⏱️ 5 min</span>
+          </div>
+          <h3>10 个让你效率翻倍的命令行技巧</h3>
+          <p>熟练使用命令行可以极大提升工作效率，这些技巧你用过几个？zsh、tmux、fzf 组合使用指南。</p>
+          <span class="read-more">阅读全文 →</span>
+        </div>
+      </article>
+
+      <article class="post-card" data-category="AI">
+        <div class="post-image">🧠</div>
+        <div class="post-content">
+          <div class="post-meta">
+            <span class="post-category category-ai">AI</span>
+            <span>2026-03-20</span>
+            <span class="read-time">⏱️ 10 min</span>
+          </div>
+          <h3>Prompt Engineering 入门指南</h3>
+          <p>掌握与 AI 高效沟通的技巧，从基础语法到高级策略，让 AI 输出更符合预期。</p>
+          <span class="read-more">阅读全文 →</span>
+        </div>
+      </article>
+
+      <article class="post-card" data-category="Dev">
+        <div class="post-image">🐳</div>
+        <div class="post-content">
+          <div class="post-meta">
+            <span class="post-category category-dev">Dev</span>
+            <span>2026-03-15</span>
+            <span class="read-time">⏱️ 15 min</span>
+          </div>
+          <h3>Docker 容器化实战：从入门到精通</h3>
+          <p>手把手带你掌握 Docker 核心概念，docker-compose 编排，以及生产环境部署最佳实践。</p>
+          <span class="read-more">阅读全文 →</span>
+        </div>
+      </article>
+    </div>
+  </main>
+
+  <footer>
+    <p>© 2026 Harry. Made with ❤️</p>
+  </footer>
+
+  <script>
+    const filterBtns = document.querySelectorAll('.filter-btn');
+    const postCards = document.querySelectorAll('.post-card');
+
+    filterBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const filter = btn.dataset.filter;
+        
+        filterBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+
+        postCards.forEach(card => {
+          if (filter === 'all' || card.dataset.category === filter) {
+            card.classList.remove('hidden');
+          } else {
+            card.classList.add('hidden');
+          }
+        });
+      });
+    });
+  </script>
+</body>
+</html>
