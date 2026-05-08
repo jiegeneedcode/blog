@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>404 — Harry's Blog</title>
+  <meta name="robots" content="noindex">
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Inter:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    *,*::before,*::after { margin:0; padding:0; box-sizing:border-box; }
+    :root {
+      --gold: #d4af37; --gold-light: #f4d03f; --gold-dark: #b8960c;
+      --bg: #0a0a0f; --bg-card: #16161f;
+      --text: #e2e8f0; --text-secondary: #94a3b8; --text-muted: #64748b;
+      --border: rgba(212, 175, 55, 0.12);
+      --radius: 12px; --transition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      --font-sans: 'Inter', 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif;
+      --font-mono: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
+      --font-cursive: 'Caveat', cursive;
+    }
+    [data-theme="light"] {
+      --bg: #f8fafc; --bg-card: #ffffff;
+      --text: #0f172a; --text-secondary: #475569; --text-muted: #94a3b8;
+      --border: rgba(212, 175, 55, 0.2);
+    }
+    body {
+      font-family: var(--font-sans); background: var(--bg); color: var(--text);
+      min-height: 100vh; display: flex; align-items: center; justify-content: center;
+      transition: background var(--transition), color var(--transition);
+      background-image: radial-gradient(circle at 1px 1px, rgba(212,175,55,0.06) 1px, transparent 0);
+      background-size: 32px 32px;
+    }
+    .container { text-align: center; padding: 2rem; }
+    .code { font-family: var(--font-mono); font-size: 8rem; font-weight: 800; color: var(--gold); line-height: 1; margin-bottom: 1rem; }
+    h1 { font-size: 1.5rem; margin-bottom: 0.5rem; }
+    p { color: var(--text-muted); margin-bottom: 2rem; }
+    .links { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+    .btn {
+      display: inline-block; padding: 0.8rem 1.8rem; border-radius: var(--radius);
+      font-size: 0.95rem; font-weight: 600; text-decoration: none;
+      transition: all var(--transition);
+    }
+    .btn-primary { background: linear-gradient(135deg, var(--gold-dark), var(--gold)); color: #000; }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(212,175,55,0.3); }
+    .btn-outline { color: var(--gold); border: 1.5px solid var(--border); }
+    .btn-outline:hover { border-color: var(--gold); background: rgba(212,175,55,0.08); }
+    .theme-toggle {
+      position: fixed; top: 1.5rem; right: 2rem;
+      width: 40px; height: 40px; border-radius: 50%;
+      border: 1px solid var(--border); background: var(--bg-card);
+      cursor: pointer; font-size: 1.1rem;
+      display: flex; align-items: center; justify-content: center;
+      transition: all var(--transition);
+    }
+    .theme-toggle:hover { border-color: var(--gold); transform: scale(1.1); }
+
+    /* Glitch effect */
+    .glitch { animation: glitch 2s infinite; }
+    @keyframes glitch {
+      0%, 100% { transform: translate(0); }
+      20% { transform: translate(-2px, 2px); }
+      40% { transform: translate(-2px, -2px); }
+      60% { transform: translate(2px, 2px); }
+      80% { transform: translate(2px, -2px); }
+    }
+  </style>
+</head>
+<body>
+  <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">🌙</button>
+
+  <div class="container">
+    <div class="code glitch">404</div>
+    <h1>页面未找到</h1>
+    <p>你似乎进入了未知领域。别担心，回到主页继续探索吧。</p>
+    <div class="links">
+      <a href="index.html" class="btn btn-primary">← 回到首页</a>
+      <a href="posts.html" class="btn btn-outline">查看文章</a>
+    </div>
+  </div>
+
+  <script>
+    const html = document.documentElement;
+    const savedTheme = localStorage.getItem('theme') || 'dark';
+    html.setAttribute('data-theme', savedTheme);
+    document.getElementById('themeToggle').textContent = savedTheme === 'dark' ? '🌙' : '☀️';
+    document.getElementById('themeToggle').addEventListener('click', () => {
+      const next = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+      html.setAttribute('data-theme', next);
+      document.getElementById('themeToggle').textContent = next === 'dark' ? '🌙' : '☀️';
+      localStorage.setItem('theme', next);
+    });
+  </script>
+</body>
+</html>
