@@ -357,35 +357,694 @@
         category: 'AI', date: '2026-04-10', readTime: '18 min', icon: '🤖',
         tags: ['AI Agent', 'Claude', '效率提升', '国企数字化'],
         description: '从 AI Agent 核心架构到实战落地，手把手教你用 Agent 自动化投资研报分析、会议纪要整理和数据处理，附完整工作流图解...',
-        content: '<h2>写在前面</h2>\n<p>作为一名国企投资岗位的工作人员，我每天需要处理大量的文档、报表、研报和会议纪要。自从接触了 AI Agent，我的工作方式发生了翻天覆地的变化。这篇文章将系统地分享 AI Agent 的核心原理、实战流程和我踩过的坑。</p>\n\n<h2>什么是 AI Agent？—— 一张图看懂</h2>\n<p>简单来说，AI Agent 是能够<strong>自主规划、执行任务并调用工具</strong>的智能系统。与普通 Chatbot 不同，Agent 具备「思考→行动→观察→反思」的完整闭环。</p>\n\n<pre class="diagram">\n┌─────────────────────────────────────────────────────────┐\n│                    <span class="ye">AI Agent 核心架构</span>                      │\n├─────────────────────────────────────────────────────────┤\n│                                                         │\n│   ┌──────────┐    ┌──────────┐    ┌──────────┐         │\n│   │  <span class="hl">Perceive</span> │───▶│  <span class="hl">Plan</span>    │───▶│  <span class="hl">Act</span>     │         │\n│   │  感知环境 │    │  规划步骤 │    │  执行动作 │         │\n│   └──────────┘    └──────────┘    └──────────┘         │\n│         ▲                               │               │\n│         │          ┌──────────┐         │               │\n│         └──────────│  <span class="hl">Observe</span> │◀────────┘               │\n│                    │  观察结果 │                          │\n│                    └──────────┘                          │\n│                                                         │\n│   <span class="dim">核心组件：</span>                                            │\n│   ├─ <span class="gr">LLM (大脑)</span>     推理、规划、决策                     │\n│   ├─ <span class="gr">Tools (手脚)</span>   搜索、代码、文件、API                │\n│   ├─ <span class="gr">Memory (记忆)</span>  短期/长期记忆                        │\n│   └─ <span class="gr">Planning (规划)</span> 任务分解、路径选择                      │\n└─────────────────────────────────────────────────────────┘\n</pre>\n\n<h2>Agent vs 传统 Chatbot：本质区别</h2>\n\n<div class="table-wrap"><table>\n<tr><th>维度</th><th>传统 Chatbot</th><th>AI Agent</th></tr>\n<tr><td>交互模式</td><td>一问一答，被动响应</td><td>自主循环，主动执行</td></tr>\n<tr><td>任务复杂度</td><td>单轮简单任务</td><td>多步骤复杂任务</td></tr>\n<tr><td>外部工具</td><td>无法调用</td><td>可调用搜索/代码/API</td></tr>\n<tr><td>错误处理</td><td>给出错误回答</td><td>自我反思 + 重试</td></tr>\n<tr><td>记忆能力</td><td>单次会话</td><td>跨会话持久记忆</td></tr>\n</table></div>\n\n<h2>动手实战：搭建投资研报分析 Agent</h2>\n\n<h3>Step 1：定义 Agent 的角色和能力</h3>\n<div class="code-block"><span class="cmt">// System Prompt — 定义 Agent 的「人设」和能力边界</span>\n<span class="kw">const</span> <span class="prop">systemPrompt</span> = <span class="str">`你是一位资深投资分析师，具备以下能力：\n1. 快速阅读并提炼投资研报的核心观点\n2. 识别关键财务指标并判断数据合理性\n3. 标注潜在风险点并给出风险等级\n4. 生成结构化的分析摘要（≤500字）\n\n工具列表：\n- search(reports): 搜索内部报告库\n- extract_financials(text): 提取财务数据表格\n- calculate_ratio(data): 计算核心财务比率\n- generate_summary(points): 生成最终摘要`</span>;\n</div>\n\n<h3>Step 2：Agent 的完整执行流程</h3>\n<pre class="diagram">\n<span class="dim">用户输入："分析XX新能源项目的投资可行性"</span>\n\n<span class="ye">▶ Step 1: 任务理解</span>\n  Agent 解析意图 → 识别为「投资项目可行性分析」任务\n\n<span class="ye">▶ Step 2: 任务分解</span>\n  ├─ 子任务1：搜索XX新能源的相关研报\n  ├─ 子任务2：提取关键财务数据\n  ├─ 子任务3：计算核心指标（IRR, NPV, ROI）\n  └─ 子任务4：汇总生成分析报告\n\n<span class="ye">▶ Step 3: 工具调用（循环执行）</span>\n  Round 1: search("XX新能源")  → 找到3份研报\n  Round 2: extract_financials() → 提取出营收/利润/现金流\n  Round 3: calculate_ratio()    → IRR=12.5%, NPV=+8500万\n  Round 4: 数据交叉验证         → 与行业均值对比\n\n<span class="ye">▶ Step 4: 结果汇总</span>\n  生成结构化分析报告 + 风险提示 + 投资建议\n</pre>\n\n<h2>我的日常工作场景（真实案例）</h2>\n\n<h3>场景一：投资报告快速分析</h3>\n<p>以前阅读一份50页投研报告需要<strong>2-3小时</strong>，现在：</p>\n<ol>\n  <li>Agent 通读全文，提取关键数据和结论（<strong>5分钟</strong>）</li>\n  <li>针对特定问题深度追问（如"这个项目的ROE为什么低于行业均值？"）</li>\n  <li>自动生成摘要和要点列表，直接用于内部汇报</li>\n</ol>\n\n<h3>场景二：会议纪要自动化</h3>\n<pre class="diagram">\n┌──────────────────────────────────────────────┐\n│          <span class="ye">会议纪要自动化流水线</span>                    │\n├──────────────────────────────────────────────┤\n│                                              │\n│  录音 ──▶ 语音转文字 ──▶ AI提取要点 ──▶ 纪要产出 │\n│  (手机)   (飞书妙记)     (Claude)     (Word)  │\n│                                              │\n│  <span class="dim">耗时：2-3小时 → 15分钟</span>                        │\n└──────────────────────────────────────────────┘\n</pre>\n\n<h3>场景三：Excel 智能处理</h3>\n<p>投资岗避不开 Excel，但复杂透视表和公式让人头疼。Agent 可以：</p>\n<ul>\n  <li>"解释这个 VLOOKUP 公式在做什么"</li>\n  <li>"帮我写一个宏，将12个月的数据汇总到一张总表"</li>\n  <li>"根据这组数据生成趋势分析的文字描述"</li>\n</ul>\n\n<div class="tip-box"><strong>💡 国企场景特别提醒</strong>：数据安全是底线！敏感财务数据建议用<strong>本地部署的模型</strong>（Ollama + Qwen/DeepSeek），非敏感内容才用云端模型。同时注意脱敏处理。</div>\n\n<h2>工具推荐与对比</h2>\n<div class="table-wrap"><table>\n<tr><th>工具</th><th>适用场景</th><th>优势</th><th>注意</th></tr>\n<tr><td>Claude</td><td>长篇分析、报告撰写</td><td>逻辑严密、中文优秀</td><td>需联网</td></tr>\n<tr><td>Claude Code</td><td>代码、自动化脚本</td><td>直接操作文件系统</td><td>门槛较高</td></tr>\n<tr><td>Dify</td><td>内部工作流搭建</td><td>可视化编排、可私有部署</td><td>需运维</td></tr>\n<tr><td>Ollama</td><td>本地敏感数据处理</td><td>完全本地、免费</td><td>性能依赖硬件</td></tr>\n</table></div>\n\n<h2>总结</h2>\n<p>AI Agent 的本质不是替代人，而是<strong>让一个人拥有一个团队的生产力</strong>。在国企数字化转型的大背景下，善用 Agent 的先行者将获得显著的效率优势。从一个小场景开始实践，你会惊讶于它的潜力。</p>'
+        content: '<h2>📌 核心要点</h2>\n
+<div class="tip-box"><strong>读完你将收获：</strong><br><br>\n
+🔹 吃透 AI Agent「感知→规划→行动→观察」核心闭环<br>\n
+🔹 Agent vs Chatbot 的 5 个本质区别，一张表讲清<br>\n
+🔹 投资研报分析 Agent 完整搭建模板，复制即用<br>\n
+🔹 3 个国企真实场景，附带耗时对比数据</div>\n
+\n
+<h2>🧠 一张图看懂 AI Agent</h2>\n
+<p>AI Agent 不只「一问一答」，而是一个<strong>自主感知、规划、执行、反思</strong>的智能体。它有自己的大脑（LLM）、手脚（Tools）、记忆（Memory），能拆解复杂任务并循环执行直至完成。</p>\n
+\n
+<pre class="diagram">\n
+╔══════════════════════════════════════════════════════════════╗\n
+║                <span class="ye">🤖 AI Agent 核心架构</span>                             ║\n
+╠══════════════════════════════════════════════════════════════╣\n
+║                                                              ║\n
+║                         <span class="ye">┌─── 感知·规划·行动·观察 循环 ───┐</span>         ║\n
+║                         │                                    │         ║\n
+║           ┌──────────┐  │  ┌──────────┐    ┌──────────┐    │         ║\n
+║      ┌───▶│<span class="hl"> Perceive </span>│──┼─▶│<span class="hl">   Plan   </span>│───▶│<span class="hl">   Act    </span>│──┐ │         ║\n
+║      │    │  🔍 感知  │  │  │  🗺 分解  │    │  ⚡ 执行  │  │ │         ║\n
+║      │    └──────────┘  │  └──────────┘    └──────────┘  │ │         ║\n
+║      │                   │                                │ │         ║\n
+║      │    ┌──────────┐  │                                │ │         ║\n
+║      └────│<span class="hl"> Observe  </span>│◀─┼────────────────────────────────┘ │         ║\n
+║           │  👁 反思  │  │                                    │         ║\n
+║           └──────────┘  └────────────────────────────────────┘         ║\n
+║                                                              ║\n
+║  <span class="dim">━━━━━━━━━━━━━━━━ 四大核心组件 ━━━━━━━━━━━━━━━━</span>            ║\n
+║                                                              ║\n
+║  <span class="gr">🧠 LLM     </span> ─ 大脑：推理 · 规划 · 决策 · 生成              ║\n
+║  <span class="gr">🔧 Tools   </span> ─ 手脚：搜索 · 代码执行 · API 调用 · 文件操作  ║\n
+║  <span class="gr">💾 Memory  </span> ─ 记忆：短期上下文 + 长期向量存储 · 跨会话     ║\n
+║  <span class="gr">🗺  Planning</span> ─ 导航：任务拆解 · 路径择优 · 失败自动修正    ║\n
+║                                                              ║\n
+║  <span class="dim">Agent = LLM + Tools + Memory + 循环控制，缺一不可</span>           ║\n
+╚══════════════════════════════════════════════════════════════╝\n
+</pre>\n
+\n
+<h2>⚡ Agent vs 传统 Chatbot</h2>\n
+<p>这不是量的差距，而是<strong>质的跃迁</strong>：</p>\n
+\n
+<div class="table-wrap"><table>\n
+<tr><th>维度</th><th>传统 Chatbot</th><th>AI Agent</th></tr>\n
+<tr><td>🎯 交互模式</td><td>一问一答，被动响应</td><td>自主循环，主动执行</td></tr>\n
+<tr><td>📐 任务复杂度</td><td>单轮简单问答</td><td>多步骤复杂任务，子任务联动</td></tr>\n
+<tr><td>🔌 外部工具</td><td>无法调用</td><td>搜索/代码/API/文件系统任意组合</td></tr>\n
+<tr><td>🔄 容错能力</td><td>直接输出错误，无自愈</td><td>自我反思 → 定位问题 → 自动重试</td></tr>\n
+<tr><td>🧩 记忆能力</td><td>单次会话即忘</td><td>跨会话持久记忆 + 知识积累</td></tr>\n
+</table></div>\n
+\n
+<h2>🛠 动手实战：投资研报分析 Agent</h2>\n
+\n
+<h3>Step 1 — System Prompt：Agent 的「宪法」</h3>\n
+<p>一个优秀 Agent 的核心在于 System Prompt——它定义了<strong>角色、能力边界和工具链</strong>。以下模板可直接使用：</p>\n
+\n
+<div class="code-block"><span class="cmt">// System Prompt — 投资研报分析 Agent 模板</span>\n
+<span class="kw">const</span> <span class="prop">systemPrompt</span> = <span class="str">`你是资深投资分析师 Agent，具备以下能力：\n
+\n
+【核心职责】\n
+1. 快速提炼投资研报核心观点与关键逻辑\n
+2. 识别关键财务指标（营收/利润/现金流/负债），判断数据合理性\n
+3. 标注风险点，给出风险等级（低/中/高）\n
+4. 生成 ≤500 字结构化摘要，可直接用于内部汇报\n
+\n
+【可用工具】\n
+search(reports)      → 搜索内部研报库\n
+extract_financials   → 提取财务数据表格\n
+calculate_ratio      → 计算 IRR / NPV / ROE / 毛利率\n
+generate_summary     → 汇总生成最终分析摘要`</span>;\n
+</div>\n
+\n
+<h3>Step 2 — 执行流程全景图</h3>\n
+<p>一个完整的分析任务，Agent 会自动拆分为 <strong>4 个阶段</strong>，循环执行直到产出最终报告：</p>\n
+\n
+<pre class="diagram">\n
+<span class="dim">用户输入：分析「XX新能源项目」投资可行性</span>\n
+\n
+┌──────────────────────────────────────────────────────────────┐\n
+│ <span class="ye">▶ Phase 1 · 意图理解</span>                                          │\n
+│   识别任务类型：投资项目可行性分析                              │\n
+│   确定所需：研报搜索 + 财务提取 + 指标计算 + 报告生成          │\n
+└────────────┬─────────────────────────────────────────────────┘\n
+             ▼\n
+┌──────────────────────────────────────────────────────────────┐\n
+│ <span class="ye">▶ Phase 2 · 任务拆解（4 个子任务）</span>                            │\n
+│                                                              │\n
+│   <span class="gr">① 研报检索</span>     search("XX新能源")  → 锁定目标报告          │\n
+│   <span class="gr">② 数据提取</span>     extract_financials() → 营收·利润·现金流    │\n
+│   <span class="gr">③ 指标计算</span>     calculate_ratio()    → IRR·NPV·ROE·毛利率 │\n
+│   <span class="gr">④ 报告生成</span>     generate_summary()   → 结构化分析报告      │\n
+└────────────┬─────────────────────────────────────────────────┘\n
+             ▼\n
+┌──────────────────────────────────────────────────────────────┐\n
+│ <span class="ye">▶ Phase 3 · 工具调用（多轮循环）</span>                             │\n
+│                                                              │\n
+│   🔄 Round 1  search("XX新能源")        → 命中 3 份研报     │\n
+│   🔄 Round 2  extract_financials()      → 营收+利润+现金流  │\n
+│   🔄 Round 3  calculate_ratio()         → IRR 12.5% | NPV +8500万│\n
+│   🔄 Round 4  交叉验证 → 与行业均值对比 → 数据无异常        │\n
+└────────────┬─────────────────────────────────────────────────┘\n
+             ▼\n
+┌──────────────────────────────────────────────────────────────┐\n
+│ <span class=\"ye\">▶ Phase 4 · 结果输出</span>                                          │\n
+│                                                              │\n
+│   ✅ 结构化分析报告                                           │\n
+│   ├─ 📊 核心指标：IRR 12.5% | NPV +8500万 | ROE 18.2%       │\n
+│   ├─ ⚠️ 风险提示：政策补贴退坡风险（中）· 技术路线不确定性（低）│\n
+│   └─ 💡 投资建议：建议跟进，重点关注政策变动                  │\n
+└──────────────────────────────────────────────────────────────┘\n
+\n
+<span class="gr">⏱ 全程耗时：~8 分钟（人工需 2-3 小时）</span>\n
+</pre>\n
+\n
+<h2>📋 真实工作场景</h2>\n
+\n
+<h3>场景一：投资报告快速分析</h3>\n
+<p>50 页研报，人工通读+提炼要点需 <strong>2-3 小时</strong>。Agent 加持后：</p>\n
+<ul>\n
+  <li><strong>5 分钟</strong> 通读全文，输出关键数据 + 核心结论</li>\n
+  <li>支持深度追问：「ROE 为何低于行业均值？请对比同行数据」</li>\n
+  <li>一键生成摘要 + 要点列表，直接用于汇报 PPT</li>\n
+</ul>\n
+\n
+<h3>场景二：会议纪要自动化</h3>\n
+<pre class="diagram">\n
+╔══════════════════════════════════════════════════════════╗\n
+║           <span class="ye">📝 会议纪要自动化流水线</span>                         ║\n
+╠══════════════════════════════════════════════════════════╣\n
+║                                                        ║\n
+║  ┌──────────┐   ┌──────────┐   ┌──────────┐   ┌─────┐ ║\n
+║  │  🎙 录音  │──▶│📝 语音转写│──▶│🤖 AI 提炼│──▶│📄 Word│ ║\n
+║  │  手机录制  │   │ 飞书妙记  │   │  Claude  │   │ 定稿  │ ║\n
+║  └──────────┘   └──────────┘   └──────────┘   └─────┘ ║\n
+║                                                        ║\n
+║  Agent 自动完成：                                       ║\n
+║  <span class="dim">├─ 识别发言人与核心观点</span>                               ║\n
+║  <span class="dim">├─ 提取待办事项 + 责任人 + 截止日期</span>                    ║\n
+║  <span class="dim">└─ 生成会议摘要 + 待办清单，15 分钟出稿</span>                 ║\n
+║                                                        ║\n
+║  <span class="gr">⏱ 耗时对比：2-3 小时 → 15 分钟（↓ 90%）</span>               ║\n
+╚══════════════════════════════════════════════════════════╝\n
+</pre>\n
+\n
+<h3>场景三：Excel 智能处理</h3>\n
+<p>投资岗日常工作高度依赖 Excel。Agent 能帮你：</p>\n
+<ul>\n
+  <li><strong>解释公式</strong>：「这个 VLOOKUP+MATCH 嵌套在做什么？逐层拆解」</li>\n
+  <li><strong>自动写宏</strong>：「把 12 张月表汇总到一张总表，列对齐、去重」</li>\n
+  <li><strong>数据叙事</strong>：「根据这组趋势数据，生成 200 字分析描述」</li>\n
+</ul>\n
+\n
+<div class="tip-box"><strong>💡 国企特别提醒</strong>：数据安全是红线！敏感财务数据 → <strong>本地模型</strong>（Ollama + Qwen/DeepSeek）；非敏感内容 → 云端模型。务必做好脱敏处理，确保数据不出内网。</div>\n
+\n
+<h2>🔧 工具推荐与对比</h2>\n
+<div class="table-wrap"><table>\n
+<tr><th>工具</th><th>适用场景</th><th>核心优势</th><th>注意事项</th></tr>\n
+<tr><td>🤖 Claude</td><td>长篇分析、报告撰写</td><td>逻辑严密、中文能力顶尖</td><td>需联网，敏感数据需脱敏</td></tr>\n
+<tr><td>💻 Claude Code</td><td>代码、自动化脚本</td><td>直接操作文件系统</td><td>学习曲线较陡</td></tr>\n
+<tr><td>🔧 Dify</td><td>企业内部工作流</td><td>可视化编排、支持私有部署</td><td>需运维投入</td></tr>\n
+<tr><td>🏠 Ollama</td><td>本地敏感数据处理</td><td>完全离线、免费、数据不出网</td><td>性能依赖硬件配置</td></tr>\n
+</table></div>\n
+\n
+<div class="tip-box"><strong>🚀 行动建议：今天就迈出第一步</strong><br><br>\n
+1️⃣ <strong>最小启动</strong>：选一份研报，直接丢给 Claude，让它做结构化分析<br>\n
+2️⃣ <strong>模板沉淀</strong>：把好用的 System Prompt 存成模板，下次一键调用<br>\n
+3️⃣ <strong>安全分层</strong>：敏感数据 → 本地 Ollama；非敏感 → 云端 Claude<br>\n
+4️⃣ <strong>每周复盘</strong>：Agent 帮你省了多少时间？哪些场景还能拓展？<br><br>\n
+<strong>AI Agent 不是替代你，而是让你一个人拥有一个团队的战斗力。</strong></div>'\n
       },
       'claude-code': {
         id: 'claude-code', title: '从0到1：用Claude Code构建个人知识库',
         category: 'Dev', date: '2026-04-08', readTime: '20 min', icon: '📚',
         tags: ['Claude Code', '知识管理', 'AI编程', '笔记系统'],
         description: '从 PARA 文件夹结构到 Claude Code 自动化流水线，带你搭建一套高效的个人知识管理系统。含完整架构图、配置模板和实测数据对比...',
-        content: '<h2>为什么需要个人知识库？</h2>\n<p>在国企投资岗位工作，每天接收的信息量巨大：行业报告、政策文件、会议纪要、研究资料...如果没有系统化管理，信息很快变得杂乱无章。最近我用 <strong>Claude Code + Markdown + Obsidian</strong> 搭建了一套个人知识管理系统，资料归档时间从每天1小时降到15分钟。</p>\n\n<h2>系统全景架构</h2>\n<pre class="diagram">\n┌──────────────────────────────────────────────────────────────────┐\n│                    <span class="ye">个人知识库系统架构</span>                              │\n├──────────────────────────────────────────────────────────────────┤\n│                                                                  │\n│  <span class="hl">┌─────────────── 输入层 ───────────────┐</span>                      │\n│  │  网页剪藏  │  文档导入  │  语音转写  │  手动笔记  │               │\n│  │ (简悦/MarkDownload) (PDF/Word) (飞书妙记) (Obsidian)│               │\n│  └────────────────────┬─────────────────────┘                      │\n│                       ▼                                            │\n│  <span class="gr">┌─────────────── 处理层 ───────────────┐</span>                      │\n│  │           Claude Code AI引擎            │                      │\n│  │  ┌─────────┐ ┌────────┐ ┌───────────┐  │                      │\n│  │  │内容提取 │ │智能分类│ │关联发现    │  │                      │\n│  │  │摘要生成 │ │标签推荐│ │知识图谱    │  │                      │\n│  │  └─────────┘ └────────┘ └───────────┘  │                      │\n│  └────────────────────┬─────────────────────┘                      │\n│                       ▼                                            │\n│  <span class="ye">┌─────────────── 存储层 ───────────────┐</span>                      │\n│  │      Obsidian 知识库 (本地Markdown)       │                      │\n│  │  ┌──────┐  ┌──────┐  ┌──────┐  ┌──────┐ │                      │\n│  │  │Inbox │  │Projects│ │Areas │  │Resources│ │                   │\n│  │  │收件箱│  │项目  │  │领域  │  │资源库 │ │                      │\n│  │  └──────┘  └──────┘  └──────┘  └──────┘ │                      │\n│  └──────────────────────────────────────────┘                      │\n└──────────────────────────────────────────────────────────────────┘\n</pre>\n\n<h2>PARA 文件夹结构 —— 知识管理的黄金法则</h2>\n<p>我采用了 Tiago Forte 的 <strong>PARA 方法</strong>来组织知识库：</p>\n\n<div class="table-wrap"><table>\n<tr><th>文件夹</th><th>含义</th><th>存放内容</th><th>示例</th></tr>\n<tr><td>📥 Inbox</td><td>收件箱</td><td>所有新进入的资料</td><td>今天下载的研报、会议录音</td></tr>\n<tr><td>📁 Projects</td><td>进行中的项目</td><td>有明确截止日期的事</td><td>"Q2投资分析报告"</td></tr>\n<tr><td>🗂 Areas</td><td>责任领域</td><td>持续关注的事</td><td>"行业研究"、"政策法规"</td></tr>\n<tr><td>📚 Resources</td><td>参考资料</td><td>未来可能用到的</td><td>"Python笔记"、"财务模型"</td></tr>\n</table></div>\n\n<h2>快速开始：3步搭建</h2>\n\n<h3>第一步：创建项目骨架</h3>\n<div class="code-block"><span class="cmt"># 创建 PARA 目录结构</span>\nmkdir -p ~/knowledge-base/{inbox,projects,areas,resources}\n<span class="kw">cd</span> ~/knowledge-base\n\n<span class="cmt"># 初始化 Git 版本控制（知识也需要版本管理）</span>\ngit init && git add -A && git commit -m <span class="str">"init knowledge base"</span></div>\n\n<h3>第二步：编写 CLAUDE.md 配置</h3>\n<div class="code-block"><span class="cmt"># CLAUDE.md — 你的知识管理「宪章」</span>\n\n## 角色定义\n你是一个知识管理助手，服务于国企投资岗位的分析师。\n\n## 处理规则\n1. 新文档首先进入 inbox/，处理后归档\n2. 每篇笔记必须包含：标题、日期、标签、来源\n3. 投资相关文档必须标注：行业、公司、日期、风险等级\n\n## 标签体系\n- #投资/新能源  #投资/半导体  #投资/消费\n- #政策/中央  #政策/地方  #政策/行业\n- #工具/Python  #工具/Excel  #工具/Claude</div>\n\n<h3>第三步：自动化处理流水线</h3>\n<pre class="diagram">\n<span class="ye">每日处理流程（Morning Routine — 15分钟）</span>\n\n<span class="dim">08:30</span>  打开 Obsidian，检查 inbox/\n<span class="dim">08:32</span>  运行：claude "处理今天 inbox 中的新文件"\n           ├─ 提取关键信息 → 生成摘要\n           ├─ 自动分类 → 匹配标签体系\n           └─ 建立关联 → 链接到已有笔记\n<span class="dim">08:40</span>  人工复核 + 微调标题/标签\n<span class="dim">08:45</span>  归档到对应 PARA 文件夹\n</pre>\n\n<h2>进阶玩法</h2>\n<ul>\n  <li><strong>向量检索</strong>：用 ChromaDB 做语义搜索，告别关键词匹配</li>\n  <li><strong>Dataview 插件</strong>：自动生成「最近7天新增笔记」「待复习清单」</li>\n  <li><strong>定时同步</strong>：Git cron job 每小时自动 push 到私有仓库</li>\n  <li><strong>AI 周报</strong>：每周五自动汇总一周新增内容生成知识周报</li>\n</ul>\n\n<div class="tip-box"><strong>💡 最重要的建议</strong>：知识库的价值不在于「收集了多少」，而在于「消化了多少」。每周五下午固定为「知识整理时间」，回顾+总结+删除过时内容。Less is more.</div>\n\n<h2>实际效果数据</h2>\n<div class="table-wrap"><table>\n<tr><th>指标</th><th>使用前</th><th>使用后</th><th>提升</th></tr>\n<tr><td>资料归档时间</td><td>1小时/天</td><td>15分钟/天</td><td>↓75%</td></tr>\n<tr><td>信息检索速度</td><td>平均8分钟</td><td>平均2分钟</td><td>↑4x</td></tr>\n<tr><td>知识复用率</td><td>~10%</td><td>~60%</td><td>↑6x</td></tr>\n<tr><td>周报撰写时间</td><td>2小时</td><td>25分钟</td><td>↓80%</td></tr>\n</table></div>\n\n<h2>总结</h2>\n<p>个人知识库不是一天建成的。从今天开始，用一个简单的 inbox 文件夹 + Claude Code 的加持，先打造最小可用版本。坚持30天，你会发现自己再也离不开它。</p>'
+        content: '<div class="tip-box"><strong>💡 核心要点</strong>：信息时代，知识管理不是"收藏"而是"消化"。用 Claude Code 搭建个人知识库，让 AI 帮你从海量信息中提炼真正有价值的内容——告别"存了等于看了"的假努力。</div>
+
+<h2>🤔 为什么需要知识库？</h2>
+<p>手机里存了多少截图？浏览器收藏夹塞了多少"稍后再看"？如果答案让你心虚，那你正需要一套知识管理系统。在国企投资岗位，我每天被行业报告、政策文件、会议纪要、研究资料淹没。没有知识库时，找一份半年前的纪要能翻半小时。现在？<strong>秒级检索，AI 辅助整理，每周自动生成知识回顾</strong>。</p>
+
+<h2>🏗 系统架构：三层"知识加工流水线"</h2>
+<p>所有信息流入、处理、沉淀，一气呵成——不囤积，只沉淀：</p>
+<pre class="diagram">
+┌──────────────────────────────────────────────────────────┐
+│              <span class="ye">📚 个人知识库系统 — 三层流水线</span>               │
+├──────────────────────────────────────────────────────────┤
+│                                                          │
+│  <span class="gr">┌──────────────── 📥 输入层 ────────────────┐</span>           │
+│  <span class="gr">│  网页剪藏 │ 文档导入 │ 语音转写 │ 手动笔记  │</span>           │
+│  <span class="gr">│  (简悦)    (PDF/Word) (飞书妙记) (Obsidian)</span>           │
+│  <span class="gr">└──────────────────┬───────────────────────┘</span>           │
+│                     ▼                                        │
+│  <span class="hl">┌──────────────── ⚙️ 处理层 ────────────────┐</span>           │
+│  <span class="hl">│          🤖 Claude Code 智能引擎          │</span>           │
+│  <span class="hl">│   📝 内容提取  │  🏷 自动分类  │  🔗 关联发现  │</span>           │
+│  <span class="hl">└──────────────────┬───────────────────────┘</span>           │
+│                     ▼                                        │
+│  <span class="ye">┌──────────────── 💾 存储层 ────────────────┐</span>           │
+│  <span class="ye">│        📂 Obsidian 知识库（本地 Markdown）    │</span>           │
+│  <span class="ye">│   📥 Inbox  │  📁 Projects  │  🗂 Areas  │  📚 Resources</span>  │
+│  <span class="ye">└───────────────────────────────────────────┘</span>           │
+│                                                          │
+│  <span class="dim">核心理念：投喂 → AI消化 → 自动归类 → 知识网络</span>              │
+└──────────────────────────────────────────────────────────┘
+</pre>
+
+<h2>📐 PARA 文件夹 — 每个知识点都有家</h2>
+<p>采用 Tiago Forte 的 <strong>PARA 方法论</strong>，告别文件散落桌面：</p>
+<div class="table-wrap"><table>
+<tr><th>文件夹</th><th>定位</th><th>一句话说明</th></tr>
+<tr><td>📥 <strong>Inbox</strong></td><td>收件箱</td><td>所有新资料的入口，处理完即归档</td></tr>
+<tr><td>📁 <strong>Projects</strong></td><td>项目</td><td>有截止日期的任务，如"Q2投资分析报告"</td></tr>
+<tr><td>🗂 <strong>Areas</strong></td><td>领域</td><td>持续关注的职责，如"新能源投资""风险合规"</td></tr>
+<tr><td>📚 <strong>Resources</strong></td><td>资源</td><td>感兴趣的主题资料，如"Python笔记""政策汇编"</td></tr>
+</table></div>
+
+<h2>🚀 三步搭建</h2>
+
+<h3>第一步：创建骨架</h3>
+<div class="code-block"><span class="cmt"># 一键生成 PARA 目录</span>
+mkdir -p ~/knowledge-base/{inbox,projects,areas,resources}
+<span class="kw">cd</span> ~/knowledge-base
+<span class="kw">git</span> init && git add -A && git commit -m <span class="str">"init knowledge base"</span></div>
+
+<h3>第二步：配置 CLAUDE.md 赋予 AI 角色</h3>
+<div class="code-block"><span class="cmt"># CLAUDE.md — 知识管家配置</span>
+
+## 🎯 角色：个人知识管理助手
+- 将 inbox 中的新资料自动分类至 projects / areas / resources
+- 提取关键信息生成摘要笔记
+- 发现知识点之间的双向链接并建立关联
+- 每周五自动生成知识周报
+
+## 标签体系
+- <span class="cmt">#投资/新能源  #投资/半导体  #投资/消费</span>
+- <span class="cmt">#政策/中央  #政策/地方  #政策/行业</span>
+- <span class="cmt">#工具/Python  #工具/Excel  #工具/Claude</span></div>
+
+<h3>第三步：跑通每日流水线</h3>
+<p>整个流程全自动——你只管投喂，AI 负责消化：</p>
+<pre class="diagram">
+📥 新资料放入 inbox
+        │
+        ▼
+⚙️ Claude Code 读取 & 分析
+        │
+        ├─ 📝 提取摘要 ──▶ 生成 Markdown 笔记
+        ├─ 🏷 自动分类 ──▶ Projects / Areas / Resources
+        └─ 🔗 建立关联 ──▶ [[双向链接]] 织成知识网
+        │
+        ▼
+📂 归档到对应 PARA 文件夹
+        │
+<span class="dim">⏱ 全程耗时：~5 分钟（人工复核 2 分钟）</span>
+</pre>
+
+<h2>🎯 进阶玩法</h2>
+<p>基础版跑通后，试试让知识库真正"活起来"：</p>
+<ul>
+  <li><strong>🧠 语义搜索</strong>：接入 ChromaDB 向量数据库，自然语言搜出语义相关的笔记，告别死板的关键词匹配</li>
+  <li><strong>📊 Dataview 动态面板</strong>：Obsidian 插件自动生成"本周新增""待复习知识点"</li>
+  <li><strong>☁️ 多端私密同步</strong>：Git cron 定时 push/pull，公司家里无缝衔接</li>
+  <li><strong>📋 AI 知识周报</strong>：每周五 Claude Code 自动汇总一周积累，生成回顾报告</li>
+</ul>
+
+<div class="tip-box"><strong>💡 最重要的建议</strong>：知识库的价值不在「收集了多少」，而在「消化了多少」。每周五下午固定为知识整理时间——回顾、总结、删除过时内容。<strong>Less is more.</strong></div>
+
+<h2>📊 实际效果</h2>
+<div class="table-wrap"><table>
+<tr><th>指标</th><th>搭建前</th><th>搭建后</th><th>提升</th></tr>
+<tr><td>📥 资料归档</td><td>~60分钟/天</td><td>~15分钟/天</td><td><strong>↓ 75%</strong></td></tr>
+<tr><td>🔍 检索速度</td><td>翻文件夹 10分钟+</td><td>关键字秒出</td><td><strong>↑ 4x</strong></td></tr>
+<tr><td>♻️ 知识复用率</td><td>~10%</td><td>~60%</td><td><strong>↑ 6x</strong></td></tr>
+<tr><td>📝 周报撰写</td><td>2小时</td><td>AI自动生成</td><td><strong>↓ 80%</strong></td></tr>
+</table></div>
+
+<div class="tip-box"><strong>🚀 30天上手路线</strong><br><br>
+📅 <strong>今天</strong>：创建 inbox/ 文件夹，把散落的文件丢进去<br>
+📅 <strong>本周</strong>：搭建 PARA 目录 + 写好 CLAUDE.md<br>
+📅 <strong>本月</strong>：坚持每日 Morning Routine，养成习惯<br>
+📅 <strong>30天后</strong>：回头看——你会惊讶自己沉淀了多少知识。<br><br>
+<strong>最好的知识库不是最复杂的，是你真正在用的那个。</strong></div>'
       },
       'mcp-protocol': {
         id: 'mcp-protocol', title: 'MCP协议：让AI真正理解你的需求',
         category: 'AI', date: '2026-04-05', readTime: '15 min', icon: '🔗',
         tags: ['MCP', 'Claude', 'AI集成', '工具调用'],
         description: '深入解析 MCP 协议架构、Client-Server 通信机制和实战配置。含国企安全架构方案和6个社区热门 MCP Server 评测...',
-        content: '<h2>MCP 是什么？—— 一句话+一张图</h2>\n<p>MCP（Model Context Protocol）是 Anthropic 推出的<strong>开放协议</strong>，让你本地的 AI 应用能安全、标准化地连接外部工具和数据。简单说，MCP 就是 <strong>AI 世界的 USB-C 接口</strong>——一个接口，连接万物。</p>\n\n<pre class="diagram">\n┌────────────────────────────────────────────────────────────────┐\n│                      <span class="ye">MCP 协议架构</span>                            │\n├────────────────────────────────────────────────────────────────┤\n│                                                                │\n│  ┌──────────────────┐         MCP Protocol        ┌──────────┐ │\n│  │                  │◄──────────────────────────▶│          │ │\n│  │   <span class="hl">MCP Client</span>      │   (JSON-RPC over stdio)  │ <span class="gr">MCP     </span> │ │\n│  │   (Claude Code,  │                            │ <span class="gr">Server  </span> │ │\n│  │    Claude Desktop)│  ┌────────────────────┐    │          │ │\n│  │                  │  │ 标准化接口定义：     │    │          │ │\n│  │                  │  │ • tools/list        │    │          │ │\n│  │                  │  │ • tools/call        │    │          │ │\n│  │                  │  │ • resources/read    │    │          │ │\n│  │                  │  │ • prompts/get       │    │          │ │\n│  │                  │  └────────────────────┘    │          │ │\n│  └──────────────────┘                            └─────┬────┘ │\n│                                                       │       │\n│                              ┌─────────────────────────┤       │\n│                              ▼                         ▼       │\n│                         ┌────────┐               ┌────────┐   │\n│                         │文件系统│               │数据库  │   │\n│                         │Server  │               │Server  │   │\n│                         └────────┘               └────────┘   │\n└────────────────────────────────────────────────────────────────┘\n</pre>\n\n<h2>为什么需要 MCP？传统方式 vs MCP 方式</h2>\n\n<div class="table-wrap"><table>\n<tr><th>对比维度</th><th>传统方式</th><th>MCP 方式</th></tr>\n<tr><td>连接方式</td><td>每个工具单独写适配代码</td><td>统一协议，即插即用</td></tr>\n<tr><td>安全性</td><td>数据上传云端处理</td><td>数据本地处理，不出网</td></tr>\n<tr><td>扩展性</td><td>添加新工具需大量开发</td><td>安装 MCP Server 即可</td></tr>\n<tr><td>标准化</td><td>各厂商接口不一致</td><td>统一的 JSON-RPC 协议</td></tr>\n<tr><td>维护成本</td><td>每个集成独立维护</td><td>社区共享，一次配置</td></tr>\n</table></div>\n\n<h2>快速上手：3个步骤</h2>\n\n<h3>Step 1：安装 MCP 服务器</h3>\n<div class="code-block"><span class="cmt"># 文件系统 MCP Server — 让 AI 读写本地文件</span>\nnpm install -g @anthropic-ai/mcp-server-fs\n\n<span class="cmt"># SQLite MCP Server — 让 AI 查询数据库</span>\nnpm install -g @anthropic-ai/mcp-server-sqlite\n\n<span class="cmt"># Brave Search MCP — 让 AI 搜索网页</span>\nnpm install -g @anthropic-ai/mcp-server-brave-search</div>\n\n<h3>Step 2：配置 MCP 服务器</h3>\n<div class="code-block">{\n  <span class="str">"mcpServers"</span>: {\n    <span class="str">"filesystem"</span>: {\n      <span class="str">"command"</span>: <span class="str">"npx"</span>,\n      <span class="str">"args"</span>: [<span class="str">"@anthropic-ai/mcp-server-fs"</span>,\n               <span class="str">"/Users/harry/projects"</span>]\n    },\n    <span class="str">"sqlite"</span>: {\n      <span class="str">"command"</span>: <span class="str">"npx"</span>,\n      <span class="str">"args"</span>: [<span class="str">"@anthropic-ai/mcp-server-sqlite"</span>,\n               <span class="str">"/Users/harry/data/investment.db"</span>]\n    }\n  }\n}</div>\n\n<h3>Step 3：像聊天一样使用</h3>\n<div class="code-block"><span class="cmt"># 直接在 Claude Code 中用自然语言操作</span>\n<span class="str">"帮我分析 projects/ 目录下所有投资报告的财务数据"</span>\n<span class="str">"查询 investment.db 中2025年新能源项目的IRR数据"</span>\n<span class="str">"批量将 reports/ 中的 PDF 文件名按日期重命名"</span></div>\n\n<h2>我在国企工作中的3个 MCP 实战场景</h2>\n\n<pre class="diagram">\n┌─────────────────────────────────────────────────────────────┐\n│               <span class="ye">MCP 在国企投资岗位的应用全景</span>                    │\n├─────────────────────────────────────────────────────────────┤\n│                                                             │\n│  <span class="hl">场景一：投资数据分析</span>                                       │\n│  ┌──────────────────────────────────────────────────────┐  │\n│  │ Excel/CSV → MCP Filesystem Server → Claude分析       │  │\n│  │ 输出：IRR对比表 + 趋势图 + 文字分析报告               │  │\n│  └──────────────────────────────────────────────────────┘  │\n│                                                             │\n│  <span class="hl">场景二：合同智能审核</span>                                       │\n│  ┌──────────────────────────────────────────────────────┐  │\n│  │ PDF合同 → MCP Filesystem → AI提取关键条款             │  │\n│  │ 输出：条款清单 + 风险标注 + 修改建议                   │  │\n│  └──────────────────────────────────────────────────────┘  │\n│                                                             │\n│  <span class="hl">场景三：内部文档检索</span>                                       │\n│  ┌──────────────────────────────────────────────────────┐  │\n│  │ 本地文档库 → MCP SQLite + Embedding → 语义搜索引擎     │  │\n│  │ 输入："找出去年关于新能源补贴的所有政策文件"           │  │\n│  └──────────────────────────────────────────────────────┘  │\n└─────────────────────────────────────────────────────────────┘\n</pre>\n\n<div class="tip-box"><strong>💡 国企安全提示</strong>：MCP 的最大优势是<strong>数据不出本地</strong>——所有文件读取、数据库查询都在本地完成，只有 AI 推理部分需要模型服务。敏感场景建议配合本地模型（Ollama + Qwen），实现<strong>完全离线运行</strong>。务必配置 ALLOWED_PATHS 白名单限制访问范围。</div>\n\n<h2>社区热门 MCP Server 一览</h2>\n<div class="table-wrap"><table>\n<tr><th>Server</th><th>能力</th><th>我的评价</th></tr>\n<tr><td>Filesystem</td><td>读写本地文件</td><td>⭐⭐⭐⭐⭐ 必备</td></tr>\n<tr><td>SQLite / PostgreSQL</td><td>数据库查询</td><td>⭐⭐⭐⭐⭐ 分析师必备</td></tr>\n<tr><td>Brave Search</td><td>网页搜索</td><td>⭐⭐⭐⭐ 调研好帮手</td></tr>\n<tr><td>Puppeteer</td><td>浏览器自动化</td><td>⭐⭐⭐⭐ 爬数据神器</td></tr>\n<tr><td>GitHub</td><td>仓库操作</td><td>⭐⭐⭐ 程序员友好</td></tr>\n<tr><td>Slack / 飞书</td><td>消息集成</td><td>⭐⭐⭐ 团队协作</td></tr>\n</table></div>\n\n<h2>总结</h2>\n<p>MCP 正在改变我们与 AI 协作的方式——从<strong>「把数据喂给 AI」</strong>到<strong>「AI 主动访问你的工具」</strong>。对于处理大量数据的投资岗位来说，这是效率跃升的关键基础设施。现在就开始配置你的第一个 MCP Server，感受「AI + 本地数据」的真正威力。</p>'
+        content: '<h2>📌 核心要点</h2>\n
+<div class="tip-box"><strong>5 分钟你将掌握：</strong><br><br>\n
+🔹 MCP = AI 的 USB-C — 一个协议连接所有工具<br>\n
+🔹 Client-Server + JSON-RPC 架构一眼看懂<br>\n
+🔹 3 步从安装到跑通第一个 MCP Server<br>\n
+🔹 国企岗位 3 大实战场景 + 安全落地方案<br>\n
+🔹 6 款热门 MCP Server 实测横评</div>\n
+\n
+<h2>🔌 MCP 一句话 + 一张图</h2>\n
+<p>MCP（Model Context Protocol）是 Anthropic 推出的<strong>开放协议</strong>——本地 AI 通过标准化接口安全连接外部工具和数据。<strong>一个协议，即插即用，数据不出本地。</strong></p>\n
+\n
+<pre class="diagram">\n
+╔══════════════════════════════════════════════════════════════════╗\n
+║                    <span class="ye">🔗 MCP 协议全貌：Client ↔ Server</span>                ║\n
+╠══════════════════════════════════════════════════════════════════╣\n
+║                                                                  ║\n
+║   ┌───────────────────────────┐          ┌───────────────────┐  ║\n
+║   │     <span class="hl">🖥  MCP Client</span>           │  JSON-RPC │   <span class="gr">⚙️ MCP Server</span>   │  ║\n
+║   │  ┌─────────────────────┐  │◄═══════▶│  ┌─────────────┐  │  ║\n
+║   │  │ Claude Desktop      │  │  stdio  │  │ 📂 文件系统  │  │  ║\n
+║   │  │ Claude Code         │  │         │  │ 🗄  数据库    │  │  ║\n
+║   │  │ 任意 AI 应用        │  │         │  │ 🔍 搜索引擎  │  │  ║\n
+║   │  └─────────────────────┘  │         │  │ 🌐 浏览器    │  │  ║\n
+║   └───────────────────────────┘         │  │ 💬 消息平台  │  │  ║\n
+║                                         │  └─────────────┘  │  ║\n
+║   <span class="dim">┌─── 标准化接口 ──────────────────────┐</span>  └───────────────────┘  ║\n
+║   <span class="dim">│</span> <span class="gr">tools/list</span>  <span class="dim">列举能力</span>  <span class="gr">tools/call</span> <span class="dim">调用工具</span>  <span class="dim">│</span>                         ║\n
+║   <span class="dim">│</span> <span class="gr">resources/read</span> <span class="dim">读资源</span>  <span class="gr">prompts/get</span> <span class="dim">取模板</span>  <span class="dim">│</span>                         ║\n
+║   <span class="dim">└────────────────────────────────────┘</span>                           ║\n
+║                                                                  ║\n
+║   <span class="ye">核心理念：</span>AI 说「我要读文件」→ Client 发 JSON-RPC → Server 执行   ║\n
+║           <span class="gr">全程本地通信，数据不经过云端</span>                              ║\n
+╚══════════════════════════════════════════════════════════════════╝\n
+</pre>\n
+\n
+<h2>⚡ 为什么需要 MCP？</h2>\n
+<div class="table-wrap"><table>\n
+<tr><th>维度</th><th>❌ 传统方式</th><th>✅ MCP 方式</th></tr>\n
+<tr><td>🔌 连接</td><td>每个工具手写适配代码</td><td>统一协议，即插即用</td></tr>\n
+<tr><td>🔒 安全</td><td>数据必须上传云端</td><td><strong>本地处理，绝不出网</strong></td></tr>\n
+<tr><td>📦 扩展</td><td>加新工具 = 大量开发</td><td>npm install 一个 Server</td></tr>\n
+<tr><td>📏 标准</td><td>各厂商接口百花齐放</td><td>统一 JSON-RPC 2.0</td></tr>\n
+<tr><td>💰 维护</td><td>每个集成独立维护</td><td>社区共建，一次配置</td></tr>\n
+</table></div>\n
+\n
+<h2>🛠 3 步跑通第一个 MCP Server</h2>\n
+\n
+<h3>Step 1 — 安装</h3>\n
+<div class="code-block"><span class="cmt"># 三行命令，装上最实用的三个 Server</span>\n
+npm install -g <span class="str">@anthropic-ai/mcp-server-fs</span>        <span class="cmt">← 读写本地文件</span>\n
+npm install -g <span class="str">@anthropic-ai/mcp-server-sqlite</span>    <span class="cmt">← 查询数据库</span>\n
+npm install -g <span class="str">@anthropic-ai/mcp-server-brave-search</span> <span class="cmt">← 网页搜索</span></div>\n
+\n
+<h3>Step 2 — 配置</h3>\n
+<div class="code-block"><span class="cmt">// claude_desktop_config.json — 告诉 Claude 你有哪些工具</span>\n
+{\n
+  <span class="str">"mcpServers"</span>: {\n
+    <span class="str">"filesystem"</span>: {\n
+      <span class="str">"command"</span>: <span class="str">"npx"</span>,\n
+      <span class="str">"args"</span>: [<span class="str">"@anthropic-ai/mcp-server-fs"</span>, <span class="str">"/Users/harry/projects"</span>]\n
+    },\n
+    <span class="str">"sqlite"</span>: {\n
+      <span class="str">"command"</span>: <span class="str">"npx"</span>,\n
+      <span class="str">"args"</span>: [<span class="str">"@anthropic-ai/mcp-server-sqlite"</span>, <span class="str">"/Users/harry/data/investment.db"</span>]\n
+    }\n
+  }\n
+}</div>\n
+\n
+<h3>Step 3 — 像聊天一样使用</h3>\n
+<div class="code-block"><span class="cmt"># 自然语言即命令 — 直接对 Claude 说：</span>\n
+<span class="str">"分析 projects/ 下所有投资报告的财务数据，做个对比表"</span>\n
+<span class="str">"查 investment.db，2025 年新能源类项目平均 IRR 是多少？"</span>\n
+<span class="str">"把 reports/ 中所有 PDF 按「日期_项目名_版本」重命名"</span></div>\n
+\n
+<h2>🏢 国企岗位 3 大实战场景</h2>\n
+\n
+<pre class="diagram">\n
+╔══════════════════════════════════════════════════════════════════╗\n
+║              <span class="ye">🔧 MCP 驱动国企投资岗 — 全场景流水线</span>                  ║\n
+╠══════════════════════════════════════════════════════════════════╣\n
+║                                                                  ║\n
+║  <span class="hl">📊 场景 1 · 投资数据分析</span>                                        ║\n
+║  ┌────────────────────────────────────────────────────────────┐ ║\n
+║  │  Excel/CSV ──▶ Filesystem Server ──▶ Claude 多维分析      │ ║\n
+║  │  <span class="gr">⏱ 原来 3h 手动 → 现在 5min 对话</span>                         │ ║\n
+║  │  📤 输出：IRR/NPV 对比表 + 趋势图 + 文字分析结论           │ ║\n
+║  └────────────────────────────────────────────────────────────┘ ║\n
+║                                                                  ║\n
+║  <span class="hl">📄 场景 2 · 合同智能审核</span>                                        ║\n
+║  ┌────────────────────────────────────────────────────────────┐ ║\n
+║  │  PDF 合同 ──▶ Filesystem Server ──▶ AI 条款提取 + 对比    │ ║\n
+║  │  <span class="gr">⏱ 原来逐份 2h → 现在批量 15min</span>                          │ ║\n
+║  │  📤 输出：关键条款清单 + 风险等级标注 + 修改建议           │ ║\n
+║  └────────────────────────────────────────────────────────────┘ ║\n
+║                                                                  ║\n
+║  <span class="hl">🔍 场景 3 · 政策文档秒级检索</span>                                    ║\n
+║  ┌────────────────────────────────────────────────────────────┐ ║\n
+║  │  本地文档库 ──▶ SQLite + Embedding ──▶ 语义搜索引擎       │ ║\n
+║  │  <span class="gr">⏱ 原来翻文件夹 15min → 现在一句话 3 秒</span>                  │ ║\n
+║  │  📥 输入："找出去年关于新能源补贴的所有政策文件"           │ ║\n
+║  └────────────────────────────────────────────────────────────┘ ║\n
+║                                                                  ║\n
+║  <span class="ye">三个场景共通的底层模式：本地数据 → MCP Server → AI 分析 → 输出</span> ║\n
+╚══════════════════════════════════════════════════════════════════╝\n
+</pre>\n
+\n
+<div class="tip-box"><strong>🛡 国企安全红线</strong><br><br>\n
+✅ <strong>数据不出本地</strong>：MCP 的核心设计 — 所有文件读写、数据库查询在本地完成<br>\n
+✅ <strong>路径白名单</strong>：务必配置 <code>ALLOWED_PATHS</code>，AI 只能访问指定目录<br>\n
+✅ <strong>敏感场景本地模型</strong>：Ollama + Qwen/DeepSeek 实现<strong>完全离线运行</strong><br>\n
+❌ <strong>绝不</strong>把含敏感数据的 Server 暴露到公网</div>\n
+\n
+<h2>🏆 社区热门 MCP Server 横评</h2>\n
+<div class="table-wrap"><table>\n
+<tr><th>Server</th><th>核心能力</th><th>投资岗适用度</th><th>一句话评价</th></tr>\n
+<tr><td>📂 Filesystem</td><td>读写本地文件</td><td>⭐⭐⭐⭐⭐</td><td>必备中的必备 — 一切的基础</td></tr>\n
+<tr><td>🗄 SQLite / PostgreSQL</td><td>数据库查询分析</td><td>⭐⭐⭐⭐⭐</td><td>分析师第二大脑</td></tr>\n
+<tr><td>🔍 Brave Search</td><td>实时网页搜索</td><td>⭐⭐⭐⭐</td><td>行业调研利器</td></tr>\n
+<tr><td>🌐 Puppeteer</td><td>浏览器自动化</td><td>⭐⭐⭐⭐</td><td>批量抓数据神器</td></tr>\n
+<tr><td>🐙 GitHub</td><td>仓库操作</td><td>⭐⭐⭐</td><td>技术人员加分项</td></tr>\n
+<tr><td>💬 Slack / 飞书</td><td>消息平台集成</td><td>⭐⭐⭐</td><td>团队协作场景</td></tr>\n
+</table></div>\n
+\n
+<div class="tip-box"><strong>🚀 行动建议 — 今天就开始</strong><br><br>\n
+📅 <strong>现在 (5min)</strong>：<code>npm install -g @anthropic-ai/mcp-server-fs</code><br>\n
+📅 <strong>今天</strong>：配置 filesystem Server，让 Claude 读一个本地文件夹<br>\n
+📅 <strong>本周</strong>：加上 SQLite Server，把工作数据库接进来<br>\n
+📅 <strong>本月</strong>：走通一个完整场景（数据分析 / 合同审核 / 文档检索）<br><br>\n
+<strong>MCP 的本质不是新技术，是终于把 AI 的「手」和「眼」接上了。有了手脚的 AI，才是真正的工作伙伴。</strong></div>'
       },
       'state-enterprise-ai': {
         id: 'state-enterprise-ai', title: '国企数字化转型：AI能做什么？',
         category: 'AI', date: '2026-04-02', readTime: '17 min', icon: '🏢',
         tags: ['国企转型', '数字化', 'AI应用', '企业级'],
         description: '5大应用场景全景图 + 安全架构方案 + 5步实施路线图，深度探讨 AI 在国企的稳妥落地路径。附 Python 实战代码和风险评估框架...',
-        content: '<h2>开篇：这场转型不是选择题</h2>\n<p>在国企工作多年，我深刻体会到：数字化转型已经过了<strong>「要不要做」</strong>的阶段，进入了<strong>「怎么做才安全有效」</strong>的深水区。AI 不是万能药，但在对的地方用对的方式，效果惊人。</p>\n\n<h2>AI 在国企的 5 大落地场景全景图</h2>\n<pre class="diagram">\n┌──────────────────────────────────────────────────────────────────┐\n│                  <span class="ye">国企 AI 应用场景全景图</span>                            │\n├──────────────────────────────────────────────────────────────────┤\n│                                                                  │\n│  ┌──────────┐  ┌──────────┐  ┌──────────┐  ┌──────────┐  ┌─────┤\n│  │ 📄 智能  │  │ 📊 数据  │  │ 💬 智能  │  │ 📋 流程  │  │ 🔍  │\n│  │  文档处理│  │  分析决策│  │  客服    │  │  自动化  │  │ 知识 │\n│  ├──────────┤  ├──────────┤  ├──────────┤  ├──────────┤  ├─────┤\n│  │•合同审核 │  │•投资分析 │  │•政策问答 │  │•审批流转 │  │•文档 │\n│  │•报告生成 │  │•风险预警 │  │•报销指引 │  │•报表汇总 │  │ 检索 │\n│  │•会议纪要 │  │•趋势预测 │  │•IT支持  │  │•数据填报 │  │•经验 │\n│  │•OCR识别 │  │•对标分析 │  │•培训答疑 │  │•合规检查 │  │ 沉淀 │\n│  └──────────┘  └──────────┘  └──────────┘  └──────────┘  └─────┤\n│                                                                  │\n│  <span class="gr">★ 低风险切入点 → 从「文档处理+知识检索」开始试点</span>                │\n└──────────────────────────────────────────────────────────────────┘\n</pre>\n\n<h2>深入场景：每个都值得认真对待</h2>\n\n<h3>1. 智能文档处理 — ROI 最高的入口</h3>\n<p>国企每天产出的文档量是惊人的。AI 最擅长的事情之一就是<strong>理解、提取、生成文字</strong>。</p>\n<ul>\n  <li><strong>合同智能审核</strong>：自动识别付款条款、违约责任、保密条款等关键内容，对比标准合同模板，标注差异和风险点。从2小时人工审到15分钟AI初审+人工复核。</li>\n  <li><strong>报告自动生成</strong>：基于模板和数据源（Excel/数据库），AI 生成投资分析报告的初稿框架，人只需做判断和润色。</li>\n  <li><strong>文档 OCR + 结构化</strong>：扫描件、图片中的表格数据自动提取，告别手动录入。</li>\n</ul>\n\n<h3>2. 数据分析与决策支持</h3>\n<div class="code-block"><span class="cmt"># 实战：用 Python + AI 做投资组合分析</span>\n<span class="kw">import</span> pandas <span class="kw">as</span> pd\n<span class="kw">import</span> numpy <span class="kw">as</span> np\n\n<span class="cmt"># 加载项目数据</span>\ndata = pd.read_csv(<span class="str">"portfolio_2026Q1.csv"</span>)\n\n<span class="cmt"># AI 辅助计算 + 解读</span>\n<span class="cmt"># "帮我计算这批项目的加权平均IRR，并对比2025Q4"</span>\nirr = np.irr(data[<span class="str">\'cashflow\'</span>])\nnpv = np.npv(0.08, data[<span class="str">\'cashflow\'</span>])\n\n<span class="cmt"># AI 自动生成分析结论</span>\n<span class="cmt"># "本季度IRR较上季度提升2.1个百分点，主要驱动因素是..."</span></div>\n\n<h3>3. 智能问答 — 内部的「政策百科」</h3>\n<p>基于 RAG 技术，将公司内部的制度文件、政策法规建成<strong>可问答的知识库</strong>。员工用自然语言提问，AI 精准定位原文并解读。</p>\n\n<h2>落地的最大挑战：不是技术，是安全</h2>\n<pre class="diagram">\n┌──────────────────────────────────────────────────────────────┐\n│                    <span class="ye">国企 AI 安全架构</span>                          │\n├──────────────────────────────────────────────────────────────┤\n│                                                              │\n│   ┌──────────────────────────────────────┐                   │\n│   │          <span class="gr">内网安全区（核心数据）</span>          │                   │\n│   │  ┌─────────┐ ┌─────────┐ ┌────────┐ │                   │\n│   │  │Ollama   │ │ChromaDB │ │本地文件│ │                   │\n│   │  │本地模型 │ │向量库   │ │服务器  │ │                   │\n│   │  └─────────┘ └─────────┘ └────────┘ │                   │\n│   │         ▲                           │                   │\n│   └─────────│───────────────────────────┘                   │\n│             │ 敏感数据不出此线                               │\n│   ══════════╪══════════════════════════  安全边界            │\n│             │                                               │\n│   ┌─────────│───────────────────────────┐                   │\n│   │          <span class="hl">可控外联区（非敏感内容）</span>        │                   │\n│   │  ┌──────┴────┐ ┌────────────────┐  │                   │\n│   │  │Claude API │ │内部知识库查询  │  │                   │\n│   │  │(脱敏后)   │ │(不含敏感字段)  │  │                   │\n│   │  └───────────┘ └────────────────┘  │                   │\n│   └──────────────────────────────────────┘                   │\n└──────────────────────────────────────────────────────────────┘\n</pre>\n<p><strong>核心原则</strong>：数据分级、敏感不上云、模型要可控、访问要审计。</p>\n\n<h2>5 步实施路线图</h2>\n<pre class="diagram">\n<span class="ye">Phase 1</span>  <span class="ye">Phase 2</span>    <span class="ye">Phase 3</span>    <span class="ye">Phase 4</span>     <span class="ye">Phase 5</span>\n  ▌           ▌           ▌           ▌            ▌\n  ▌  场景     ▌  技术     ▌  试点     ▌  迭代      ▌  规模\n  ▌  调研     ▌  选型     ▌  先行     ▌  优化      ▌  推广\n  ▌           ▌           ▌           ▌            ▌\n  ▼           ▼           ▼           ▼            ▼\n┌────────┐ ┌────────┐ ┌────────┐ ┌────────┐ ┌────────┐\n│梳理高频│ │选择部署│ │选1-2个 │ │根据反馈│ │形成最佳│\n│低风险  │ │方式    │ │部门试点│ │持续改进│ │实践    │\n│AI场景  │ │安全评估│ │快速验证│ │效果评估│ │全公司推│\n└────────┘ └────────┘ └────────┘ └────────┘ └────────┘\n   2周         1周         4周         4周        持续\n</pre>\n\n<div class="tip-box"><strong>💡 来自实践的建议</strong>：不要一上来就做最复杂的场景。从<strong>「内部知识库问答」</strong>或<strong>「文档格式转换」</strong>这种低风险、高感知的场景切入，让领导层和同事先感受到 AI 的便利，再逐步推进到核心业务场景。</div>\n\n<h2>总结</h2>\n<p>国企的 AI 转型需要的不是技术冒险，而是<strong>稳妥的渐进创新</strong>。找准切入点、守好安全线、让效果说话。AI 是工具，人是主角——这个认知决定了转型能走多远。</p>'
+        content: '<h2>📌 核心要点</h2>
+<div class="tip-box"><strong>读完你将收获：</strong><br><br>
+🔹 5 大场景全景图 + 风险评级<br>
+🔹 最低风险切入路径（文档处理）<br>
+🔹 内网-外联双层安全架构<br>
+🔹 5 步路线图（含时间线）<br>
+🔹 一线避坑建议</div>
+
+<h2>🎯 不是"要不要"，是"怎么安全地做"</h2>
+<p>国企数字化转型已进入深水区。AI 不是万能药，但<strong>在对的场景用对的方式</strong>，ROI 惊人。</p>
+
+<h2>🗺 5 大场景全景图</h2>
+<pre class="diagram">
+╔══════════════════════════════════════════════════════════════╗
+║                <span class="ye">🏢 国企 AI 落地 — 5 大场景全览</span>                    ║
+╠══════════════════════════════════════════════════════════════╣
+║                                                              ║
+║  ┌───────────────┐  ┌───────────────┐  ┌───────────────┐   ║
+║  │  📄 文档处理   │  │  📊 分析决策   │  │  💬 智能客服   │   ║
+║  │  <span class="gr">★★★ 低风险</span>  │  │  <span class="ye">★★☆ 中风险</span>  │  │  <span class="ye">★★☆ 中风险</span>  │   ║
+║  │ 合同审核·报告  │  │ 投资分析·风控  │  │ 政策问答·报销  │   ║
+║  │ 纪要·OCR识别  │  │ 趋势·对标分析  │  │ IT支持·培训    │   ║
+║  └───────────────┘  └───────────────┘  └───────────────┘   ║
+║                                                              ║
+║  ┌───────────────┐  ┌───────────────┐                       ║
+║  │  📋 流程自动化 │  │  🔍 知识管理   │                       ║
+║  │  <span class="hl">★★★ 高风险</span>  │  │  <span class="gr">★★☆ 低风险</span>  │                       ║
+║  │ 审批流转·报表  │  │ 文档检索·经验  │                       ║
+║  │ 数据填报·合规  │  │ 沉淀·知识库    │                       ║
+║  └───────────────┘  └───────────────┘                       ║
+║                                                              ║
+║  <span class="gr">★ 推荐入口：文档处理 + 知识管理 → 低风险、高感知、快见效</span>    ║
+╚══════════════════════════════════════════════════════════════╝
+</pre>
+
+<h2>🔬 3 大核心场景详解</h2>
+
+<h3>1. 📄 智能文档处理 <span class="gr">— ROI 最高</span></h3>
+<div class="table-wrap"><table>
+<tr><th>子场景</th><th>AI 做什么</th><th>效率提升</th></tr>
+<tr><td>合同智能审核</td><td>自动抓取付款/违约/保密条款，比对标准模板</td><td><strong>2h → 15min</strong></td></tr>
+<tr><td>报告自动生成</td><td>基于模板+数据源，生成初稿框架</td><td>人只做判断润色</td></tr>
+<tr><td>文档 OCR+结构化</td><td>扫描件/图片表格自动提取</td><td>告别手动录入</td></tr>
+</table></div>
+
+<h3>2. 📊 数据分析与决策支持</h3>
+<div class="code-block"><span class="cmt"># 实战：Python + AI 做投资组合分析</span>
+<span class="kw">import</span> pandas <span class="kw">as</span> pd
+<span class="kw">import</span> numpy <span class="kw">as</span> np
+
+<span class="cmt"># 加载项目数据</span>
+data = pd.read_csv(<span class="str">"portfolio_2026Q1.csv"</span>)
+
+<span class="cmt"># AI 辅助计算 + 解读</span>
+<span class="cmt"># "帮我计算这批项目的加权平均 IRR，并对比 2025Q4"</span>
+irr = np.irr(data[<span class="str">'cashflow'</span>])
+npv = np.npv(0.08, data[<span class="str">'cashflow'</span>])
+
+<span class="cmt"># AI 自动生成分析结论</span>
+<span class="cmt"># "本季度 IRR 较上季度提升 2.1 个百分点，主要驱动因素是..."</span></div>
+
+<h3>3. 💬 智能问答 — 内部"政策百科"</h3>
+<p>RAG 技术将制度文件、政策法规建成<strong>可问答知识库</strong>。自然语言提问 → AI 精准定位原文并解读。核心价值：<strong>新员工不再追着老员工问</strong>。</p>
+
+<h2>🔒 最大挑战：安全，不是技术</h2>
+<pre class="diagram">
+╔══════════════════════════════════════════════════════════════╗
+║                  <span class="ye">🛡 国企 AI 双层安全架构</span>                        ║
+╠══════════════════════════════════════════════════════════════╣
+║                                                              ║
+║  ┌──────────────────────────────────────────────────────┐   ║
+║  │            <span class="gr">🔒 内网安全区 — 核心数据不出墙</span>               │   ║
+║  │                                                      │   ║
+║  │    ┌────────────┐  ┌────────────┐  ┌────────────┐   │   ║
+║  │    │ 🦙 Ollama  │  │ 🗄 ChromaDB│  │ 📂 本地文件 │   │   ║
+║  │    │ 本地大模型 │  │ 私有向量库 │  │  敏感数据   │   │   ║
+║  │    └────────────┘  └────────────┘  └────────────┘   │   ║
+║  │                                                      │   ║
+║  └──────────────────────────┬───────────────────────────┘   ║
+║                             │                               ║
+║              ═══════════════╪═══════════════                 ║
+║              🚫  敏感数据不出此边界  🚫                       ║
+║              ═══════════════╪═══════════════                 ║
+║                             │                               ║
+║  ┌──────────────────────────┴───────────────────────────┐   ║
+║  │            <span class="hl">🌐 可控外联区 — 脱敏后可调云</span>                 │   ║
+║  │                                                      │   ║
+║  │    ┌────────────┐  ┌────────────────────────────┐   │   ║
+║  │    │ 🤖 Claude  │  │ 📋 内部知识库查询(脱敏版)  │   │   ║
+║  │    │ API(脱敏)  │  │                            │   │   ║
+║  │    └────────────┘  └────────────────────────────┘   │   ║
+║  │                                                      │   ║
+║  └──────────────────────────────────────────────────────┘   ║
+║                                                              ║
+║  <span class="gr">4 条铁律：</span>数据分级 │ 敏感不上云 │ 模型可控 │ 全程审计         ║
+╚══════════════════════════════════════════════════════════════╝
+</pre>
+
+<h2>🗓 5 步实施路线图</h2>
+<pre class="diagram">
+╔══════════════════════════════════════════════════════════════════╗
+║              <span class="ye">从 0 到 1：国企 AI 落地 5 步走</span>                       ║
+╠══════════════════════════════════════════════════════════════════╣
+║                                                                  ║
+║  <span class="gr">Phase 1</span>           <span class="ye">Phase 2</span>          <span class="hl">Phase 3</span>         <span class="gr">Phase 4</span>         <span class="ye">Phase 5</span>   ║
+║  ┌──────────┐    ┌──────────┐    ┌──────────┐    ┌──────────┐    ┌──────────┐ ║
+║  │ 🔍 场景  │ ─► │ 🛠 技术  │ ─► │ 🧪 试点  │ ─► │ 🔄 迭代  │ ─► │ 📈 规模  │ ║
+║  │   调研   │    │   选型   │    │   先行   │    │   优化   │    │   推广   │ ║
+║  ├──────────┤    ├──────────┤    ├──────────┤    ├──────────┤    ├──────────┤ ║
+║  │梳理高频  │    │选择部署  │    │选1-2部门 │    │收集反馈  │    │形成最佳  │ ║
+║  │低风险场景│    │方式·安全 │    │快速验证  │    │持续改进  │    │实践全公司│ ║
+║  │          │    │   评估   │    │   跑通   │    │效果评估  │    │   推广   │ ║
+║  └──────────┘    └──────────┘    └──────────┘    └──────────┘    └──────────┘ ║
+║   <span class="dim">⏱ 2 周</span>           <span class="dim">⏱ 1 周</span>          <span class="dim">⏱ 4 周</span>          <span class="dim">⏱ 4 周</span>         <span class="dim">⏱ 持续</span>   ║
+║                                                                  ║
+║  <span class="gr">总周期约 3 个月，从 PoC 到全公司推广</span>                             ║
+╚══════════════════════════════════════════════════════════════════╝
+</pre>
+
+<div class="tip-box"><strong>💡 避坑指南</strong><br><br>
+<strong>先易后难：</strong>从「内部知识库问答」或「文档格式转换」切入——低风险、高感知，让领导和同事先尝到甜头，再逐步推进核心业务。</div>
+
+<div class="tip-box"><strong>🚀 行动建议</strong><br><br>
+📋 <strong>第 1 周</strong>：梳理团队最高频的 3 个文档处理场景<br>
+🔧 <strong>第 2 周</strong>：选最低风险场景做 PoC<br>
+👥 <strong>第 1 月</strong>：小范围试点，收集反馈<br>
+📊 <strong>第 2 月</strong>：数据说话——效率提升？错误率降低？<br>
+🏢 <strong>第 3 月</strong>：形成最佳实践，全公司推广<br><br>
+<strong>国企 AI 转型不需要技术冒险，需要稳妥的渐进创新。</strong></div>'
       },
       'efficiency-tools': {
         id: 'efficiency-tools', title: '效率提升工具箱：我常用的5个AI工具',
         category: 'Tips', date: '2026-03-28', readTime: '15 min', icon: '🧰',
         tags: ['效率工具', 'AI助手', '工作流', '推荐'],
         description: '5件套 AI 工具生态全解：Claude、Claude Code、Obsidian、飞书、浏览器插件。含工具联动工作流图解和对比评测表...',
-        content: '<h2>工具选型：我的4条铁律</h2>\n<p>在国企工作这些年，我试过无数效率工具，能留下的不到10%。总结出4条标准：<strong>够用就好、嵌入工作流、学习成本低、数据安全可控</strong>。</p>\n\n<h2>我的 5 件套工具生态</h2>\n<pre class="diagram">\n┌──────────────────────────────────────────────────────────────────┐\n│                    <span class="ye">Harry 的 AI 工具生态（2026版）</span>                  │\n├──────────────────────────────────────────────────────────────────┤\n│                                                                  │\n│                     ┌─────────────────┐                         │\n│                     │   <span class="hl">🧠 Claude</span>     │                         │\n│                     │   思考 & 写作    │                         │\n│                     └────────┬────────┘                         │\n│                              │                                   │\n│     ┌────────────────────────┼────────────────────────┐         │\n│     │                        │                        │         │\n│     ▼                        ▼                        ▼         │\n│ ┌──────────┐          ┌──────────┐           ┌──────────┐      │\n│ │🛠 Claude │          │📝 Obsidian│          │🚀 浏览器 │      │\n│ │  Code    │          │  知识库   │           │  AI 插件  │      │\n│ │代码/自动化│         │长期沉淀   │           │即时辅助   │      │\n│ └────┬─────┘          └────┬─────┘           └────┬─────┘      │\n│      │                     │                      │              │\n│      └─────────────────────┼──────────────────────┘              │\n│                            ▼                                     │\n│                    ┌───────────────┐                             │\n│                    │  📋 飞书/Notion│                             │\n│                    │  团队协作 & 输出│                             │\n│                    └───────────────┘                             │\n└──────────────────────────────────────────────────────────────────┘\n</pre>\n\n<h2>逐一说透</h2>\n\n<h3>1. Claude — 主力写作 & 思考伙伴</h3>\n<p><strong>核心场景</strong>：报告撰写、方案策划、长文润色、逻辑推演。</p>\n<p>Claude 的中文能力在所有 AI 中第一梯队，尤其擅长处理长文本（200K token 上下文窗口）。我每天用它：</p>\n<ul>\n  <li>写投资分析报告的结构大纲</li>\n  <li>润色给领导的汇报材料（口头语→正式书面语）</li>\n  <li>分析政策文件的逻辑框架</li>\n</ul>\n<div class="tip-box"><strong>💡 技巧</strong>：建一个专属 Project，把常写的报告模板、术语表、风格偏好放进去作为 System Prompt。越具体效果越好。</div>\n\n<h3>2. Claude Code — 编程 & 自动化引擎</h3>\n<p><strong>核心场景</strong>：写脚本、处理数据、批量操作文件。</p>\n<div class="code-block"><span class="cmt"># 日常高频用法</span>\n\n<span class="cmt"># 1. 批量文件处理</span>\n<span class="str">"把 reports/ 下所有 PDF 按「日期_项目名」重命名"</span>\n\n<span class="cmt"># 2. 数据清洗</span>\n<span class="str">"处理这个 CSV：去重、填充空值、按金额降序排列"</span>\n\n<span class="cmt"># 3. 自动化脚本</span>\n<span class="str">"写一个脚本，每天17:00检查 inbox/ 有新文件就发通知"</span></div>\n\n<h3>3. Obsidian — 第二大脑</h3>\n<p><strong>核心场景</strong>：知识沉淀、笔记关联、长期积累。</p>\n<p>为什么选 Obsidian 而不是 Notion？因为它是<strong>本地 Markdown 文件 + 纯文本</strong>——你可以用任何编辑器打开，数据100%归你掌控。配合 Claude Code 可以实现自动化的知识整理。</p>\n\n<h3>4. 飞书 — 团队协作中枢</h3>\n<p><strong>核心场景</strong>：团队文档协作、会议纪要、项目管理。</p>\n<p>飞书的 AI 能力正在快速进化：多维表格的自动填充、文档的智能续写、会议纪要的自动要点提取。在国企体系内，飞书是目前生态最完整的协作平台。</p>\n\n<h3>5. 浏览器 AI 插件 — 随叫随到的助手</h3>\n<p>推荐组合：<strong>Monica</strong>（网页AI翻译+总结）+ <strong>简悦</strong>（沉浸式阅读）+ <strong>MarkDownload</strong>（一键剪藏到 Obsidian）。这个组合覆盖了「发现→阅读→保存→整理」的完整信息流。</p>\n\n<h2>工具联动：我的完美工作流</h2>\n<pre class="diagram">\n<span class="ye">一天的工作流（从信息到产出）</span>\n\n<span class="dim">07:30</span>  📱 通勤路上刷新闻\n          → Monica 插件快速翻译+摘要英文资讯\n          → MarkDownload 一键保存有价值的到 Obsidian inbox\n\n<span class="dim">09:00</span>  💼 到公司处理邮件+文档\n          → Claude 快速梳理邮件要点，提取待办\n          → Claude Code 批量处理昨天的数据文件\n\n<span class="dim">11:00</span>  📊 开会讨论投资项目\n          → 飞书妙记自动录音+转写\n          → Claude 提取会议决策项+待办+责任人\n\n<span class="dim">14:00</span>  ✍️ 写投资分析报告\n          → Claude 生成报告大纲→填充分析内容→润色定稿\n          → 飞书协作分享给团队审阅\n\n<span class="dim">16:30</span>  📝 知识整理时间（铁打不动的30分钟）\n          → Obsidian 整理今天的笔记\n          → Claude Code 自动关联已有内容、补全标签\n\n<span class="dim">17:00</span>  ✅ 下班前回顾\n          → Claude 生成今日工作总结（从Obsidian日记提取）\n</pre>\n\n<h2>工具对比速查表</h2>\n<div class="table-wrap"><table>\n<tr><th>工具</th><th>最佳场景</th><th>价格</th><th>上手难度</th><th>推荐指数</th></tr>\n<tr><td>Claude</td><td>写作、分析、思考</td><td>$20/月</td><td>低</td><td>⭐⭐⭐⭐⭐</td></tr>\n<tr><td>Claude Code</td><td>代码、自动化</td><td>免费</td><td>中</td><td>⭐⭐⭐⭐⭐</td></tr>\n<tr><td>Obsidian</td><td>知识管理</td><td>免费</td><td>中</td><td>⭐⭐⭐⭐⭐</td></tr>\n<tr><td>飞书</td><td>团队协作</td><td>免费</td><td>低</td><td>⭐⭐⭐⭐</td></tr>\n<tr><td>Monica</td><td>网页AI辅助</td><td>免费/付费</td><td>低</td><td>⭐⭐⭐⭐</td></tr>\n</table></div>\n\n<h2>结语：少即是多</h2>\n<p>选2-3个核心工具深入使用，比什么都装但什么都不精要强一万倍。工具只是手段，<strong>你能持续产出的价值</strong>才是目的。从今天开始，搭建你的最小工具栈，然后用30天养成使用习惯。</p>'
+        content: '<h2>📌 读完你将收获</h2>
+<div class="tip-box"><strong>5 分钟速览：</strong><br><br>
+🔹 4 条铁律砍掉 90% 无效工具<br>
+🔹 5 件套协作全景图<br>
+🔹 每个工具的「最佳一击」+ 避坑指南<br>
+🔹 从通勤到下班的完美 AI 工作流<br>
+🔹 速查对比表 + 30 天上手路线</div>
+
+<h2>📏 我的 4 条选型铁律</h2>
+<div class="table-wrap"><table>
+<tr><th>铁律</th><th>一句话解释</th></tr>
+<tr><td><strong>够用就好</strong></td><td>不追新、不 ALL-IN-ONE，解决 80% 场景就够</td></tr>
+<tr><td><strong>嵌入工作流</strong></td><td>工具是"滑进去"的，不是"供起来"的</td></tr>
+<tr><td><strong>学习成本低</strong></td><td>10 分钟内跑通第一个任务，否则放弃</td></tr>
+<tr><td><strong>数据安全可控</strong></td><td>国企底线：敏感数据不出本地、权限可审计</td></tr>
+</table></div>
+
+<h2>🌐 5 件套协作全景图</h2>
+<pre class="diagram">
+<span class="ye">                🧰 Harry 的 AI 工具栈</span>
+
+        ┌───────────────────────────────────┐
+        │                                   │
+        │    <span class="hl">🧠 Claude</span>  ◀── 大脑中枢       │
+        │    "一切思考的起点"                 │
+        │                                   │
+        └───────────────┬───────────────────┘
+                        │
+        ┌───────────────┼───────────────┐
+        │               │               │
+        ▼               ▼               ▼
+┌──────────────┐ ┌──────────────┐ ┌──────────────┐
+│ <span class="gr">🛠 Claude</span>   │ │ <span class="gr">📝 Obsidian</span> │ │ <span class="gr">🚀 浏览器</span>   │
+│ <span class="gr">   Code</span>     │ │ <span class="gr">  知识库</span>    │ │ <span class="gr">  AI 插件</span>   │
+│              │ │              │ │              │
+│ 代码·自动化  │ │ 沉淀·关联    │ │ 获取·速读    │
+└──────┬───────┘ └──────┬───────┘ └──────┬───────┘
+       │                │                │
+       └────────────────┼────────────────┘
+                        │
+                        ▼
+               ┌────────────────┐
+               │  <span class="ye">📋 飞书</span>       │
+               │  协作·交付     │
+               └────────────────┘
+</pre>
+
+<h2>🔍 逐一拆解</h2>
+
+<h3>1. 🧠 Claude — 你的私人参谋长</h3>
+<p><strong>一句话定位</strong>：中文写作的天花板，200K 上下文，长文推理无敌。</p>
+<div class="table-wrap"><table>
+<tr><th>场景</th><th>实际用例</th></tr>
+<tr><td>写报告</td><td>输入要点 → 出完整大纲 → 逐节填充 → 一键润色</td></tr>
+<tr><td>改汇报</td><td>口语化草稿 → 正式公文风格，领导看了点头</td></tr>
+<tr><td>读政策</td><td>丢进一份 50 页政策文件 → 3 分钟出逻辑脑图</td></tr>
+</table></div>
+<div class="tip-box"><strong>💡 关键技巧</strong>：建一个专属 Project，把报告模板、术语表、风格偏好塞进 System Prompt。<strong>越具体，越像你</strong>。</div>
+
+<h3>2. 🛠 Claude Code — 自动化流水线</h3>
+<p><strong>一句话定位</strong>：把重复劳动一键清零。终端里说人话就行。</p>
+<div class="code-block"><span class="cmt"># 三口仙气，解决三类高频痛点</span>
+
+<span class="cmt"># 1. 文件批处理</span>
+<span class="str">"把 reports/ 下所有 PDF 按「日期_项目名」重命名"</span>
+
+<span class="cmt"># 2. 数据清洗</span>
+<span class="str">"处理这个 CSV：去重、填缺失值、金额降序"</span>
+
+<span class="cmt"># 3. 自动化脚本</span>
+<span class="str">"写个脚本，每天 17:00 检查 inbox/，有新文件就通知我"</span></div>
+
+<h3>3. 📝 Obsidian — 你的第二大脑</h3>
+<p><strong>一句话定位</strong>：本地 Markdown，数据 100% 归你。笔记之间自动织成知识网。</p>
+<p>核心优势：<strong>纯文本、本地存储、双向链接</strong>。配合 Claude Code 可实现自动打标签、关联历史笔记、生成周报——把你的笔记从"仓库"升级为"引擎"。</p>
+
+<h3>4. 📋 飞书 — 团队协作中枢</h3>
+<p><strong>一句话定位</strong>：国企生态内最完整的协作平台。多维表格 + AI 续写 + 妙记自动纪要，三位一体。</p>
+<p>飞书的 AI 正快速进化：多维表格自动填充、文档智能续写、妙记自动提取待办。在国企体系内，当前无出其右。</p>
+
+<h3>5. 🚀 浏览器插件三件套</h3>
+<div class="table-wrap"><table>
+<tr><th>插件</th><th>用途</th><th>一键操作</th></tr>
+<tr><td><strong>Monica</strong></td><td>网页翻译 + 摘要</td><td>选中 → 右键 → 总结</td></tr>
+<tr><td><strong>简悦</strong></td><td>沉浸式阅读</td><td>杂乱网页变 Typora</td></tr>
+<tr><td><strong>MarkDownload</strong></td><td>剪藏到 Obsidian</td><td>点击 → 进知识库</td></tr>
+</table></div>
+<p>三件套串起完整信息流：<strong>发现 → 阅读 → 保存 → 整理</strong>，一气呵成。</p>
+
+<h2>🔄 我的完美一天</h2>
+<pre class="diagram">
+<span class="ye">⏰ 一张图看完 AI 如何嵌入 7 个时间点</span>
+
+<span class="dim">07:30</span> ── 📱 通勤 ──→ Monica 译摘要文 → MarkDownload 存 Obsidian
+<span class="dim">        </span>                           <span class="dim">〰️ 信息流入</span>
+
+<span class="dim">09:00</span> ── 💼 到岗 ──→ Claude 提取邮件待办 → Claude Code 批处理数据
+<span class="dim">        </span>                           <span class="dim">〰️ 任务归拢</span>
+
+<span class="dim">11:00</span> ── 📊 会议 ──→ 飞书妙记录音转写 → Claude 提取决策+待办+责任人
+<span class="dim">        </span>                           <span class="dim">〰️ 决策沉淀</span>
+
+<span class="dim">14:00</span> ── ✍️ 写报告 ─→ Claude 大纲→填充→润色 → 飞书分享团队审阅
+<span class="dim">        </span>                           <span class="dim">〰️ 核心产出</span>
+
+<span class="dim">16:30</span> ── 📝 整理 ──→ Obsidian 整理笔记 → Claude Code 补标签+关联
+<span class="dim">        </span>                           <span class="dim">〰️ 知识内化</span>
+
+<span class="dim">17:00</span> ── ✅ 回顾 ──→ Claude 从 Obsidian 日记 → 生成今日工作总结
+<span class="dim">        </span>                           <span class="dim">〰️ 闭环收官</span>
+</pre>
+
+<h2>📊 速查对比</h2>
+<div class="table-wrap"><table>
+<tr><th>工具</th><th>最佳一击</th><th>价格</th><th>难度</th><th>推荐</th></tr>
+<tr><td>🧠 Claude</td><td>写作·分析·思考</td><td>$20/月</td><td>⭐</td><td>⭐⭐⭐⭐⭐</td></tr>
+<tr><td>🛠 Claude Code</td><td>代码·自动化</td><td>免费</td><td>⭐⭐</td><td>⭐⭐⭐⭐⭐</td></tr>
+<tr><td>📝 Obsidian</td><td>知识管理</td><td>免费</td><td>⭐⭐</td><td>⭐⭐⭐⭐⭐</td></tr>
+<tr><td>📋 飞书</td><td>团队协作</td><td>免费</td><td>⭐</td><td>⭐⭐⭐⭐</td></tr>
+<tr><td>🚀 Monica</td><td>网页 AI 辅助</td><td>免费/付费</td><td>⭐</td><td>⭐⭐⭐⭐</td></tr>
+</table></div>
+
+<h2>🎯 少即是多</h2>
+<p>别当工具仓鼠。选 2-3 个核心工具用到肌肉记忆，比装 30 个插件从来不打开强一万倍。工具只是手段——<strong>你能持续产出的价值</strong>才是唯一值得关注的东西。</p>
+
+<div class="tip-box"><strong>🚀 30 天上手路线</strong><br><br>
+📅 <strong>第 1 周</strong>：只装 Claude + Obsidian。别碰别的。<br>
+📅 <strong>第 2 周</strong>：加入 Claude Code，自动化一个你每周都在手动做的任务。<br>
+📅 <strong>第 3 周</strong>：装浏览器三件套，打通「发现→保存→整理」信息流。<br>
+📅 <strong>第 4 周</strong>：复盘——你省下了几个小时？哪个工具 ROI 最高？<br><br>
+<strong>从今天开始，搭你的最小工具栈。30 天后你会感谢今天的决定。</strong></div>'
       }
     };
 
