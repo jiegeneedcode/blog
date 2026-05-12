@@ -1045,6 +1045,196 @@ npv = np.npv(0.08, data[<span class="str">'cashflow'</span>])
 📅 <strong>第 3 周</strong>：装浏览器三件套，打通「发现→保存→整理」信息流。<br>
 📅 <strong>第 4 周</strong>：复盘——你省下了几个小时？哪个工具 ROI 最高？<br><br>
 <strong>从今天开始，搭你的最小工具栈。30 天后你会感谢今天的决定。</strong></div>'
+      },
+      'hot-20260512-1': {
+        id: 'hot-20260512-1', title: '给AI装个大脑：gbrain是怎么让Agent记住17888页内容的',
+        category: 'AI', date: '2026-05-12', readTime: '14 min', icon: '🧠',
+        tags: ['AI Agent', '记忆系统', '知识图谱', 'gbrain', 'RAG'],
+        description: '深入拆解YC总裁Garry Tan自用的AI Agent大脑——gbrain。混合检索（向量+图谱+全文）比纯RAG高出31个点，30分钟部署，21个定时任务自主运行...',
+        content: '<h2>📌 核心要点</h2>\n
+<div class="tip-box"><strong>读完你将收获：</strong><br><br>\n
+🔹 理解 AI Agent 记忆系统的三大技术路线（向量/图谱/混合）<br>\n
+🔹 吃透 gbrain 的核心架构：自动建图 + 混合检索 + 夜间巩固<br>\n
+🔹 学会用零 LLM 调用的规则引擎做实体关系抽取<br>\n
+🔹 获得国企投资场景下的 AI 记忆系统落地思路</div>\n
+\n
+<h2>🤔 你的AI Agent，是不是也很健忘？</h2>\n
+<p>这是每个用 AI Agent 的人都会遇到的魔幻时刻：</p>\n
+<ul>\n
+  <li>上周让 Agent 分析过的那份新能源研报，这周问它「上次提到的那个风险点是什么」，它一脸茫然。</li>\n
+  <li>你让它帮你追踪 10 家公司的融资动态，每次问它都像第一次听说这些公司。</li>\n
+  <li>更离谱的是，明明 5 分钟前才聊过的内容，换个话题再回来它就「失忆」了。</li>\n
+</ul>\n
+<p>这不是你的 Agent 智商低，是它<strong>没有长期记忆</strong>。</p>\n
+<p>而今天的主角——<strong>gbrain</strong>，YC 总裁 Garry Tan 本人自用的 AI 记忆系统，管理着 <strong>17,888 页内容、4,383 个联系人、723 家公司</strong>，21 个定时任务全自动运行——只用了 <strong>12 天</strong>就搭建完成。</p>\n
+\n
+<h2>🧠 一张图看懂 gbrain 架构</h2>\n
+<p>gbrain 的核心思路：<strong>向量搜索 + 知识图谱 + 全文检索，三合一</strong>。单独哪一项都不够，但组合起来就能回答向量搜索答不了的问题。</p>\n
+\n
+<pre class="diagram">\n
+╔══════════════════════════════════════════════════════════════════╗\n
+║              <span class="ye">🧠 GBrain 混合检索引擎</span>                                 ║\n
+╠══════════════════════════════════════════════════════════════════╣\n
+║                                                                  ║\n
+║                         <span class="ye">用户查询</span>                                   ║\n
+║                   「Bob 这季度投资了什么？」                         ║\n
+║                              │                                     ║\n
+║         ┌────────────────────┼────────────────────┐               ║\n
+║         ▼                    ▼                     ▼              ║\n
+║  ┌──────────────┐   ┌──────────────┐   ┌──────────────┐         ║\n
+║  │ <span class="hl">🔍 向量搜索</span>  │   │ <span class="hl">🕸 知识图谱</span>  │   │ <span class="hl">📄 BM25全文</span>  │         ║\n
+║  │              │   │              │   │              │         ║\n
+║  │ 语义相似度   │   │ 实体→关系     │   │ 关键词匹配   │         ║\n
+║  │ 「投资相关」 │   │ Bob─invested  │   │ "Bob"+"投资" │         ║\n
+║  │  + 上下文   │   │    _in→公司   │   │  +"Q1 2026"  │         ║\n
+║  └──────┬───────┘   └──────┬───────┘   └──────┬───────┘         ║\n
+║         │                  │                  │                  ║\n
+║         └──────────────────┼──────────────────┘                  ║\n║                            ▼                                     ║\n║                   ┌──────────────────┐                           ║\n║                   │ <span class="gr">🎯 结果融合排序</span> │                           ║\n║                   │  Backlink Boosting│                           ║\n║                   │  去重 + 置信度   │                           ║\n║                   └────────┬─────────┘                           ║\n║                            ▼                                     ║\n║              <span class="gr">✅ P@5: 49.1% | R@5: 97.9%</span>                          ║\n║              <span class="dim">vs 纯向量 RAG: P@5 17.7%（+31.4 点）</span>                ║\n║                                                                  ║\n╚══════════════════════════════════════════════════════════════════╝\n
+</pre>\n
+\n
+<div class="tip-box"><strong>🎯 关键洞察</strong>：向量搜索擅长「语义相似」，但回答不了「Bob 投资了什么」——因为这是一个<strong>结构化关系查询</strong>。你需要图谱来存储 typed links（attended / works_at / invested_in），需要全文搜索来精确匹配实体名。三者互补，缺一不可。</div>\n
+\n
+<h2>🏗 三大核心设计：每一个都值得学</h2>\n
+\n
+<h3>设计一：自动建图——零 LLM 调用的实体关系抽取</h3>\n
+<p>这是 gbrain 最让我拍案叫绝的地方。每当你（或你的 Agent）写入一页新内容，gbrain 自动：</p>\n
+<ol>\n
+  <li>识别文本中的<strong>实体</strong>（人名、公司名、项目名）</li>\n
+  <li>判断实体间的<strong>关系类型</strong>（参会/任职/投资/创立/顾问……）</li>\n
+  <li>在知识图谱中创建<strong>类型化链接</strong></li>\n
+</ol>\n
+<p><strong>整个过程，零 LLM 调用。</strong></p>\n
+\n
+<div class="table-wrap"><table>\n
+<tr><th>关系类型</th><th>示例</th><th>触发关键词</th></tr>\n
+<tr><td>👔 <strong>works_at</strong></td><td>张三是 XYZ 公司的技术总监</td><td>「任职」「担任」「入职」</td></tr>\n
+<tr><td>💰 <strong>invested_in</strong></td><td>某基金领投了 ABC 项目</td><td>「投资」「领投」「跟投」</td></tr>\n
+<tr><td>🏢 <strong>founded</strong></td><td>李四创立了某科技公司</td><td>「创立」「创办」「成立」</td></tr>\n
+<tr><td>📅 <strong>attended</strong></td><td>王五参加了新能源研讨会</td><td>「参加」「出席」「与会」</td></tr>\n
+<tr><td>🤝 <strong>advises</strong></td><td>赵六是某公司顾问</td><td>「顾问」「咨询」「指导」</td></tr>\n
+</table></div>\n
+\n
+<div class="tip-box"><strong>💡 为什么不直接用 LLM 做关系抽取？</strong><br><br>\n
+答案很现实：<strong>成本 × 延迟 × 隐私</strong>。Garry Tan 的大脑每天摄入大量私人邮件、会议纪要、语音通话。如果每一条都调一次 API 做 NER+关系抽取，不仅贵（日积月累），慢（增加查询延迟），还有隐私风险（数据上云）。<br><br>\n
+<strong>规则引擎虽然在召回上不如 LLM 灵活，但配合图谱的结构化存储，精确度和可用性远超预期。</strong></div>\n
+\n
+<h3>设计二：混合检索——单靠向量搜索真的不够</h3>\n
+<p>这就引出了一个很多 RAG 教程不会告诉你的事实：<strong>向量搜索的 P@5（前 5 精度）在实际场景中惨不忍睹</strong>。</p>\n
+\n
+<p>gbrain 团队自己做了一组对比实验。在一个 240 页的 Opus 生成语料库上：</p>\n
+\n
+<div class="table-wrap"><table>\n
+<tr><th>检索方案</th><th>P@5（精度）</th><th>R@5（召回）</th></tr>\n
+<tr><td>纯向量搜索（ChromaDB）</td><td>17.7%</td><td>~65%</td></tr>\n
+<tr><td>ripgrep + BM25 全文搜索</td><td>~20%</td><td>~70%</td></tr>\n
+<tr><td>向量 + 全文（朴素融合）</td><td>~25%</td><td>~80%</td></tr>\n
+<tr><td><strong>gbrain（向量 + 图谱 + BM25）</strong></td><td><strong>49.1%</strong></td><td><strong>97.9%</strong></td></tr>\n
+</table></div>\n
+\n
+<p><strong>加上图谱层后，P@5 从 17.7% 跳到 49.1%，提升 31.4 个百分点。</strong>这不是微调，是质的飞跃。</p>\n
+\n
+<p>为什么会差这么多？因为很多真实查询是这样的：</p>\n
+\n
+<pre class="diagram">\n
+<span class="dim">查询：「帮我找找张总最近半年跟新能源有关的发言」</span>\n
+\n
+<span class="gr">纯向量搜索</span> → 能找到「新能源」「发言」语义相关的内容\n
+                      <span class="dim">但不知道「张总」是谁，结果里混入了李总、王总</span>\n
+\n
+<span class="ye">gbrain 混合搜索</span> → 图谱定位「张总」实体 → 筛选 attended/spoke_at 边\n
+                        → 时间过滤（最近半年）→ 向量语义确认（新能源相关）\n
+                        → <span class="gr">精确命中</span>\n
+</pre>\n
+\n
+<h3>设计三：夜间记忆巩固——AI 自己整理自己</h3>\n
+<p>这是 gbrain 的「管家模式」：每晚自动运行 cron job，在你睡觉时：</p>\n
+\n
+<pre class="diagram">\n
+<span class="ye">🌙 每日凌晨 3:00，gbrain 自动执行：</span>\n
+\n
+┌─────────────────────────────────────────────────────┐\n│ <span class="hl">① 合并重复记忆</span>                                     │\n│    同一事件被多次记录 → 合并为一条 + 标记来源         │\n├─────────────────────────────────────────────────────┤\n│ <span class="hl">② 修复引用关系</span>                                     │\n│    新的信息补充了旧实体 → 更新图谱链接                │\n├─────────────────────────────────────────────────────┤\n│ <span class="hl">③ 丰富人物/公司画像</span>                                 │\n│    聚合所有 mentions → 生成结构化摘要                 │\n├─────────────────────────────────────────────────────┤\n│ <span class="hl">④ 清理低质量内容</span>                                     │\n│    碎片化、无上下文的记录 → 归档或删除                 │\n└─────────────────────────────────────────────────────┘\n\n<span class="gr">第二天醒来，大脑比昨晚更聪明。</span>\n</pre>\n
+\n
+<div class="tip-box"><strong>🔑 为什么这个设计如此重要？</strong><br><br>\n
+它解决了 AI 记忆系统的一个核心矛盾：<strong>日间写入要快，夜间整理要深</strong>。如果把整理放在日间实时进行，会拖慢 Agent 的响应速度；如果完全不整理，记忆库会变成垃圾场。<br><br>\n
+这种「读写分离 + 批处理」的架构思想，其实是数据库领域几十年的最佳实践，gbrain 巧妙地把它搬到了 AI 记忆系统上。</div>\n
+\n
+<h2>🔧 实战：如果我来做国企投资版的 gbrain</h2>\n
+\n
+<p>学完 gbrain，我脑子里立刻冒出了一个想法：<strong>这套架构，简直就是为投资研究量身定做的。</strong></p>\n
+\n
+<h3>场景一：行业研究自动化</h3>\n
+\n
+<pre class="diagram">\n
+<span class="ye">📊 输入：100 份新能源行业研报（PDF）、50 篇政策文件、30 条公司公告</span>\n
+\n
+┌──────────────────────────────────────────────────────┐\n│ <span class="hl">Phase 1 · 自动建图</span>                                   │\n│                                                      │\n│  提取实体：公司名、高管名、技术路线、政策条款          │\n│  建立关系：supplies（供应）、competes_with（竞争）     │\n│           regulates（监管）、invests_in（投资）        │\n│                                                      │\n│  <span class="dim">→ 产出：产业链知识图谱</span>                              │\n└──────────────────────┬───────────────────────────────┘\n                       ▼\n┌──────────────────────────────────────────────────────┐\n│ <span class="hl">Phase 2 · 混合查询</span>                                   │\n│                                                      │\n│  Q：「宁德时代上游供应商最近 6 个月的产能扩张情况」     │\n│                                                      │\n│  图谱定位 supplier 边 → 时间过滤 → 向量语义确认       │\n│  <span class="dim">→ 精确返回：5 家供应商、3 家宣布扩产、合计新增产能XX</span>  │\n└──────────────────────┬───────────────────────────────┘\n                       ▼\n┌──────────────────────────────────────────────────────┐\n│ <span class="hl">Phase 3 · 夜间报告</span>                                   │\n│                                                      │\n│  cron job 自动生成：行业周报、异常监测、趋势分析       │\n│  <span class="dim">→ 每天早晨，一份更新后的行业全景图躺在你的邮箱里</span>     │\n└──────────────────────────────────────────────────────┘\n</pre>\n
+\n
+<h3>场景二：尽调信息管理——发现矛盾点</h3>\n
+<p>投资尽调最怕什么？<strong>信息不一致</strong>。A 轮时说营收 5000 万，B 轮时说 8000 万，中间发生了什么？传统方法靠人工交叉对比，费时费力还容易漏。</p>\n
+\n
+<p>用 gbrain 的思路：</p>\n
+\n
+<pre class="diagram">\n
+<span class="ye">🔍 尽调交叉验证 Agent</span>\n
+\n
+┌─────────────────────────────────────────────────────┐\n│ 输入：公司历次融资材料 + 财务数据 + 高管访谈纪要      │\n├─────────────────────────────────────────────────────┤\n│                                                     │\n│ <span class="hl">自动对比：</span>                                         │\n│  ├─ 营收数据跨版本变化                               │\n│  ├─ 核心团队变动（图谱追踪）                          │\n│  ├─ 客户/供应商重合度                                │\n│  └─ 与行业均值的偏离度                               │\n│                                                     │\n│ <span class="gr">┌─ 检测到矛盾 ──────────────────────────┐</span>           │\n│ <span class="gr">│ ⚠️ 财务预测：2025 年预计营收 2 亿       │</span>           │\n│ <span class="gr">│ ⚠️ 2026 尽调：实际营收 8000 万           │</span>           │\n│ <span class="gr">│ 📉 偏差 -60%，需重点核实                  │</span>           │\n│ <span class="gr">└────────────────────────────────────────┘</span>           │\n│                                                     │\n└─────────────────────────────────────────────────────┘\n</pre>\n
+\n
+<h2>📊 横向对比：gbrain vs 其他记忆方案</h2>\n
+\n
+<p>2026 年 5 月，AI 记忆系统这条赛道已经非常卷了。几大主流方案各有什么优劣？</p>\n
+\n
+<div class="table-wrap"><table>\n
+<tr><th>方案</th><th>核心思路</th><th>检索方式</th><th>部署难度</th><th>适合场景</th></tr>\n
+<tr><td>🧠 <strong>gbrain</strong></td><td>图谱 + 向量 + BM25</td><td>混合检索</td><td>30分钟（PGLite）</td><td>关系密集型（投资/CRM/项目管理）</td></tr>\n
+<tr><td>🏛 <strong>MemPalace</strong></td><td>本地语义搜索</td><td>ChromaDB 向量</td><td>5分钟（uv tool install）</td><td>个人知识管理/对话历史</td></tr>\n
+<tr><td>🔗 <strong>Mem0</strong></td><td>LLM 提取 + 向量</td><td>语义搜索</td><td>中等（需 API）</td><td>通用 Agent 记忆</td></tr>\n
+<tr><td>📝 <strong>LangChain Memory</strong></td><td>会话窗口 + 摘要</td><td>短期上下文</td><td>轻量</td><td>简单对话型 Agent</td></tr>\n
+<tr><td>🗄 <strong>传统 RAG</strong></td><td>向量数据库</td><td>纯语义搜索</td><td>简单</td><td>文档问答</td></tr>\n
+</table></div>\n
+\n
+<div class="tip-box"><strong>🎯 选型建议</strong><br><br>\n
+<ul>\n
+  <li>如果你的数据充满<strong>实体和关系</strong>（投资组合、客户管理、供应链）→ 选 gbrain 模式</li>\n
+  <li>如果你需要<strong>完全本地、零成本</strong>的对话记忆 → 选 MemPalace</li>\n
+  <li>如果你在做<strong>简单的文档问答</strong>，RAG 够用了 → 别过度设计</li>\n
+</ul>\n
+<strong>最好的工具不是最强的，是最适合你当前场景的。</strong></div>\n
+\n
+<h2>🚀 给你的 Agent 装上大脑：三步启动</h2>\n
+\n
+<p>gbrain 的部署出奇地简单——<strong>30 分钟就能拥有一个可工作的 AI 记忆系统</strong>。下面是核心流程：</p>\n
+\n
+<div class="code-block"><span class="cmt"># Step 1：安装（PGLite 数据库，无需服务器，2 秒启动）</span>\n
+<span class="kw">npx</span> skills add garrytan/gbrain\n
+\n
+<span class="cmt"># Step 2：初始化大脑</span>\n
+<span class="kw">gbrain</span> init\n
+\n
+<span class="cmt"># Step 3：开始投喂数据——你的 Agent 会自动调用这些能力：</span>\n
+<span class="kw">gbrain</span> page write <span class="str">"会议纪要：与ABC新能源讨论了..."</span>      <span class="cmt">← 写入页面，自动建图</span>\n
+<span class="kw">gbrain</span> search <span class="str">"ABC新能源的投资方有哪些"</span>               <span class="cmt">← 混合检索</span>\n
+<span class="kw">gbrain</span> person show <span class="str">"张三"</span>                            <span class="cmt">← 查看人物全貌</span>\n
+\n
+<span class="cmt"># Step 4：配置夜间 cron job（可选但强烈推荐）</span>\n
+<span class="kw">0 3 * * *</span> gbrain cron nightly                       <span class="cmt">← 每日 3AM 自动巩固记忆</span>\n
+</div>\n
+\n
+<h2>💡 我的三点核心感悟</h2>\n
+\n
+<h3>1. 图谱不是可选项，是必选项</h3>\n
+<p>做 AI Agent 的人很容易陷入「向量搜索就够了」的陷阱。gbrain 用数据证明：对于需要精确关系查询的场景，图谱带来的精度提升（+31.4 点 P@5）是向量搜索无论如何优化都达不到的。<strong>如果你的数据中有实体和关系，就值一个图谱。</strong></p>\n
+\n
+<h3>2. 「零 LLM」的设计哲学值得学习</h3>\n
+<p>在「万物皆可 LLM」的时代，gbrain 反其道而行——<strong>实体关系抽取用规则引擎，不调 API</strong>。这不是技术保守，是工程务实。在成本敏感、延迟敏感、隐私敏感的场景下，规则 + 图谱的组合拳比 LLM 方案更可持续。</p>\n
+\n
+<h3>3. Agent 基础设施的竞争才刚刚开始</h3>\n
+<p>2026 年 Q2，Agent 技能的标准化（caveman/graphify/agent-skills）和记忆系统的升级（gbrain/mempalace）是两条并行的主线。它们共同指向一个方向：<strong>让 AI Agent 从「能对话」进化到「能记忆、能推理、能自主学习」</strong>。这不是 feature，这是质变。</p>\n
+\n
+<div class="tip-box"><strong>🚀 给你的行动建议</strong><br><br>\n
+1️⃣ <strong>今天</strong>：拉一个 gbrain，喂 10 条你最近的工作内容进去，感受混合检索的威力<br>\n
+2️⃣ <strong>这周</strong>：思考你的工作场景中，哪些查询用纯向量搜索回答不了？那些就是图谱的价值所在<br>\n
+3️⃣ <strong>这个月</strong>：如果你的 Agent 还在「每次对话从零开始」，是时候给它装一个记忆系统了<br><br>\n
+<strong>AI Agent 的下一个分水岭，不是更大的模型，而是更好的记忆。</strong></div>'
       }
     };
 
@@ -1054,7 +1244,8 @@ npv = np.npv(0.08, data[<span class="str">'cashflow'</span>])
       'claude-code': ['ai-agent', 'efficiency-tools'],
       'mcp-protocol': ['ai-agent', 'state-enterprise-ai'],
       'state-enterprise-ai': ['ai-agent', 'efficiency-tools'],
-      'efficiency-tools': ['claude-code', 'state-enterprise-ai']
+      'efficiency-tools': ['claude-code', 'state-enterprise-ai'],
+      'hot-20260512-1': ['ai-agent', 'claude-code']
     };
 
     // ===== Render Article =====
