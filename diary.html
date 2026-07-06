@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Learning Diary — Harry's Blog</title>
+  <meta name="description" content="Harry 的 AI Agents 学习日记 — 记录每一天的成长与收获，从基础概念到实战应用">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://jiegeneedcode.github.io/blog/diary.html">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+  <style>
+    *,*::before,*::after { margin:0; padding:0; box-sizing:border-box; }
+    :root {
+      --gold: #d4af37; --gold-light: #f4d03f; --gold-dark: #b8960c;
+      --accent: #6c63ff; --accent-light: #8b83ff;
+      --bg: #0a0a0f; --bg-elevated: #12121a; --bg-card: #16161f; --bg-card-hover: #1c1c28;
+      --text: #e2e8f0; --text-secondary: #94a3b8; --text-muted: #64748b;
+      --border: rgba(212, 175, 55, 0.12); --border-light: rgba(148, 163, 184, 0.08);
+      --radius: 12px; --radius-lg: 16px; --radius-xl: 24px;
+      --shadow: 0 4px 20px rgba(0,0,0,0.4);
+      --transition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      --font-sans: 'Inter', 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif;
+      --font-mono: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
+      --font-cursive: 'Caveat', cursive;
+    }
+    [data-theme="light"] {
+      --bg: #f8fafc; --bg-elevated: #ffffff; --bg-card: #ffffff; --bg-card-hover: #f1f5f9;
+      --text: #0f172a; --text-secondary: #475569; --text-muted: #94a3b8;
+      --border: rgba(212, 175, 55, 0.2); --border-light: rgba(148, 163, 184, 0.15);
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: var(--font-sans); background: var(--bg); color: var(--text);
+      line-height: 1.7; min-height: 100vh; overflow-x: hidden;
+      transition: background var(--transition), color var(--transition);
+      background-image: radial-gradient(circle at 1px 1px, rgba(212,175,55,0.06) 1px, transparent 0);
+      background-size: 32px 32px;
+    }
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: var(--text-muted); border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--gold); }
+
+    /* Nav */
+    nav {
+      position: fixed; top:0; left:0; right:0; z-index: 1000;
+      padding: 1rem 2rem;
+      background: rgba(10,10,15,0.88); backdrop-filter: blur(20px) saturate(180%);
+      border-bottom: 1px solid var(--border);
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    [data-theme="light"] nav { background: rgba(248,250,252,0.88); }
+    .nav-logo {
+      font-family: var(--font-cursive); font-size: 1.8rem; font-weight: 700;
+      background: linear-gradient(135deg, var(--gold), var(--gold-light));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      text-decoration: none; letter-spacing: 2px;
+    }
+    .nav-links { display: flex; gap: 2rem; align-items: center; }
+    .nav-links a {
+      color: var(--text-secondary); font-size: 0.9rem; font-weight: 500;
+      transition: color var(--transition); text-decoration: none; position: relative;
+    }
+    .nav-links a::after { content: ''; position: absolute; bottom: -4px; left: 0; width: 0; height: 2px; background: var(--gold); transition: width var(--transition); }
+    .nav-links a:hover, .nav-links a.active { color: var(--gold); }
+    .nav-links a:hover::after, .nav-links a.active::after { width: 100%; }
+    .theme-toggle {
+      width: 40px; height: 40px; border-radius: 50%;
+      border: 1px solid var(--border); background: var(--bg-card);
+      cursor: pointer; font-size: 1.1rem;
+      display: flex; align-items: center; justify-content: center;
+      transition: all var(--transition);
+    }
+    .theme-toggle:hover { border-color: var(--gold); transform: scale(1.1); }
+
+    /* Page Header */
+    .page-header { padding: 8rem 2rem 3rem; text-align: center; max-width: 800px; margin: 0 auto; }
+    .page-header .badge {
+      display: inline-block; padding: 0.4rem 1.2rem;
+      background: rgba(108,99,255,0.1); border: 1px solid rgba(108,99,255,0.2);
+      border-radius: 20px; font-size: 0.85rem; color: var(--accent-light); margin-bottom: 1.5rem;
+    }
+    .page-header h1 {
+      font-size: clamp(2rem, 4vw, 2.8rem); font-weight: 800; margin-bottom: 1rem;
+      font-family: var(--font-cursive);
+      background: linear-gradient(135deg, var(--gold), var(--gold-light));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    }
+    .page-header p { color: var(--text-muted); font-size: 1.05rem; }
+
+    /* Streak Counter */
+    .streak-bar {
+      display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;
+      max-width: 800px; margin: 0 auto 3rem;
+    }
+    .streak-card {
+      text-align: center; padding: 1.5rem 2rem;
+      background: var(--bg-card); border-radius: var(--radius-lg);
+      border: 1px solid var(--border); min-width: 120px;
+      transition: all var(--transition);
+    }
+    .streak-card:hover { border-color: var(--gold); }
+    .streak-card .num {
+      font-size: 2.5rem; font-weight: 800; color: var(--gold);
+      font-family: var(--font-mono);
+    }
+    .streak-card .label { font-size: 0.85rem; color: var(--text-muted); margin-top: 0.25rem; }
+
+    /* Timeline */
+    .diary-container { max-width: 900px; margin: 0 auto; padding: 0 2rem 5rem; position: relative; }
+
+    /* Timeline line */
+    .diary-container::before {
+      content: ''; position: absolute; left: 56px; top: 0; bottom: 0;
+      width: 2px; background: linear-gradient(180deg, var(--gold), var(--border-light));
+    }
+
+    .diary-entry {
+      position: relative; padding-left: 100px; margin-bottom: 2.5rem;
+      opacity: 0; transform: translateX(-20px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    .diary-entry.visible { opacity: 1; transform: translateX(0); }
+
+    /* Timeline dot */
+    .diary-entry::before {
+      content: ''; position: absolute;
+      left: 46px; top: 28px;
+      width: 20px; height: 20px;
+      border-radius: 50%; background: var(--bg);
+      border: 3px solid var(--gold);
+      transform: translateX(-50%);
+      z-index: 2;
+    }
+    .diary-entry:first-child::before {
+      background: var(--gold); box-shadow: 0 0 20px rgba(212,175,55,0.4);
+    }
+
+    .entry-card {
+      background: var(--bg-card); border-radius: var(--radius-lg);
+      padding: 2rem; border: 1px solid var(--border);
+      transition: all var(--transition);
+    }
+    .entry-card:hover { border-color: rgba(212,175,55,0.4); box-shadow: 0 10px 30px rgba(212,175,55,0.04); }
+
+    .entry-header {
+      display: flex; justify-content: space-between; align-items: flex-start;
+      margin-bottom: 1rem; flex-wrap: wrap; gap: 0.75rem;
+    }
+    .entry-day-badge {
+      display: flex; align-items: center; gap: 0.75rem;
+    }
+    .day-circle {
+      width: 50px; height: 50px; border-radius: 14px;
+      background: linear-gradient(135deg, var(--gold-dark), var(--gold));
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      color: #000; font-weight: 700;
+    }
+    .day-circle .d { font-size: 1.3rem; line-height: 1; }
+    .day-circle .l { font-size: 0.65rem; text-transform: uppercase; }
+    .entry-title { font-size: 1.3rem; font-weight: 600; }
+    .entry-date {
+      padding: 0.35rem 0.9rem; background: rgba(212,175,55,0.08);
+      border-radius: 20px; font-size: 0.82rem; color: var(--gold-light);
+      border: 1px solid var(--border);
+    }
+
+    .entry-stats {
+      display: flex; gap: 1.5rem; margin-bottom: 1.2rem; flex-wrap: wrap;
+    }
+    .stat-item {
+      display: flex; align-items: center; gap: 0.4rem;
+      font-size: 0.85rem; color: var(--text-muted);
+    }
+
+    .entry-content { color: var(--text-secondary); font-size: 0.95rem; margin-bottom: 1.2rem; line-height: 1.8; }
+
+    .key-points {
+      background: rgba(212,175,55,0.04); border-radius: var(--radius);
+      padding: 1.25rem 1.5rem; border-left: 3px solid var(--gold);
+    }
+    .key-points h4 {
+      color: var(--gold); font-size: 0.9rem; margin-bottom: 0.75rem;
+      display: flex; align-items: center; gap: 0.5rem;
+    }
+    .key-points ul { list-style: none; display: flex; flex-direction: column; gap: 0.5rem; }
+    .key-points li {
+      display: flex; align-items: flex-start; gap: 0.6rem;
+      font-size: 0.9rem; color: var(--text);
+    }
+    .key-points li::before { content: '✦'; color: var(--gold); flex-shrink: 0; margin-top: 0.05rem; }
+
+    /* Archive */
+    .archive-section {
+      max-width: 900px; margin: 4rem auto 0; padding: 0 2rem;
+    }
+    .archive-section h2 { font-size: 1.5rem; margin-bottom: 1.5rem; color: var(--text); }
+    .archive-accordion { display: flex; flex-direction: column; gap: 0.75rem; }
+    .archive-month {
+      background: var(--bg-card); border-radius: var(--radius);
+      border: 1px solid var(--border); overflow: hidden;
+    }
+    .archive-month summary {
+      padding: 1rem 1.5rem; cursor: pointer; font-weight: 600;
+      color: var(--text); display: flex; justify-content: space-between; align-items: center;
+      list-style: none;
+    }
+    .archive-month summary::-webkit-details-marker { display: none; }
+    .archive-month summary::after { content: '▸'; font-size: 0.8rem; color: var(--gold); transition: transform var(--transition); }
+    .archive-month[open] summary::after { transform: rotate(90deg); }
+    .archive-month .month-content {
+      padding: 0 1.5rem 1.25rem; display: flex; flex-direction: column; gap: 0.5rem;
+    }
+    .archive-month .month-content a {
+      color: var(--text-secondary); font-size: 0.9rem; text-decoration: none;
+      padding: 0.5rem 0; border-bottom: 1px solid var(--border-light);
+      display: flex; justify-content: space-between; transition: color var(--transition);
+    }
+    .archive-month .month-content a:hover { color: var(--gold); }
+    .archive-month .month-content a span:last-child { color: var(--text-muted); font-size: 0.8rem; }
+
+    /* Footer */
+    footer { text-align: center; padding: 3rem 2rem; border-top: 1px solid var(--border); color: var(--text-muted); font-size: 0.9rem; }
+
+    /* Scroll top */
+    .scroll-top {
+      position: fixed; bottom: 2rem; right: 2rem; z-index: 100;
+      width: 44px; height: 44px; border-radius: 50%; background: var(--bg-card);
+      border: 1px solid var(--border); color: var(--gold); font-size: 1.2rem;
+      cursor: pointer; display: flex; align-items: center; justify-content: center;
+      opacity: 0; visibility: hidden; transition: all var(--transition); box-shadow: var(--shadow);
+    }
+    .scroll-top.visible { opacity: 1; visibility: visible; }
+    .scroll-top:hover { border-color: var(--gold); transform: translateY(-4px); }
+
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+      .diary-container::before { left: 24px; }
+      .diary-entry { padding-left: 56px; }
+      .diary-entry::before { left: 14px; width: 16px; height: 16px; }
+      .page-header h1 { font-size: 1.8rem; }
+      .entry-card { padding: 1.25rem; }
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <a href="index.html" class="nav-logo">Harry</a>
+    <div class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="posts.html">Posts</a>
+      <a href="diary.html" class="active">Diary</a>
+      <a href="index.html#about">About</a>
+    </div>
+    <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">🌙</button>
+  </nav>
+
+  <header class="page-header">
+    <div class="badge">📝 AI Agents 学习记录</div>
+    <h1>Learning Diary</h1>
+    <p>记录 AI Agents 学习的每一天，从基础概念到实战应用，见证成长的每一步</p>
+  </header>
+
+  <!-- Streak Counter -->
+  <div class="streak-bar">
+    <div class="streak-card">
+      <div class="num">4</div>
+      <div class="label">连续学习天数</div>
+    </div>
+    <div class="streak-card">
+      <div class="num">21.5</div>
+      <div class="label">累计学习小时</div>
+    </div>
+    <div class="streak-card">
+      <div class="num">23</div>
+      <div class="label">阅读文章数</div>
+    </div>
+    <div class="streak-card">
+      <div class="num">11</div>
+      <div class="label">Demo/项目</div>
+    </div>
+  </div>
+
+  <!-- Timeline -->
+  <main class="diary-container">
+    <article class="diary-entry">
+      <div class="entry-card">
+        <div class="entry-header">
+          <div class="entry-day-badge">
+            <div class="day-circle"><span class="d">04</span><span class="l">Day</span></div>
+            <h2 class="entry-title">Multi-Agent 系统</h2>
+          </div>
+          <span class="entry-date">2026-04-18</span>
+        </div>
+        <div class="entry-stats">
+          <div class="stat-item">⏱️ 7 小时</div>
+          <div class="stat-item">📚 4 篇文章</div>
+          <div class="stat-item">💻 2 个项目</div>
+        </div>
+        <div class="entry-content">
+          今天挑战了更复杂的 Multi-Agent 架构！实现了一个由 Planner Agent、Researcher Agent、Coder Agent、Reviewer Agent 组成的协作系统。每个 Agent 有明确的角色和分工，通过消息传递实现协作。第一次感受到"AI 社会"的魅力——不同的 Agent 像不同的专家一样各司其职。
+        </div>
+        <div class="key-points">
+          <h4>💡 核心要点</h4>
+          <ul>
+            <li>Agent 间的通信协议设计至关重要</li>
+            <li>适当的 System Prompt 是定义角色行为的关键</li>
+            <li>错误处理和重试机制保证系统稳定性</li>
+          </ul>
+        </div>
+      </div>
+    </article>
+
+    <article class="diary-entry">
+      <div class="entry-card">
+        <div class="entry-header">
+          <div class="entry-day-badge">
+            <div class="day-circle"><span class="d">03</span><span class="l">Day</span></div>
+            <h2 class="entry-title">RAG 技术深入</h2>
+          </div>
+          <span class="entry-date">2026-04-17</span>
+        </div>
+        <div class="entry-stats">
+          <div class="stat-item">⏱️ 6 小时</div>
+          <div class="stat-item">📚 6 篇文章</div>
+          <div class="stat-item">💻 3 个Demo</div>
+        </div>
+        <div class="entry-content">
+          今天深入学习了 RAG（检索增强生成）技术。从文档切分策略、向量数据库选择（ChromaDB vs Pinecone）、到混合检索实现，完整搭建了一个本地知识库问答系统。理解了 Embedding 的本质：把文本转化为向量，在向量空间中捕捉语义相似性。
+        </div>
+        <div class="key-points">
+          <h4>💡 核心要点</h4>
+          <ul>
+            <li>Chunk Size 影响检索精度，需要根据场景调优</li>
+            <li>语义分块比固定长度分块效果更好</li>
+            <li>Reranking 可以进一步提升相关性</li>
+          </ul>
+        </div>
+      </div>
+    </article>
+
+    <article class="diary-entry">
+      <div class="entry-card">
+        <div class="entry-header">
+          <div class="entry-day-badge">
+            <div class="day-circle"><span class="d">02</span><span class="l">Day</span></div>
+            <h2 class="entry-title">LangChain 快速上手</h2>
+          </div>
+          <span class="entry-date">2026-04-16</span>
+        </div>
+        <div class="entry-stats">
+          <div class="stat-item">⏱️ 5 小时</div>
+          <div class="stat-item">📚 8 篇文章</div>
+          <div class="stat-item">💻 4 个Demo</div>
+        </div>
+        <div class="entry-content">
+          学习了 LangChain 的核心组件：Chains、Agents、Memory。动手实现了第一个带工具调用的 Agent，可以自动搜索网页、计算数学问题。最兴奋的是成功接入了 Claude API，让 Agent 具备了更强大的推理能力。
+        </div>
+        <div class="key-points">
+          <h4>💡 核心要点</h4>
+          <ul>
+            <li>LangChain Expression Language (LCEL) 简化链式调用</li>
+            <li>Tool Calling 是 Agent 与外界交互的关键</li>
+            <li>Memory 模块让 Agent 保持对话上下文</li>
+          </ul>
+        </div>
+      </div>
+    </article>
+
+    <article class="diary-entry">
+      <div class="entry-card">
+        <div class="entry-header">
+          <div class="entry-day-badge">
+            <div class="day-circle"><span class="d">01</span><span class="l">Day</span></div>
+            <h2 class="entry-title">初识 AI Agents</h2>
+          </div>
+          <span class="entry-date">2026-04-15</span>
+        </div>
+        <div class="entry-stats">
+          <div class="stat-item">⏱️ 3.5 小时</div>
+          <div class="stat-item">📚 5 篇文章</div>
+          <div class="stat-item">💻 2 个Demo</div>
+        </div>
+        <div class="entry-content">
+          今天正式开启 AI Agents 的学习之旅！从最基础的概念开始，了解什么是 Agent、它与传统 AI 助手的区别、以及为什么 Agent 是 AI 发展的下一个重要方向。通过阅读 OpenAI 的文档和 Andrew Ng 的课程，建立了对 Agent 工作流的基本认知。
+        </div>
+        <div class="key-points">
+          <h4>💡 核心要点</h4>
+          <ul>
+            <li>Agent = LLM + 工具调用 + 记忆 + 规划能力</li>
+            <li>ReAct 模式：思考 → 行动 → 观察 → 迭代</li>
+            <li>Agent 擅长处理复杂、多步骤的任务</li>
+          </ul>
+        </div>
+      </div>
+    </article>
+  </main>
+
+  <!-- Monthly Archive -->
+  <section class="archive-section">
+    <h2>📂 按月归档</h2>
+    <div class="archive-accordion">
+      <details class="archive-month">
+        <summary>2026年4月 <span style="color:var(--text-muted);font-size:0.85rem;">4 篇日记</span></summary>
+        <div class="month-content">
+          <a href="#"><span>Day 04 — Multi-Agent 系统</span><span>04-18</span></a>
+          <a href="#"><span>Day 03 — RAG 技术深入</span><span>04-17</span></a>
+          <a href="#"><span>Day 02 — LangChain 快速上手</span><span>04-16</span></a>
+          <a href="#"><span>Day 01 — 初识 AI Agents</span><span>04-15</span></a>
+        </div>
+      </details>
+    </div>
+  </section>
+
+  <footer>
+    <p>© 2026 Harry. Made with ❤️ | 学习日记持续更新中...</p>
+  </footer>
+
+  <button class="scroll-top" id="scrollTop" aria-label="Back to top">↑</button>
+
+  <script>
+    // Theme
+    const html = document.documentElement;
+    const savedTheme = localStorage.getItem('theme') || 'dark';
+    html.setAttribute('data-theme', savedTheme);
+    document.getElementById('themeToggle').textContent = savedTheme === 'dark' ? '🌙' : '☀️';
+    document.getElementById('themeToggle').addEventListener('click', () => {
+      const next = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+      html.setAttribute('data-theme', next);
+      document.getElementById('themeToggle').textContent = next === 'dark' ? '🌙' : '☀️';
+      localStorage.setItem('theme', next);
+    });
+
+    // Scroll reveal for timeline entries
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((e, i) => {
+        if (e.isIntersecting) {
+          setTimeout(() => e.target.classList.add('visible'), i * 100);
+        }
+      });
+    }, { threshold: 0.15 });
+    document.querySelectorAll('.diary-entry').forEach(el => observer.observe(el));
+
+    // Scroll to top
+    const scrollTop = document.getElementById('scrollTop');
+    window.addEventListener('scroll', () => {
+      scrollTop.classList.toggle('visible', window.scrollY > 600);
+    });
+    scrollTop.addEventListener('click', () => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+  </script>
+</body>
+</html>
