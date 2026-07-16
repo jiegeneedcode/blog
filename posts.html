@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-CN" data-theme="dark">
+<html lang="zh-CN" data-theme="dark" data-lang="zh">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -74,6 +74,26 @@
       transition: all var(--transition);
     }
     .theme-toggle:hover { border-color: var(--gold); transform: scale(1.1); }
+
+    /* ========== Lang Toggle ========== */
+    .lang-toggle {
+      width: 40px; height: 40px; border-radius: 50%;
+      border: 1px solid var(--border); background: var(--bg-card);
+      cursor: pointer; font-size: 0.75rem; font-weight: 700;
+      display: flex; align-items: center; justify-content: center;
+      transition: all var(--transition);
+      color: var(--text-secondary);
+      font-family: var(--font-sans);
+    }
+    .lang-toggle:hover { border-color: var(--gold); transform: scale(1.1); color: var(--gold); }
+
+    /* Bilingual hiding */
+    [data-lang] .zh, [data-lang] .en { display: none; }
+    [data-lang="zh"] .zh, [data-lang="zh"] .zh-inline { display: inline; }
+    [data-lang="zh"] .zh-block { display: block; }
+    [data-lang="en"] .en, [data-lang="en"] .en-inline { display: inline; }
+    [data-lang="en"] .en-block { display: block; }
+
 
     /* Page Header */
     .page-header { padding: 8rem 2rem 3rem; text-align: center; max-width: 800px; margin: 0 auto; }
@@ -207,14 +227,15 @@
     <div class="nav-links">
       <a href="index.html">Home</a>
       <a href="posts.html" class="active">Posts</a>
-      <a href="diary.html">Diary</a>
-      <a href="index.html#about">About</a>
+      <a href="diary.html"><span class="zh">Diary</span><span class="en">Diary</span></a>
+      <a href="index.html#about"><span class="zh">About</span><span class="en">About</span></a>
     </div>
-    <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">🌙</button>
+    <button class="lang-toggle" id="langToggle" aria-label="Switch language" title="中/EN">中</button>
+        <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">🌙</button>
   </nav>
 
   <header class="page-header">
-    <h1>所有文章</h1>
+    <h1><span class="zh">所有文章</span><span class="en">All Posts</span></h1>
     <p>技术文章、学习笔记与开发心得，涵盖 AI、Dev、效率工具等主题</p>
     <p style="margin-top:0.5rem;">共 <span class="post-count" id="totalCount">36</span> 篇文章</p>
   </header>
@@ -704,6 +725,22 @@
       document.getElementById('themeToggle').textContent = next === 'dark' ? '🌙' : '☀️';
       localStorage.setItem('theme', next);
     });
+
+    // ===== Language Toggle =====
+    const langToggle = document.getElementById('langToggle');
+    const savedLang = localStorage.getItem('lang') || 'zh';
+    setLang(savedLang);
+    langToggle.addEventListener('click', () => {
+      const next = html.getAttribute('data-lang') === 'zh' ? 'en' : 'zh';
+      setLang(next);
+    });
+    function setLang(lang) {
+      html.setAttribute('data-lang', lang);
+      langToggle.textContent = lang === 'zh' ? 'EN' : '中';
+      langToggle.title = lang === 'zh' ? 'Switch to English' : '切换到中文';
+      localStorage.setItem('lang', lang);
+    }
+
 
     // View toggle
     const postsGrid = document.getElementById('postsGrid');
