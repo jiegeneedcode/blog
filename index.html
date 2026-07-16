@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="zh-CN" data-theme="dark">
+<html lang="zh-CN" data-theme="dark" data-lang="zh">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Harry's Blog — AI Developer / 持续学习者</title>
+  <title>Harry's Blog — AI Developer</title>
 
   <!-- SEO Meta -->
   <meta name="description" content="Harry 的技术博客 — 专注 AI、前端开发与效率工具。分享 AI Agent 实战、Claude Code 技巧、国企数字化转型经验。">
@@ -163,6 +163,26 @@
       transition: all var(--transition);
     }
     .theme-toggle:hover { border-color: var(--gold); transform: scale(1.1); }
+
+    /* ========== Lang Toggle ========== */
+    .lang-toggle {
+      width: 40px; height: 40px; border-radius: 50%;
+      border: 1px solid var(--border); background: var(--bg-card);
+      cursor: pointer; font-size: 0.75rem; font-weight: 700;
+      display: flex; align-items: center; justify-content: center;
+      transition: all var(--transition);
+      color: var(--text-secondary);
+      font-family: var(--font-sans);
+    }
+    .lang-toggle:hover { border-color: var(--gold); transform: scale(1.1); color: var(--gold); }
+
+    /* Bilingual hiding */
+    [data-lang] .zh, [data-lang] .en { display: none; }
+    [data-lang="zh"] .zh { display: inline; }
+    [data-lang="zh"] .zh-block { display: block; }
+    [data-lang="en"] .en { display: inline; }
+    [data-lang="en"] .en-block { display: block; }
+
 
     /* Hamburger */
     .hamburger {
@@ -495,6 +515,7 @@
       <a href="#contact">Contact</a>
     </div>
     <div class="nav-actions">
+      <button class="lang-toggle" id="langToggle" aria-label="Switch language" title="中/EN">中</button>
       <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">🌙</button>
       <button class="hamburger" id="hamburger" aria-label="Menu">
         <span></span><span></span><span></span>
@@ -515,7 +536,7 @@
   <!-- ========== Hero ========== -->
   <section class="hero">
     <div class="hero-content">
-      <div class="hero-badge">👋 欢迎来到我的博客</div>
+      <div class="hero-badge"><span class="zh">👋 欢迎来到我的博客</span><span class="en">👋 Welcome to My Blog</span></div>
       <h1><span class="greeting">HELLO, I'M </span><span class="name">Harry</span></h1>
       <div class="hero-typing">
         <span id="typingText"></span><span class="cursor"></span>
@@ -524,16 +545,16 @@
         <span class="tag"># AI Agent</span>
         <span class="tag"># Frontend Dev</span>
         <span class="tag"># Python</span>
-        <span class="tag"># 国企数字化</span>
+        <span class="tag"><span class="zh"># 国企数字化</span><span class="en"># Digital Transformation</span></span>
       </div>
       <div class="hero-buttons">
-        <a href="#posts" class="btn btn-primary">📖 阅读文章</a>
-        <a href="#contact" class="btn btn-outline">💬 联系我</a>
+        <a href="#posts" class="btn btn-primary"><span class="zh">📖 阅读文章</span><span class="en">📖 Read Articles</span></a>
+        <a href="#contact" class="btn btn-outline"><span class="zh">💬 联系我</span><span class="en">💬 Contact Me</span></a>
       </div>
     </div>
     <div class="scroll-hint">
       <div class="mouse"></div>
-      <span>向下滚动</span>
+      <span class="zh">向下滚动</span><span class="en">Scroll Down</span>
     </div>
   </section>
 
@@ -541,26 +562,29 @@
   <section id="about">
     <div class="container">
       <div class="section-label" data-num="01">About</div>
-      <h2 class="section-title">关于我</h2>
+      <h2 class="section-title"><span class="zh">关于我</span><span class="en">About Me</span></h2>
       <div class="about-grid">
         <div class="about-text reveal">
-          <p>嗨！我是 <strong>Harry</strong>，坐标<strong>四川成都</strong>。一名热爱技术的 AI 开发者，目前专注于 AI Agent、前端开发和效率工具。</p>
-          <p>在国企数字化转型的浪潮中，我致力于用 <strong>AI 技术</strong> 解决实际工作场景中的痛点——从文档智能处理到数据分析自动化。</p>
-          <p>我相信技术的力量在于<strong>落地实践</strong>。这个博客记录了我的学习心得、项目实战和成长感悟。</p>
+          <p class="zh">嗨！我是 <strong>Harry</strong>，坐标<strong>四川成都</strong>。一名热爱技术的 AI 开发者，目前专注于 AI Agent、前端开发和效率工具。</p>
+          <p class="zh">在国企数字化转型的浪潮中，我致力于用 <strong>AI 技术</strong> 解决实际工作场景中的痛点——从文档智能处理到数据分析自动化。</p>
+          <p class="zh">我相信技术的力量在于<strong>落地实践</strong>。这个博客记录了我的学习心得、项目实战和成长感悟。</p>
+          <p class="en">Hi! I'm <strong>Harry</strong>, based in <strong>Chengdu, Sichuan</strong>. An AI developer passionate about AI Agents, frontend development, and productivity tools.</p>
+          <p class="en">In the wave of digital transformation at state-owned enterprises, I focus on applying <strong>AI technology</strong> to solve real-world workflow pain points — from intelligent document processing to automated data analysis.</p>
+          <p class="en">I believe technology's power lies in <strong>practical application</strong>. This blog documents my learning journey, project experience, and personal growth.</p>
         </div>
         <div class="reveal">
           <div class="stats-grid">
             <div class="stat-card">
               <div class="stat-number" data-count="3">0</div>
-              <div class="stat-label">年编程经验</div>
+              <div class="stat-label"><span class="zh">年编程经验</span><span class="en">Years Coding</span></div>
             </div>
             <div class="stat-card">
               <div class="stat-number" data-count="50">0</div>
-              <div class="stat-label">篇文章</div>
+              <div class="stat-label"><span class="zh">篇文章</span><span class="en">Articles</span></div>
             </div>
             <div class="stat-card">
               <div class="stat-number">∞</div>
-              <div class="stat-label">持续学习</div>
+              <div class="stat-label"><span class="zh">持续学习</span><span class="en">Always Learning</span></div>
             </div>
           </div>
           <div class="code-card">
@@ -576,7 +600,7 @@
               &nbsp;&nbsp;],<br>
               &nbsp;&nbsp;<span class="prop">motto</span>: <span class="str">"Keep Learning"</span><br>
               };<br>
-              <span class="cmt">// 道阻且长，行则将至 ✨</span>
+              <span class="cmt"><span class="zh">// 道阻且长，行则将至 ✨</span><span class="en">// The road is long, but we'll get there ✨</span></span>
             </div>
           </div>
         </div>
@@ -588,12 +612,12 @@
   <section id="skills">
     <div class="container">
       <div class="section-label" data-num="02">Skills</div>
-      <h2 class="section-title">技术栈</h2>
+      <h2 class="section-title"><span class="zh">技术栈</span><span class="en">Tech Stack</span></h2>
       <div class="skills-grid reveal">
         <div>
           <div class="skill-category">
-            <h3>🤖 AI / ML</h3>
-            <div class="skill-info"><span>LLM 应用开发</span><span>85%</span></div>
+            <h3><span class="zh">🤖 AI / ML</span><span class="en">🤖 AI / ML</span></h3>
+            <div class="skill-info"><span>LLM <span class="zh">应用开发</span><span class="en">Apps</span></span><span>85%</span></div>
             <div class="skill-bar"><div class="fill" style="width:0" data-width="85%"></div></div>
             <div class="skill-info"><span>RAG / Agent</span><span>80%</span></div>
             <div class="skill-bar"><div class="fill" style="width:0" data-width="80%"></div></div>
@@ -603,7 +627,7 @@
         </div>
         <div>
           <div class="skill-category">
-            <h3>💻 前端开发</h3>
+            <h3><span class="zh">💻 前端开发</span><span class="en">💻 Frontend</span></h3>
             <div class="skill-info"><span>JavaScript / TypeScript</span><span>80%</span></div>
             <div class="skill-bar"><div class="fill" style="width:0" data-width="80%"></div></div>
             <div class="skill-info"><span>Vue / React</span><span>75%</span></div>
@@ -614,12 +638,12 @@
         </div>
         <div>
           <div class="skill-category">
-            <h3>🛠 工具 / 其他</h3>
+            <h3><span class="zh">🛠 工具 / 其他</span><span class="en">🛠 Tools & Others</span></h3>
             <div class="skill-info"><span>Python</span><span>85%</span></div>
             <div class="skill-bar"><div class="fill" style="width:0" data-width="85%"></div></div>
             <div class="skill-info"><span>Git / DevOps</span><span>70%</span></div>
             <div class="skill-bar"><div class="fill" style="width:0" data-width="70%"></div></div>
-            <div class="skill-info"><span>文档写作</span><span>88%</span></div>
+            <div class="skill-info"><span><span class="zh">文档写作</span><span class="en">Writing</span></span><span>88%</span></div>
             <div class="skill-bar"><div class="fill" style="width:0" data-width="88%"></div></div>
           </div>
         </div>
@@ -643,7 +667,7 @@
   <section id="posts">
     <div class="container">
       <div class="section-label" data-num="03">Blog</div>
-      <h2 class="section-title">最新文章</h2>
+      <h2 class="section-title"><span class="zh">最新文章</span><span class="en">Latest Posts</span></h2>
       <div class="posts-grid">
         <a href="article.html?id=hot-20260518-1" class="post-card reveal">
           <div class="post-card-image">💰</div>
@@ -743,7 +767,7 @@
         </a>
       </div>
       <div class="view-all">
-        <a href="posts.html" class="btn btn-outline">查看全部文章 →</a>
+        <a href="posts.html" class="btn btn-outline"><span class="zh">查看全部文章 →</span><span class="en">View All Posts →</span></a>
       </div>
     </div>
   </section>
@@ -752,11 +776,11 @@
   <section id="contact">
     <div class="container">
       <div class="section-label" data-num="04">Contact</div>
-      <h2 class="section-title">联系我</h2>
+      <h2 class="section-title"><span class="zh">联系我</span><span class="en">Contact Me</span></h2>
       <div class="contact-grid reveal">
         <div class="contact-info">
-          <h3>保持联系</h3>
-          <p>有任何问题或合作意向，欢迎通过以下方式联系我。Let's connect and grow together!</p>
+          <h3><span class="zh">保持联系</span><span class="en">Get in Touch</span></h3>
+          <p><span class="zh">有任何问题或合作意向，欢迎通过以下方式联系我。</span><span class="en">Have questions or collaboration ideas? Reach out anytime.</span> Let's connect and grow together!</p>
           <div class="contact-links">
             <a href="mailto:z2982468979@163.com" class="contact-link">
               <span class="icon">📧</span>
@@ -776,7 +800,7 @@
           <div class="qr-placeholder">
             [ 微信二维码 ]
           </div>
-          <p style="color:var(--text-muted);font-size:0.9rem;">扫一扫添加微信</p>
+          <p style="color:var(--text-muted);font-size:0.9rem;"><span class="zh">扫一扫添加微信</span><span class="en">Scan to add on WeChat</span></p>
           <p class="wechat-id">z3551576273</p>
         </div>
       </div>
@@ -786,11 +810,11 @@
   <!-- ========== Newsletter ========== -->
   <div class="container">
     <div class="newsletter reveal">
-      <h3>📬 订阅更新</h3>
-      <p>不想错过新文章？留下邮箱，每周五收到最新内容推送。</p>
+      <h3><span class="zh">📬 订阅更新</span><span class="en">📬 Subscribe</span></h3>
+      <p><span class="zh">不想错过新文章？留下邮箱，每周五收到最新内容推送。</span><span class="en">Don't miss new articles. Drop your email for weekly updates every Friday.</span></p>
       <form class="newsletter-form" onsubmit="alert('感谢订阅！(演示)');return false">
-        <input type="email" placeholder="输入你的邮箱地址..." required>
-        <button type="submit" class="btn btn-primary">订阅</button>
+        <input type="email" placeholder="your@email.com" required>
+        <button type="submit" class="btn btn-primary"><span class="zh">订阅</span><span class="en">Subscribe</span></button>
       </form>
     </div>
   </div>
@@ -809,7 +833,7 @@
       <a href="#" title="WeChat">💬</a>
       <a href="https://github.com/jiegeneedcode" target="_blank" title="GitHub">💼</a>
     </div>
-    <p>© 2026 Harry. Made with ❤️</p>
+    <p>© 2026 Harry. Made with ❤️ in Chengdu</p>
   </footer>
 
   <!-- Scroll to Top -->
@@ -828,6 +852,22 @@
       themeToggle.textContent = next === 'dark' ? '🌙' : '☀️';
       localStorage.setItem('theme', next);
     });
+
+    // ===== Language Toggle =====
+    const langToggle = document.getElementById('langToggle');
+    const savedLang = localStorage.getItem('lang') || 'zh';
+    setLang(savedLang);
+    langToggle.addEventListener('click', () => {
+      const next = html.getAttribute('data-lang') === 'zh' ? 'en' : 'zh';
+      setLang(next);
+    });
+    function setLang(lang) {
+      html.setAttribute('data-lang', lang);
+      langToggle.textContent = lang === 'zh' ? 'EN' : '中';
+      langToggle.title = lang === 'zh' ? 'Switch to English' : '切换到中文';
+      localStorage.setItem('lang', lang);
+    }
+
 
     // ===== Mobile Menu =====
     const hamburger = document.getElementById('hamburger');
@@ -851,6 +891,12 @@
       '持续学习者',
       '效率工具控',
       '在国企做数字化转型'
+    ];
+    const enPhrases = [
+      'AI Developer',
+      'Lifelong Learner',
+      'Productivity Hacker',
+      'SOE Digital Pioneer'
     ];
     let phraseIdx = 0, charIdx = 0, isDeleting = false;
     const typingText = document.getElementById('typingText');
