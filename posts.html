@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-CN" data-theme="dark">
+<html lang="zh-CN" data-theme="dark" data-lang="zh">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -74,6 +74,26 @@
       transition: all var(--transition);
     }
     .theme-toggle:hover { border-color: var(--gold); transform: scale(1.1); }
+
+    /* ========== Lang Toggle ========== */
+    .lang-toggle {
+      width: 40px; height: 40px; border-radius: 50%;
+      border: 1px solid var(--border); background: var(--bg-card);
+      cursor: pointer; font-size: 0.75rem; font-weight: 700;
+      display: flex; align-items: center; justify-content: center;
+      transition: all var(--transition);
+      color: var(--text-secondary);
+      font-family: var(--font-sans);
+    }
+    .lang-toggle:hover { border-color: var(--gold); transform: scale(1.1); color: var(--gold); }
+
+    /* Bilingual hiding */
+    [data-lang] .zh, [data-lang] .en { display: none; }
+    [data-lang="zh"] .zh, [data-lang="zh"] .zh-inline { display: inline; }
+    [data-lang="zh"] .zh-block { display: block; }
+    [data-lang="en"] .en, [data-lang="en"] .en-inline { display: inline; }
+    [data-lang="en"] .en-block { display: block; }
+
 
     /* Page Header */
     .page-header { padding: 8rem 2rem 3rem; text-align: center; max-width: 800px; margin: 0 auto; }
@@ -207,16 +227,17 @@
     <div class="nav-links">
       <a href="index.html">Home</a>
       <a href="posts.html" class="active">Posts</a>
-      <a href="diary.html">Diary</a>
-      <a href="index.html#about">About</a>
+      <a href="diary.html"><span class="zh">Diary</span><span class="en">Diary</span></a>
+      <a href="index.html#about"><span class="zh">About</span><span class="en">About</span></a>
     </div>
-    <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">🌙</button>
+    <button class="lang-toggle" id="langToggle" aria-label="Switch language" title="中/EN">中</button>
+        <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">🌙</button>
   </nav>
 
   <header class="page-header">
-    <h1>所有文章</h1>
+    <h1><span class="zh">所有文章</span><span class="en">All Posts</span></h1>
     <p>技术文章、学习笔记与开发心得，涵盖 AI、Dev、效率工具等主题</p>
-    <p style="margin-top:0.5rem;">共 <span class="post-count" id="totalCount">7</span> 篇文章</p>
+    <p style="margin-top:0.5rem;">共 <span class="post-count" id="totalCount">38</span> 篇文章</p>
   </header>
 
   <!-- Search & View Toggle -->
@@ -235,15 +256,309 @@
 
   <!-- Filters -->
   <div class="filters">
-    <button class="filter-btn active" data-filter="all">全部 <span class="count">7</span></button>
-    <button class="filter-btn" data-filter="AI">AI <span class="count">5</span></button>
-    <button class="filter-btn" data-filter="Dev">Dev <span class="count">1</span></button>
+    <button class="filter-btn active" data-filter="all">全部 <span>16</span></button>
+    <button class="filter-btn" data-filter="AI">AI <span>14</span></button>
+    <button class="filter-btn" data-filter="Dev">Dev <span class="count">23</span></span></button>
     <button class="filter-btn" data-filter="Tips">Tips <span class="count">1</span></button>
   </div>
 
   <!-- Posts Grid -->
   <main class="posts-container">
     <div class="posts-grid" id="postsGrid">
+                            <a class="post-card" href="article.html?id=hot-20260807-1">
+          <div class="post-card-content">
+            <span class="post-category">AI</span>
+            <h3>一个指挥一群：Orca如何用Agent舰队把编程效率拉满10倍</h3>
+            <p class="post-excerpt">本月GitHub飙升榜亚军Orca深度解读：39K星、+27K月增。Parallel Worktrees让5个Agent同时开工互不干扰，SSH远程指挥云端算力，Design Mode一键拾取UI元素。深度拆解四大核心设计，附国企投资视角的Agent基础设施赛道分析...</p>
+            <div class="post-meta">
+              <span class="post-date">2026-08-07</span>
+              <span class="post-read-time">16 min read</span>
+            </div>
+          </div>
+        </a>
+<a class="post-card" href="article.html?id=hot-20260729-1">
+          <div class="post-card-content">
+            <span class="post-category">AI</span>
+            <h3>终结模型绑架：OmniRoute如何用开源网关让AI Agent月省95% Token</h3>
+            <p class="post-excerpt">本周GitHub飙升榜首OmniRoute深度解读：一个端点连接290+模型供应商、12引擎Token压缩省95%、19种智能路由策略。从架构设计到RTK+Caveman压缩管线，一文讲透这个33K星的AI基础设施新星...</p>
+            <div class="post-meta">
+              <span class="post-date">2026-07-29</span>
+              <span class="post-read-time">15 min read</span>
+            </div>
+          </div>
+        </a>
+<a class="post-card" href="article.html?id=hot-20260727-1">
+          <div class="post-card-content">
+            <span class="post-category">AI</span>
+            <h3>2周22K星！马斯克xAI把编码Agent搬进终端：grok-build深度解读</h3>
+            <p class="post-excerpt">马斯克xAI团队开源grok-build：全屏TUI、鼠标交互、Rust实现、原生扩展。13天22.8K星。深度拆解Agent Harness架构、与Claude Code/Codex的全面对比。</p>
+            <div class="post-meta">
+              <span class="post-date">2026-07-27</span>
+              <span class="post-read-time">14 min read</span>
+            </div>
+          </div>
+        </a>
+<a class="post-card" href="article.html?id=hot-20260720-1">
+          <div class="post-card-content">
+            <span class="post-category">AI</span>
+            <h3>42K星的AI「黑客」：Strix如何让渗透测试从手工艺术变成自动化科学</h3>
+            <p class="post-excerpt">42.6K星！Strix用AI Agent重构渗透测试：ReAct认知循环+Multi-Agent编排+Docker沙箱隔离，覆盖六大类漏洞，从发现到PoC验证到自动修复全链路。</p>
+            <div class="post-meta">
+              <span class="post-date">2026-07-20</span>
+              <span class="post-read-time">15 min read</span>
+            </div>
+          </div>
+        </a>
+<a class="post-card" href="article.html?id=hot-20260715-1">
+          <div class="post-card-content">
+            <span class="post-category">AI</span>
+            <h3>25GB内存跑7440亿参数模型：colibrì如何让蜂鸟引擎驮起AI巨兽</h3>
+            <p class="post-excerpt">纯C语言2400行代码，零依赖，25GB内存就能跑GLM-5.2（7440亿参数MoE）。深度拆解三层内存架构、MLA压缩注意力、MTP投机解码等6大核心创新</p>
+            <div class="post-meta">
+              <span class="post-date">2026年07月15日</span>
+              <span class="post-read-time">16 min read</span>
+            </div>
+          </div>
+        </a>
+      <a href="article.html?id=hot-20260624-1" class="post-card" data-category="AI" data-keywords="codebase-memory-mcp MCP 知识图谱 tree-sitter AI Agent Token优化 代码智能">
+        <div class="post-card-image">🧬</div>
+        <div class="post-card-body">
+          <div class="post-card-meta">
+            <span class="post-card-category cat-ai">AI</span><span>2026-06-24</span><span>⏱ 15 min</span>
+          </div>
+          <h3>代码库永不遗忘：codebase-memory-mcp如何用知识图谱省下99%的Token</h3>
+          <p>纯C实现，158种语言，Linux内核3分钟索引。六阶段流水线+六策略调用解析+混合LSP类型推断，AI编程Agent从此不再「失忆」...</p>
+        </div>
+      </a>
+      <a href="article.html?id=hot-20260623-1" class="post-card" data-category="AI" data-keywords="OpenMontage Agentic Video AI Agent 视频生产 开源 Claude Code">
+        <div class="post-card-image">🎬</div>
+        <div class="post-card-body">
+          <div class="post-card-meta">
+            <span class="post-card-category cat-ai">AI</span><span>2026-06-23</span><span>⏱ 16 min</span>
+          </div>
+          <h3>12K星！OpenMontage：把AI编程助手变成完整视频制作团队</h3>
+          <p>世界首个开源Agentic视频生产系统——12条流水线×52工具×500+Skill×零成本出片。AI编程助手变身导演+剪辑+特效...</p>
+        </div>
+      </a>
+            <a href="article.html?id=hot-20260625-1" class="post-card">
+                <div class="post-card-icon">🧠</div>
+                <div class="post-card-content">
+                    <h3>221K星！ECC深度解读：给AI编程Agent装个「操作系统」</h3>
+                    <div class="post-meta">
+                        <span class="post-date">2026-06-25</span>
+                        <span class="post-category">AI</span>
+                        <span class="post-read-time">14 min</span>
+                    </div>
+                    <p>221K星，10个月——ECC如何用四层架构+六阶段流水线定义AI编程Agent的「操作系统」标准。深度拆解跨平台DRY适配器、AgentShield安全对抗、记忆持久化与持续学习系统。</p>
+                    <div class="post-tags">
+                        <span class="tag">ECC</span>
+                        <span class="tag">Agent OS</span>
+                        <span class="tag">AI Agent</span>
+                        <span class="tag">Claude Code</span>
+                    </div>
+                </div>
+            </a>
+      <a href="article.html?id=hot-20260626-1" class="post-card">
+        <div class="post-card-icon">🤖</div>
+        <div class="post-card-content">
+          <h3>住在网页里的AI Agent：page-agent如何用一行JS标签终结浏览器自动化</h3>
+          <div class="post-meta">
+            <span class="post-date">2026-06-26</span>
+            <span class="post-category">AI</span>
+            <span class="post-read-time">12 min</span>
+          </div>
+          <p>阿里19.8K星开源项目page-agent深度解读：为什么「内嵌式Agent」正在取代「外挂式自动化」？从国企OA到无障碍访问，一行script标签如何让任何网页拥有AI操作能力。</p>
+          <div class="post-tags">
+            <span class="tag">page-agent</span><span class="tag">阿里巴巴</span><span class="tag">GUI Agent</span><span class="tag">DOM</span>
+          </div>
+        </div>
+      </a>
+
+      <a href="article.html?id=hot-20260630-1" class="post-card">
+        <div class="post-card-icon">🧠</div>
+        <div class="post-card-content">
+          <h3>代码智能的「图数据库革命」：codebase-memory-mcp 如何让 AI Agent 的 Token 消耗暴降 99%</h3>
+          <div class="post-meta">
+                        <span class="post-date">2026-06-30</span>
+          </div>
+        </a>
+
+        <!-- NEW: hot-20260703-1 -->
+        <a class="post-card" href="article.html?id=hot-20260703-1">
+          <div class="post-card-content">
+            <span class="post-category">AI</span>
+            <h3>71K星只用了2周！Ponytail深度解读：当AI学会了「能不写就不写」</h3>
+            <p class="post-excerpt">6月15日开源，2周71.6K星。Ponytail让AI编程Agent像最懒的高级工程师一样写代码——能不写就不写。实测代码减少54%，Token节省22%。</p>
+            <div class="post-meta">
+              <span class="post-date">2026年07月03日</span>
+              <span class="post-read-time">8 min read</span>
+            </div>
+          </div>
+        </a>
+            <span class="post-category">AI</span>
+            <span class="post-read-time">14 min</span>
+          </div>
+          <p>21.4K星项目深度解读：用Tree-Sitter+知识图谱+MCP三位一体架构，让AI编程Agent的Token消耗暴降99%。单文件静态二进制，158种语言，Linux内核3分钟索引...</p>
+          <div class="post-tags">
+            <span class="tag">codebase-memory-mcp</span><span class="tag">知识图谱</span><span class="tag">MCP</span><span class="tag">Tree-Sitter</span>
+          </div>
+        </div>
+      </a>
+
+        <!-- NEW: hot-20260707-1 -->
+        <a class="post-card" href="article.html?id=hot-20260707-1">
+          <div class="post-card-content">
+            <span class="post-category">AI</span>
+            <h3>当AI Agent学会「工程规范」——Google工程大佬的24条「军规」如何驯服Coding Agent</h3>
+            <p class="post-excerpt">70K星！Addy Osmani开源24个生产级Agent Skill，把Google工程基因编码为AI可执行的SOP。流程优于文档、反理性化表、强制验证——Agent时代的新基本功。</p>
+            <div class="post-meta">
+              <span class="post-date">2026年07月07日</span>
+              <span class="post-read-time">13 min read</span>
+            </div>
+          </div>
+        
+        <!-- NEW: hot-20260709-1 -->
+        <a class="post-card" href="article.html?id=hot-20260709-1">
+          <div class="post-card-content">
+            <span class="post-category">AI</span>
+            <h3>79K星！graphify深度解读：用知识图谱替代grep，AI Agent终于「看懂」你的代码</h3>
+            <p class="post-excerpt">79K星，30天——graphify如何用tree-sitter+Leiden算法+图查询重新定义代码智能。零LLM的代码解析、社区发现自动识别模块边界、LOCOMO基准recall@10碾压向量检索10倍。AI编程Agent从此不再「盲人摸象」。</p>
+            <div class="post-meta">
+              <span class="post-date">2026年07月09日</span>
+              <span class="post-read-time">15 min read</span>
+            </div>
+          </div>
+        </a>
+          </div>
+        </a>
+
+        <!-- NEW: hot-20260714-1 -->
+        <a class="post-card" href="article.html?id=hot-20260714-1">
+          <div class="post-card-content">
+            <span class="post-category">AI</span>
+            <h3>21K星！Vibe-Trading深度解读：香港大学开源的「一句话生成交易策略」AI Agent</h3>
+            <p class="post-excerpt">21.7K星！港大数据科学实验室出品的开源AI交易Agent——自然语言一句话生成策略、回测、报告。深度拆解Multi-Agent团队架构、Shadow Account行为诊断、Alpha Zoo因子库、54个MCP工具，附国企投资视角的AI落地思考...</p>
+            <div class="post-meta">
+              <span class="post-date">2026年07月14日</span>
+              <span class="post-read-time">15 min read</span>
+            </div>
+          </div>
+        </a>
+
+        <!-- NEW: hot-20260721-1 -->
+        <a class="post-card" href="article.html?id=hot-20260721-1">
+          <div class="post-card-content">
+            <span class="post-category">AI</span>
+            <h3>别再让AI Agent「失忆」了：cognee如何用知识图谱给Agent装上永久记忆</h3>
+            <p class="post-excerpt">29K星的Agent记忆平台cognee深度解读：向量+图谱双引擎、remember/recall/forget/improve四操作API、MCP原生支持。从为什么Agent需要记忆到完整架构拆解，附国企投资场景的落地思路和5分钟上手指南...</p>
+            <div class="post-meta">
+              <span class="post-date">2026年07月21日</span>
+              <span class="post-read-time">15 min read</span>
+            </div>
+          </div>
+        </a>
+
+        <!-- NEW: hot-20260725-1 -->
+        <a class="post-card" href="article.html?id=hot-20260725-1">
+          <div class="post-card-content">
+            <span class="post-category">AI</span>
+            <h3>Kronos深度解读：金融市场的第一个「大语言模型」——33K星，AAAI 2026最佳论文</h3>
+            <p class="post-excerpt">首个专为金融K线数据设计的开源基础模型：45家交易所、120亿条记录训练、RankK提升93%。专用分词器+自回归Transformer，国企投资+AI开发双重视角深度拆解。</p>
+            <div class="post-meta">
+              <span class="post-date">2026年07月25日</span>
+              <span class="post-read-time">16 min read</span>
+            </div>
+          </div>
+        </a>
+
+        <!-- NEW: hot-20260722-1 -->
+        <a class="post-card" href="article.html?id=hot-20260722-1">
+          <div class="post-card-content">
+            <span class="post-category">AI</span>
+            <h3>别再猜了！llmfit：一条命令告诉你电脑能跑什么大模型</h3>
+            <p class="post-excerpt">30K星！llmfit用一条命令终结「我的电脑能跑什么模型」的终极问题。自动检测硬件、四维评分、500+模型覆盖、TUI/CLI/API三种模式——本地AI部署从玄学变科学。</p>
+            <div class="post-meta">
+              <span class="post-date">2026年07月22日</span>
+              <span class="post-read-time">16 min read</span>
+            </div>
+          </div>
+        </a>
+
+        <!-- NEW: hot-20260713-1 -->
+        <a class="post-card" href="article.html?id=hot-20260713-1">
+          <div class="post-card-content">
+            <span class="post-category">AI</span>
+            <h3>AI Agent终于会做PPT了：OfficeCLI深度解读——15K星，让任何AI直接操作Word/Excel/PPT</h3>
+            <p class="post-excerpt">15K星！OfficeCLI是首个专为AI Agent打造的Office套件——一个二进制文件，零依赖，无需安装Office。深度拆解Agent-first设计哲学、HTML渲染引擎、路径寻址系统、Formula引擎四大核心架构，附国企办公场景实战...</p>
+            <div class="post-meta">
+              <span class="post-date">2026年07月13日</span>
+              <span class="post-read-time">14 min read</span>
+            </div>
+          </div>
+        </a>
+
+      <a class="post-card" href="article.html?id=hot-20260710-1">
+        <div class="post-card-content">
+          <span class="post-category">AI</span>
+          <h3>75K Star！Agent Skills深度解读：AI编码时代，高级工程师的「不可见智慧」如何标准化</h3>
+          <p>16 min \u00b7 2026-07-10</p>
+        </div>
+      </a>
+      <!-- was: <a class="post-card" href="article.html?id=hot-20 --></a>
+      <a class="post-card" href="article.html?id=hot-20260710-1">
+        <div class="post-card-content">
+          <span class="post-category">AI</span>
+          <h3>75K Star！Agent Skills深度解读：AI编码时代，高级工程师的「不可见智慧」如何标准化</h3>
+          <p>16 min · 2026-07-10</p>
+        </div>
+      </a>
+      <!-- next card was <!-- NEW: hot-20260708-1 --> --></a>
+
+        <!-- NEW: hot-20260708-1 -->
+        <a class="post-card" href="article.html?id=hot-20260708-1">
+          <div class="post-card-content">
+            <span class="post-category">AI</span>
+            <h3>一个人+Claude Code=一个投研团队：ai-berkshire深度解读——11K星，两年实盘+69%</h3>
+            <p class="post-excerpt">11.7K星！ai-berkshire将巴菲特、芒格、段永平、李录四大投资大师方法论编译为19个Claude Code Skill，两年实盘+66%+。深度拆解四大师对抗分析、Decimal精确计算、结构化反偏见机制——一个人就是一个投研团队。</p>
+            <div class="post-meta">
+              <span class="post-date">2026年07月08日</span>
+              <span class="post-read-time">14 min read</span>
+            </div>
+          </div>
+        
+
+        <!-- NEW: hot-20260717-1 -->
+        <a class="post-card" href="article.html?id=hot-20260717-1">
+          <div class="post-card-content">
+            <span class="post-category">AI</span>
+            <h3>设计品味可以「安装」吗？Hallmark：给AI编程Agent装上反套路审美</h3>
+            <p class="post-excerpt">7月15日刚登上GitHub Trending第2名的Hallmark（日增3,372星），是一个「反AI套路」的设计Skill。它用21种宏观结构+20个主题+57道反套路闸门，让AI生成的UI不再千篇一律。深度拆解五大AI设计套路、八大铁律、定制主题机制，附国企投资视角的应用思考。</p>
+            <div class="post-meta">
+              <span class="post-date">2026-07-17</span>
+              <span class="post-read-time">14 min</span>
+            </div>
+          </div>
+        </a>
+</a>
+</a>
+
+      <a href="article.html?id=hot-20260629-1" class="post-card">
+        <div class="post-card-icon">🐟</div>
+        <div class="post-card-content">
+          <h3>67K星！MiroFish深度解读：用群体智能「预演未来」的AI沙盘</h3>
+          <div class="post-meta">
+            <span class="post-date">2026-06-29</span>
+            <span class="post-category">AI</span>
+            <span class="post-read-time">15 min</span>
+          </div>
+          <p>67K星的多智能体预测引擎：千个独立人格Agent在数字世界里替你试错。深度拆解五阶段架构、实体图谱构建、双平台并行模拟，附国企投资场景应用思考...</p>
+          <div class="post-tags">
+            <span class="tag">MiroFish</span><span class="tag">群体智能</span><span class="tag">多Agent</span><span class="tag">预测引擎</span>
+          </div>
+        </div>
+      </a>
+
+
       <a href="article.html?id=ai-agent" class="post-card" data-category="AI" data-keywords="AI Agent 国企 投资 智能化 转型 文档 处理 会议纪要">
         <div class="post-card-image">🤖</div>
         <div class="post-card-body">
@@ -294,26 +609,201 @@
           <p>分享我在国企工作中最常用的5个AI工具，以及如何搭建高效工作流...</p>
         </div>
       </a>
-      <a href="article.html?id=hot-20260803-1" class="post-card" data-category="AI" data-keywords="OpenClaw AI Agent 开源 架构 个人助理 操作系统 Gateway 技能">
-        <div class="post-card-image">🦞</div>
-        <div class="post-card-body">
-          <div class="post-card-meta">
-            <span class="post-card-category cat-ai">AI</span><span>2026-08-03</span><span>⏱ 14 min</span>
-          </div>
-          <h3>346k Star的背后：OpenClaw如何重新定义「AI操作系统」</h3>
-          <p>深入解析GitHub历史增长最快项目的架构哲学——从Hub-Spoke到Skills=Markdown...</p>
-        </div>
-      </a>
-      <a href="article.html?id=hot-20260706-1" class="post-card" data-category="AI" data-keywords="知识图谱 MCP AI编程 代码智能 开源项目 codebase memory Tree-Sitter">
+      <a href="article.html?id=hot-20260512-1" class="post-card" data-category="AI" data-keywords="AI Agent 记忆系统 知识图谱 gbrain RAG Garry Tan YC 混合检索">
         <div class="post-card-image">🧠</div>
         <div class="post-card-body">
           <div class="post-card-meta">
-            <span class="post-card-category cat-ai">AI</span><span>2026-07-06</span><span>⏱ 12 min</span>
+            <span class="post-card-category cat-ai">AI</span><span>2026-05-12</span><span>⏱ 14 min</span>
           </div>
-          <h3>当AI学会「看懂」代码：Codebase-Memory如何用知识图谱重塑AI编程</h3>
-          <p>深入解析本周GitHub最火开源项目——让AI编程助手从此告别"盲人摸象"...</p>
+          <h3>给AI装个大脑：gbrain是怎么让Agent记住17888页内容的</h3>
+          <p>混合检索（向量+图谱+全文）比纯RAG高出31个点，30分钟部署，21个定时任务自主运行...</p>
         </div>
       </a>
+      <a href="article.html?id=hot-20260515-1" class="post-card" data-category="AI" data-keywords="DeepSeek 本地推理 antirez Metal AI基础设施 ds4 MoE KV Cache">
+        <div class="post-card-image">🚀</div>
+        <div class="post-card-body">
+          <div class="post-card-meta">
+            <span class="post-card-category cat-ai">AI</span><span>2026-05-15</span><span>⏱ 16 min</span>
+          </div>
+          <h3>Redis之父再造轮子：9天9k星，ds4如何让DeepSeek在MacBook上起飞</h3>
+          <p>antirez用纯C手写DeepSeek推理引擎，从MoE架构到KV Cache落盘，一文讲透年度最硬核开源项目...</p>
+        </div>
+      </a>
+      <a href="article.html?id=hot-20260518-1" class="post-card" data-category="AI" data-keywords="DeepSeek Claude Code 成本优化 AI Agent deepclaude 降本 代理 热切换">
+        <div class="post-card-image">💰</div>
+        <div class="post-card-body">
+          <div class="post-card-meta">
+            <span class="post-card-category cat-ai">AI</span><span>2026-05-18</span><span>⏱ 12 min</span>
+          </div>
+          <h3>Claude Code月费$200？用deepclaude换成DeepSeek，直接省17倍</h3>
+          <p>deepclaude 代理切换架构 + 热切换机制，月费从$200降到$12，国企降本实战全解...</p>
+        </div>
+      </a>
+      <a href="article.html?id=hot-20260522-1" class="post-card" data-category="AI" data-keywords="MemPalace AI记忆 MCP 向量检索 Agent 记忆宫殿 长期记忆">
+        <div class="post-card-image">🧠</div>
+        <div class="post-card-body">
+          <div class="post-card-meta">
+            <span class="post-card-category cat-ai">AI</span><span>2026-05-22</span><span>⏱ 15 min</span>
+          </div>
+          <h3>52K星！MemPalace：给AI装上永不褪色的记忆宫殿</h3>
+          <p>一个半月52K星，逐字存储+三层索引+96.6%检索准确率+29个MCP工具，让AI告别健忘症...</p>
+        </div>
+      <a href="article.html?id=hot-20260525-1" class="post-card" data-category="AI" data-keywords="html-anything Agent Skills AI Agent 效率工具 内容创作 HTML编辑器">
+        <div class="post-card-image">🎨</div>
+        <div class="post-card-body">
+          <div class="post-card-meta">
+            <span class="post-card-category cat-ai">AI</span><span>2026-05-25</span><span>⏱ 16 min</span>
+          </div>
+          <h3>Agent时代的HTML编辑器：html-anything深度解读</h3>
+          <p>75个Skill × 9种输出场景 × 8种Agent CLI，Agent时代的内容创作新范式...</p>
+        </div>
+      </a>
+      <a href="article.html?id=hot-20260528-1" class="post-card" data-category="AI" data-keywords="zerolang Vercel Agent 编程语言 编译器 AI">
+        <div class="post-card-image">🔧</div>
+        <div class="post-card-body">
+          <div class="post-card-meta">
+            <span class="post-card-category cat-ai">AI</span><span>2026-05-28</span><span>⏱ 14 min</span>
+          </div>
+          <h3>Vercel 造了门给 AI Agent 用的编程语言：zerolang 深度解读</h3>
+          <p>14天4600星！编译器输出结构化JSON，专为AI Agent设计。深度解析「编译器即API」的架构创新...</p>
+        </div>
+      </a>
+      <a href="article.html?id=hot-20260529-1" class="post-card" data-category="AI" data-keywords="PilotDeck OpenBMB Agent 操作系统 白盒记忆 智能路由 WorkSpace">
+        <div class="post-card-image">🏗️</div>
+        <div class="post-card-body">
+          <div class="post-card-meta">
+            <span class="post-card-category cat-ai">AI</span><span>2026-05-29</span><span>⏱ 14 min</span>
+          </div>
+          <h3>Agent时代的操作系统：PilotDeck深度解读</h3>
+          <p>清华OpenBMB开源Agent OS：工作空间隔离+白盒记忆+智能路由，成本直降77%...</p>
+        </div>
+      </a>
+      <a href="article.html?id=hot-20260601-1" class="post-card" data-category="AI" data-keywords="DeerFlow ByteDance SuperAgent LangGraph Skill 子代理 沙盒 Agent平台">
+        <div class="post-card-image">🦌</div>
+        <div class="post-card-body">
+          <div class="post-card-meta">
+            <span class="post-card-category cat-ai">AI</span><span>2026-06-01</span><span>⏱ 16 min</span>
+          </div>
+          <h3>字节开源的SuperAgent：DeerFlow 2.0深度解读</h3>
+          <p>70K Stars的SuperAgent平台：Skill渐进加载+子代理并行+Docker沙盒+6大IM通道...</p>
+        </div>
+      </a>
+      <a href="article.html?id=hot-20260602-1" class="post-card" data-category="AI" data-keywords="GPT Researcher Deep Research MCP 自主Agent 研究自动化 RAG 开箱即用">
+        <div class="post-card-image">🔎</div>
+        <div class="post-card-body">
+          <div class="post-card-meta">
+            <span class="post-card-category cat-ai">AI</span><span>2026-06-02</span><span>⏱ 14 min</span>
+          </div>
+          <h3>27K星的自主研究Agent：GPT Researcher深度解读</h3>
+          <p>GitHub 27K Stars的开源自主研究Agent：Planner-Execution-Publisher三阶段架构...</p>
+        </div>
+      </a>
+
+      <a href="article.html?id=hot-20260604-1" class="post-card" data-category="AI" data-keywords="Kimi Code Moonshot AI AI编程 终端Agent MCP 开源 子Agent">
+        <div class="post-card-image">🤖</div>
+        <div class="post-card-body">
+          <div class="post-card-meta">
+            <span class="post-card-category cat-ai">AI</span><span>2026-06-04</span><span>⏱ 13 min</span>
+          </div>
+          <h3>Kimi杀入AI编程赛道：月之暗面开源的终端Agent</h3>
+          <p>月之暗面开源终端AI编程Agent：单二进制零依赖、视频输入、3个子Agent并行工作...</p>
+        </div>
+      </a>
+      <a href="article.html?id=hot-20260605-2" class="post-card" data-category="AI" data-keywords="OpenClaw AI助理 个人Agent Gateway架构 开源 多Agent 跨平台">
+        <div class="post-card-image">🦞</div>
+        <div class="post-card-body">
+          <div class="post-card-meta">
+            <span class="post-card-category cat-ai">AI</span><span>2026-06-05</span><span>⏱ 14 min</span>
+          </div>
+          <h3>37万星，7个月——OpenClaw 如何重新定义「个人AI助理」</h3>
+          <p>7个月冷启动37万星，OpenAI/GitHub/NVIDIA/Vercel四巨头同时站台。深入拆解OpenClaw技术架构...</p>
+        </div>
+      </a>
+      <a href="article.html?id=hot-20260609-1" class="post-card" data-category="AI" data-keywords="Odysseus AI Agent 自托管 MCP LLM Agent框架 Docker">
+        <div class="post-card-image">🏛️</div>
+        <div class="post-card-body">
+          <div class="post-card-meta">
+            <span class="post-card-category cat-ai">AI</span><span>2026-06-09</span><span>⏱ 16 min</span>
+          </div>
+          <h3>9天63K星！Odysseus深度解读：自托管AI工作空间的「私有大管家」</h3>
+          <p>9天63K星的现象级项目Odysseus，深度拆解Agent引擎、Cookbook模型厨房、Memory系统三大核心架构...</p>
+        </div>
+      </a>
+      <a href="article.html?id=hot-20260610-1" class="post-card" data-category="AI" data-keywords="Karpathy autoresearch AI Agent 自主研究 LLM训练 自动化 实验">
+        <div class="post-card-image">🤖</div>
+        <div class="post-card-body">
+          <div class="post-card-meta">
+            <span class="post-card-category cat-ai">AI</span><span>2026-06-10</span><span>⏱ 16 min</span>
+          </div>
+          <h3>85K星！Karpathy的autoresearch：让AI自己搞AI研究</h3>
+          <p>Karpathy用3个文件定义AI研究新范式：人写指令，Agent改代码，固定5分钟训练，一夜100次自动实验...</p>
+        </div>
+      </a>
+      <a href="article.html?id=hot-20260611-1" class="post-card">
+        <span class="post-icon">🗜️</span>
+        <div class="post-content">
+          <div class="post-meta">
+            <span class="post-date">2026-06-11</span>
+            <span class="post-category">AI</span>
+          </div>
+          <h3>给LLM装个「压缩引擎」：Headroom如何让你的AI Agent Token消耗暴降92%</h3>
+          <p>Headroom是一个本地运行的LLM上下文压缩层，节省60-95%的Token消耗——3层压缩管线+CCR可逆架构全解。</p>
+          <div class="post-tags">
+            <span>Headroom</span><span>Token优化</span><span>AI Agent</span>
+          </div>
+        </div>
+      <a href="article.html?id=hot-20260615-1" class="post-card" data-category="AI" data-keywords="Omnigent AI Agent Meta-Harness 多Agent协作 Agent治理 开源">
+        <div class="post-card-image">🦐</div>
+        <div class="post-card-body">
+          <div class="post-card-meta">
+            <span class="post-card-category cat-ai">AI</span><span>2026-06-15</span><span>⏱ 15 min</span>
+          </div>
+          <h3>73K单日Star！Omnigent深度解读：Agent世界的「元操作系统」来了</h3>
+          <p>给Claude Code、Codex、Pi等Agent装上统一的元底座——全设备漫游、多Agent监督、三层策略治理深度拆解。</p>
+        </div>
+      </a>
+      <a href="article.html?id=hot-20260616-1" class="post-card" data-category="AI" data-keywords="Hermes Agent Nous Research AI Agent 闭环学习 Skill系统 MCP协议 开源 自进化">
+        <div class="post-card-image">🔮</div>
+        <div class="post-card-body">
+          <div class="post-card-meta">
+            <span class="post-card-category cat-ai">AI</span><span>2026-06-16</span><span>⏱ 16 min</span>
+          </div>
+          <h3>194K星！Hermes Agent深度解读：唯一会「自我进化」的AI Agent是怎么炼成的</h3>
+          <p>Nous Research打造的唯一内置闭环学习机制的Agent，Skill自生成+三层记忆+MCP无限扩展...</p>
+        </div>
+      </a>
+      <a href="article.html?id=hot-20260618-1" class="post-card" data-category="AI" data-keywords="TradingAgents Multi-Agent 金融AI LLM交易 量化投资 开源">
+        <div class="post-card-image">📈</div>
+        <div class="post-card-body">
+          <div class="post-card-meta">
+            <span class="post-card-category cat-ai">AI</span><span>2026-06-18</span><span>⏱ 16 min</span>
+          </div>
+          <h3>87K星！TradingAgents深度解读：用7个AI分析师搭建你的华尔街交易团队</h3>
+          <p>UCLA & MIT联合出品，7个LLM分析师通过结构化辩论做交易决策——四层架构+牛熊辩论机制深度拆解。</p>
+        </div>
+      </a>
+      <a href="article.html?id=hot-20260619-1" class="post-card" data-category="AI" data-keywords="Open Code Review 阿里巴巴 代码审查 AI Agent 确定性工程 开源 Alibaba">
+        <div class="post-card-image">🔍</div>
+        <div class="post-card-body">
+          <div class="post-card-meta">
+            <span class="post-card-category cat-ai">AI</span><span>2026-06-19</span><span>⏱ 12 min</span>
+          </div>
+          <h3>阿里2年实战验证：Open Code Review如何用「确定性工程+AI」省掉89%审查成本</h3>
+          <p>阿里巴巴内部跑了2年的AI代码审查工具终于开源——确定性工程×Agent混合架构，Token仅通用方案1/9，精度却更高。</p>
+        </div>
+      </a>
+
+      <a href="article.html?id=hot-20260622-1" class="post-card" data-category="AI" data-keywords="Spec Kit GitHub 规范驱动开发 SDD AI编程 Vibe Coding 工程化">
+        <div class="post-card-image">📋</div>
+        <div class="post-card-body">
+          <div class="post-card-meta">
+            <span class="post-card-category cat-ai">AI</span><span>2026-06-22</span><span>⏱ 15 min</span>
+          </div>
+          <h3>GitHub亲自下场定义AI编码新范式：Spec Kit深度解读——用「写规范」终结Vibe Coding</h3>
+          <p>115K Star的GitHub官方项目，8步工作流将AI编码从「随性发挥」升级为「按规执行」——深度拆解Constitution+Specify+Plan+Implement...</p>
+        </div>
+      </a>
+
     </div>
   </main>
 
@@ -332,6 +822,22 @@
       document.getElementById('themeToggle').textContent = next === 'dark' ? '🌙' : '☀️';
       localStorage.setItem('theme', next);
     });
+
+    // ===== Language Toggle =====
+    const langToggle = document.getElementById('langToggle');
+    const savedLang = localStorage.getItem('lang') || 'zh';
+    setLang(savedLang);
+    langToggle.addEventListener('click', () => {
+      const next = html.getAttribute('data-lang') === 'zh' ? 'en' : 'zh';
+      setLang(next);
+    });
+    function setLang(lang) {
+      html.setAttribute('data-lang', lang);
+      langToggle.textContent = lang === 'zh' ? 'EN' : '中';
+      langToggle.title = lang === 'zh' ? 'Switch to English' : '切换到中文';
+      localStorage.setItem('lang', lang);
+    }
+
 
     // View toggle
     const postsGrid = document.getElementById('postsGrid');
