@@ -669,6 +669,18 @@
       <div class="section-label" data-num="03">Blog</div>
       <h2 class="section-title"><span class="zh">最新文章</span><span class="en">Latest Posts</span></h2>
       <div class="posts-grid">
+        <a href="article.html?id=hot-20261019-1" class="post-card reveal">
+          <div class="post-card-image">🖥️</div>
+          <div class="post-card-body">
+            <div class="post-card-meta">
+              <span class="post-card-category cat-ai">AI</span>
+              <span>2026-10-19</span>
+              <span>⏱ 24 min</span>
+            </div>
+            <h3>【5.4 万星】CLI-Anything 深度解读：当用户从人变成 Agent，软件该长什么样？</h3>
+            <p>54.6K 星、Apache 2.0、115 位贡献者、40 多个真实软件的 harness、2,464 个测试全绿——HKUDS/CLI-Anything 把「Agent 怎么用软件」从演示级问题变成了工程级问题。本文拆解这条 7 阶段流水线：为什么先找后端引擎再找按钮；为什么「用真软件、禁止重写」是第一条不可谈判的铁律；「渲染鸿沟」是怎么让一个跑成功的导出静默丢失所有滤镜，以及 native engine → filtergraph 翻译 → 生成脚本的三级降级链；测试为什么要验 %PDF- magic bytes 和抽取帧像素，而不是「跑完没报错」；双模态 REPL、--json 硬性要求、排他文件锁、PEP 420 命名空间包这些细节；以及它对「Skill 自动生成」这个动作的真正意义——让文档从代码里长出来，而不是靠人维护两份。最后从国企投资视角谈三点：Agent 就绪度如何成为软件资产的新属性、存量系统改造为什么是「加一层」而不是「换一套」、以及护城河为什么可能在接口层而不在模型层。</p>
+          </div>
+        </a>
         <a href="article.html?id=hot-20261016-1" class="post-card reveal">
           <div class="post-card-image">📎</div>
           <div class="post-card-body">
@@ -691,18 +703,6 @@
             </div>
             <h3>【净室重写 Word】8.8 万行 Rust、97% 对齐率：Agent 造生产级桌面软件的工程拆解</h3>
             <p>11.1K 星、MIT / Apache 双许可、单日 +2,151 星——storytold/wordcraft 用 5 天、95 个合并 PR、约 8.8 万行纯 Rust，净室重写出一个 97% 功能区对齐的 Microsoft Word，并在同一天把 Excel（gridcraft）、AutoCAD（cadcraft）、PowerPoint（deckcraft）一起送上 GitHub 飙升榜。拆解它把「一切皆命令」写成 433 条 CommandSpec、让功能区 / 快捷键 / 命令搜索 / CLI / JSON 控制通道 / MCP 共用同一命令面的架构；把「像不像 Word」做成只升不降的 parity 门与几百组「Word for Windows 实测」的差分测试；用 deny(unwrap) 与 hostile_params_never_panic 把「绝不崩溃」变成编译器约束；以及最值得投资视角关注的一点——它把剩余工程量折成 agent 小时（到完全对齐 Word 约 750–1,250 agent 小时，新子系统 600–1,000 行 / agent 小时，保真度工作慢 5–10 倍）。附净室纪律如何把知识产权风险变成 CI 门禁，以及「97% 功能覆盖只等于 60% 可用性」的诚实自评。</p>
-          </div>
-        </a>
-        <a href="article.html?id=hot-20261013-1" class="post-card reveal">
-          <div class="post-card-image">🛰️</div>
-          <div class="post-card-body">
-            <div class="post-card-meta">
-              <span class="post-card-category cat-ai">AI</span>
-              <span>2026-10-13</span>
-              <span>⏱ 30 min</span>
-            </div>
-            <h3>【53.7K 星】上帝视角：公开数据、3D 地球与一个会说人话的 AI 情报官——God’s Eye View 深度解读</h3>
-            <p>53.7K 星、MIT、GitHub Trending 日榜与周榜双第一——bilawalsidhu/gods-eye-view 把航班应答机、船舶信标、卫星轨道根数、地震台站、NOAA 气象与公共摄像头，聚合成一个跑在本地浏览器里的 3D 地球，再配一个能听懂自然语言的实时 AI 情报官。拆解它的四构造器生命周期与逆向清理契约、工具定义一次却同时喂给 MCP 与语音的双适配器、把「没观测到」独立成态的诚实设计、可执行的边界声明 check:boundaries，以及本地 RTL-SDR 接收器如何把数据主权收回自己家。附国企投资视角——当公开数据可以被一个人聚合成情报台，数据智能标的的定价权该往哪里找。</p>
           </div>
         </a>
         <a href="article.html?id=ai-agent" class="post-card reveal">
