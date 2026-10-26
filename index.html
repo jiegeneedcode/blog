@@ -669,6 +669,18 @@
       <div class="section-label" data-num="03">Blog</div>
       <h2 class="section-title"><span class="zh">最新文章</span><span class="en">Latest Posts</span></h2>
       <div class="posts-grid">
+        <a href="article.html?id=hot-20261026-1" class="post-card reveal">
+          <div class="post-card-image">🦆</div>
+          <div class="post-card-body">
+            <div class="post-card-meta">
+              <span class="post-card-category cat-ai">AI</span>
+              <span>2026-10-26</span>
+              <span>⏱ 22 min</span>
+            </div>
+            <h3>【1.1 万星】800 克的机器鸭与 20 毫秒的账：Microduck 深度解读——强化学习如何变成可运维的硬件产品</h3>
+            <p>11.7K 星、Apache-2.0、595 个文件、12 篇设计文档——Pollen Robotics 开源的不只是「一只会走路的机器鸭」，而是一套把强化学习做成消费级产品的完整工程账本。本文逐层拆解：61 维观测契约如何让 13 个策略在真机上互相热切换；BAM 舵机模型、域随机化与 ±1 度背隙建模为什么才是 sim2real 的主体；ONNX 归一化器为什么必须烘焙进图；manifest.json 如何用四个门控数字把「换一个动作」从发固件降级成装仓库；一次 fast sync read 与 return_delay_time 从 250 改到 0 省下的 8 毫秒为什么值一个 20 毫秒周期的 40%；七个守护进程为何坚持「一个服务一根 Unix socket」；以及安全层三条反直觉设计——NaN 拒绝而非夹取、摔倒判定只报不上闸、停止不等于瘫软。最后给出国企投资视角的三点判断：消费级机器人的护城河在运维而不在模型、策略商店如何把装机量变成分发渠道、以及为什么设计文档才是尽调时唯一抄不走的东西。</p>
+          </div>
+        </a>
         <a href="article.html?id=hot-20261019-1" class="post-card reveal">
           <div class="post-card-image">🖥️</div>
           <div class="post-card-body">
@@ -691,18 +703,6 @@
             </div>
             <h3>【10.2 万星】Paperclip 深度解读：当员工全是 Agent，「公司」这件软件该长什么样？</h3>
             <p>102.7K 星、MIT、217 位贡献者、2,700+ 合并 PR——paperclipai/paperclip 用一句话定义了 2026 年下半年的 Agent 竞争焦点：「如果说 OpenClaw 是一名员工，那 Paperclip 就是一家公司。」本文拆解这套「公司操作系统」的控制平面架构：为什么心跳被定义成协议而不是运行时（invoke / status / cancel 三方法契约）；单指派加原子签出如何在设计层面消除冲突，而不需要乐观锁或 CRDT；任务如何取代聊天室成为唯一的通信总线，以及 billing code 怎样把 Agent A 请求 Agent B 的成本回溯归因；MCP 工具网关里 Profile（能不能看见工具）与 Policy（这次能不能用）的分工；low_trust_review 信任档如何把「提示注入」当成架构问题处理（fail closed、强制沙箱与隔离工作区、默认切断子任务向父任务的自由文本回写）；以及独立 Runner 进程如何用一次性票据与 PRP 协议做到「不变成第二个控制平面」。最后给出国企投资视角的三点启示，附一份最值得抄的「反需求」清单。</p>
-          </div>
-        </a>
-        <a href="article.html?id=hot-20261014-1" class="post-card reveal">
-          <div class="post-card-image">🏗️</div>
-          <div class="post-card-body">
-            <div class="post-card-meta">
-              <span class="post-card-category cat-ai">AI</span>
-              <span>2026-10-14</span>
-              <span>⏱️ 28 min</span>
-            </div>
-            <h3>【净室重写 Word】8.8 万行 Rust、97% 对齐率：Agent 造生产级桌面软件的工程拆解</h3>
-            <p>11.1K 星、MIT / Apache 双许可、单日 +2,151 星——storytold/wordcraft 用 5 天、95 个合并 PR、约 8.8 万行纯 Rust，净室重写出一个 97% 功能区对齐的 Microsoft Word，并在同一天把 Excel（gridcraft）、AutoCAD（cadcraft）、PowerPoint（deckcraft）一起送上 GitHub 飙升榜。拆解它把「一切皆命令」写成 433 条 CommandSpec、让功能区 / 快捷键 / 命令搜索 / CLI / JSON 控制通道 / MCP 共用同一命令面的架构；把「像不像 Word」做成只升不降的 parity 门与几百组「Word for Windows 实测」的差分测试；用 deny(unwrap) 与 hostile_params_never_panic 把「绝不崩溃」变成编译器约束；以及最值得投资视角关注的一点——它把剩余工程量折成 agent 小时（到完全对齐 Word 约 750–1,250 agent 小时，新子系统 600–1,000 行 / agent 小时，保真度工作慢 5–10 倍）。附净室纪律如何把知识产权风险变成 CI 门禁，以及「97% 功能覆盖只等于 60% 可用性」的诚实自评。</p>
           </div>
         </a>
         <a href="article.html?id=ai-agent" class="post-card reveal">
