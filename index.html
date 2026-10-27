@@ -669,6 +669,18 @@
       <div class="section-label" data-num="03">Blog</div>
       <h2 class="section-title"><span class="zh">最新文章</span><span class="en">Latest Posts</span></h2>
       <div class="posts-grid">
+        <a href="article.html?id=hot-20261027-1" class="post-card reveal">
+          <div class="post-card-image">🛤️</div>
+          <div class="post-card-body">
+            <div class="post-card-meta">
+              <span class="post-card-category cat-ai">AI</span>
+              <span>2026-10-27</span>
+              <span>⏱ 24 min</span>
+            </div>
+            <h3>【JetBrains 下场】ThinkRail 深度解读：当 IDE 学会「只做外骨骼」</h3>
+            <p>2,906 星、单日 +1,173、Apache-2.0、两个月 121 个 tag——JetBrains 孵化器里长出来的 ThinkRail 没有做「又一个 AI IDE」，而是把自家最值钱的那一层让了出去：agent loop 交给外部引擎 pi，它只做外骨骼。本文拆它五个决策：三环架构（引擎宿主 / wire 协议 / UI 客户端）；工作区就是 git worktree，以及为什么它比容器和分支都更合适；每轮对话的 diff 收据为什么不从 Agent 的工具调用里读，而是对文件系统做两次快照；Spec 图如何用「图」而不是「摘要」压缩上下文，以及「spec 永不由代码生成」这条铁律；MCP 的密钥只存引用、授权落在 project record 而不落仓库文件。最后给国企投资视角三条判断：IDE 会退化成外骨骼、分层是抗模型迭代的保险、锁定点从代码变成了规格。</p>
+          </div>
+        </a>
         <a href="article.html?id=hot-20261026-1" class="post-card reveal">
           <div class="post-card-image">🦆</div>
           <div class="post-card-body">
@@ -691,18 +703,6 @@
             </div>
             <h3>【5.4 万星】CLI-Anything 深度解读：当用户从人变成 Agent，软件该长什么样？</h3>
             <p>54.6K 星、Apache 2.0、115 位贡献者、40 多个真实软件的 harness、2,464 个测试全绿——HKUDS/CLI-Anything 把「Agent 怎么用软件」从演示级问题变成了工程级问题。本文拆解这条 7 阶段流水线：为什么先找后端引擎再找按钮；为什么「用真软件、禁止重写」是第一条不可谈判的铁律；「渲染鸿沟」是怎么让一个跑成功的导出静默丢失所有滤镜，以及 native engine → filtergraph 翻译 → 生成脚本的三级降级链；测试为什么要验 %PDF- magic bytes 和抽取帧像素，而不是「跑完没报错」；双模态 REPL、--json 硬性要求、排他文件锁、PEP 420 命名空间包这些细节；以及它对「Skill 自动生成」这个动作的真正意义——让文档从代码里长出来，而不是靠人维护两份。最后从国企投资视角谈三点：Agent 就绪度如何成为软件资产的新属性、存量系统改造为什么是「加一层」而不是「换一套」、以及护城河为什么可能在接口层而不在模型层。</p>
-          </div>
-        </a>
-        <a href="article.html?id=hot-20261016-1" class="post-card reveal">
-          <div class="post-card-image">📎</div>
-          <div class="post-card-body">
-            <div class="post-card-meta">
-              <span class="post-card-category cat-ai">AI</span>
-              <span>2026-10-16</span>
-              <span>⏱️ 26 min</span>
-            </div>
-            <h3>【10.2 万星】Paperclip 深度解读：当员工全是 Agent，「公司」这件软件该长什么样？</h3>
-            <p>102.7K 星、MIT、217 位贡献者、2,700+ 合并 PR——paperclipai/paperclip 用一句话定义了 2026 年下半年的 Agent 竞争焦点：「如果说 OpenClaw 是一名员工，那 Paperclip 就是一家公司。」本文拆解这套「公司操作系统」的控制平面架构：为什么心跳被定义成协议而不是运行时（invoke / status / cancel 三方法契约）；单指派加原子签出如何在设计层面消除冲突，而不需要乐观锁或 CRDT；任务如何取代聊天室成为唯一的通信总线，以及 billing code 怎样把 Agent A 请求 Agent B 的成本回溯归因；MCP 工具网关里 Profile（能不能看见工具）与 Policy（这次能不能用）的分工；low_trust_review 信任档如何把「提示注入」当成架构问题处理（fail closed、强制沙箱与隔离工作区、默认切断子任务向父任务的自由文本回写）；以及独立 Runner 进程如何用一次性票据与 PRP 协议做到「不变成第二个控制平面」。最后给出国企投资视角的三点启示，附一份最值得抄的「反需求」清单。</p>
           </div>
         </a>
         <a href="article.html?id=ai-agent" class="post-card reveal">
