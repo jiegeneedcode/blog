@@ -237,7 +237,7 @@
   <header class="page-header">
     <h1><span class="zh">所有文章</span><span class="en">All Posts</span></h1>
     <p>技术文章、学习笔记与开发心得，涵盖 AI、Dev、效率工具等主题</p>
-    <p style="margin-top:0.5rem;">共 <span class="post-count" id="totalCount">78</span> 篇文章</p>
+    <p style="margin-top:0.5rem;">共 <span class="post-count" id="totalCount">79</span> 篇文章</p>
   </header>
 
   <!-- Search & View Toggle -->
@@ -1111,6 +1111,16 @@
           </div>
           <h3>【MLSys 2026 最佳论文】LEANN 深度解读：向量索引砍到原数据的 5%，embedding 留到用时再算</h3>
           <p>13.6k 星、MLSys 2026 最佳论文、MIT——同样 76GB 语料，传统 HNSW 要 188GB 索引，LEANN 只要 4GB。靠的不是压缩而是「不存」：图索引一次查询只碰几百个节点，那就用时现算 embedding。本文拆解两级搜索（AQ/EQ 双队列 + 重排比例 alpha）、动态批处理、高保度剪枝三个机制，附存储/延迟/ContextBench 全套数字、三条失效边界，以及从国企投资视角看的「存储换成本」结构迁移。</p>
+        </div>
+      </a>
+<a href="article.html?id=hot-20261102-1" class="post-card" data-category="AI" data-keywords="Lightpanda Zig 无头浏览器 CDP V8 渲染管线 国企投资视角">
+        <div class="post-card-image">🐼</div>
+        <div class="post-card-body">
+          <div class="post-card-meta">
+            <span class="post-card-category cat-ai">AI</span><span>2026-11-02</span><span>⏱ 24 min</span>
+          </div>
+          <h3>【把渲染管线删掉】Lightpanda 深度解读：一个用 Zig 重写的「给机器看的浏览器」</h3>
+          <p>40.1K 星、单日 +825、AGPL-3.0——Lightpanda 不 fork Chromium、不 patch WebKit，而是从零写了一个没有渲染引擎的浏览器。本文拆解它的减法：为什么 CDP 天生和像素绑定、四家自动化库为何集体绕开 DOM 域、五层对象模型与 V8 线程亲和两条铁律、933 页爬取的完整数字，以及 80% WPT 覆盖率背后被放弃的 CSS / SVG 领地。最后给三条判断：成本结构变了不是性能变好了、省下的钱要付在覆盖面、兼容 CDP 既是护城河也是枷锁。</p>
         </div>
       </a>
     </div>
