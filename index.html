@@ -669,6 +669,18 @@
       <div class="section-label" data-num="03">Blog</div>
       <h2 class="section-title"><span class="zh">最新文章</span><span class="en">Latest Posts</span></h2>
       <div class="posts-grid">
+        <a href="article.html?id=hot-20261110-1" class="post-card reveal">
+          <div class="post-card-image">📐</div>
+          <div class="post-card-body">
+            <div class="post-card-meta">
+              <span class="post-card-category cat-ai">AI</span>
+              <span>2026-11-10</span>
+              <span>⏱ 26 min</span>
+            </div>
+            <h3>【答案必须能被审】NVIDIA Auto-Ontology 深度解读：把企业数据编译成一层可认证的语义层</h3>
+            <p>11.0K 星、本周 +10,159（占总量 92%）、Apache-2.0——NVIDIA 把「AI 问数」拆成生成、认证、回答三段：先用元数据编译出 Term / SQL 属性 / 关系三种定义，让每个指标只有一个实现，再由人认证，最后才让 Agent 回答。查询阶段先用 sqlglot 做确定性静态检查（退化查询、空转聚合、缺失聚合、大小写折叠），再用有界重建兜底（最多 7 次、软检查 5 次后让路）。本文拆解六条生成期工程规则与 MCP「服务不持凭证、权限随人」的设计，并给出国企投资场景能抄与不能抄的清单。</p>
+          </div>
+        </a>
         <a href="article.html?id=hot-20261109-1" class="post-card reveal">
           <div class="post-card-image">🌳</div>
           <div class="post-card-body">
@@ -691,18 +703,6 @@
             </div>
             <h3>【不要再截图了】agent-desktop 深度解读：让 Agent 用无障碍树操作桌面，而不是看图猜坐标</h3>
             <p>9.7K 星、单日 +2,275、Apache-2.0——agent-desktop 不截图、不匹配像素，直接读操作系统的无障碍树，把桌面变成一棵带引用的 JSON 树。本文拆解它的分层与硬隔离、观察-引用-验证循环、三条铁律（动作成功不等于界面变化 / 引用有寿命且失败关闭 / 证据三态不是布尔）、窗口句柄回收与代际令牌、四类读失败，以及为什么「可审计性」正在变成 Agent 进入金融与政务链路的准入门槛。</p>
-          </div>
-        </a>
-        <a href="article.html?id=hot-20261102-1" class="post-card reveal">
-          <div class="post-card-image">🐼</div>
-          <div class="post-card-body">
-            <div class="post-card-meta">
-              <span class="post-card-category cat-ai">AI</span>
-              <span>2026-11-02</span>
-              <span>⏱ 24 min</span>
-            </div>
-            <h3>【把渲染管线删掉】Lightpanda 深度解读：一个用 Zig 重写的「给机器看的浏览器」</h3>
-            <p>40.1K 星、单日 +825、AGPL-3.0——Lightpanda 不 fork Chromium、不 patch WebKit，而是从零写了一个没有渲染引擎的浏览器。本文拆解它的减法：为什么 CDP 天生和像素绑定、四家自动化库为何集体绕开 DOM 域、五层对象模型与 V8 线程亲和两条铁律、933 页爬取的完整数字，以及 80% WPT 覆盖率背后被放弃的 CSS / SVG 领地。最后给三条判断：成本结构变了不是性能变好了、省下的钱要付在覆盖面、兼容 CDP 既是护城河也是枷锁。</p>
           </div>
         </a>
         <a href="article.html?id=ai-agent" class="post-card reveal">
