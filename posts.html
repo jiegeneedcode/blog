@@ -237,7 +237,7 @@
   <header class="page-header">
     <h1><span class="zh">所有文章</span><span class="en">All Posts</span></h1>
     <p>技术文章、学习笔记与开发心得，涵盖 AI、Dev、效率工具等主题</p>
-    <p style="margin-top:0.5rem;">共 <span class="post-count" id="totalCount">81</span> 篇文章</p>
+    <p style="margin-top:0.5rem;">共 <span class="post-count" id="totalCount">82</span> 篇文章</p>
   </header>
 
   <!-- Search & View Toggle -->
@@ -1141,6 +1141,16 @@
           </div>
           <h3>「并行不是多开几个 Agent」worktrunk 深度解读：隔离的单位不是分支，是工作目录</h3>
           <p>12.1K 星、5,516 commits、154 tags、Rust——worktrunk 把 git worktree 变成像分支一样好用的东西，专门服务并行 AI Agent。本文拆解三层架构（shell 函数 / Rust 二进制 / 共享对象库）、三条铁律（隔离单位是目录不是分支、共享不可变与隔离可变、进程改不了父进程的 cwd）、reflink 写时复制把 Rust 首次构建从 68 秒压到 3 秒、pre 阻塞与 post 后台的钩子二分法，以及项目配置审批的失败关闭语义。最后给投资视角：边际成本从「复制资产」变成「按写入付费」。</p>
+        </div>
+      </a>
+<a href="article.html?id=hot-20261110-1" class="post-card" data-category="AI" data-keywords="auto-ontology 语义层 Text-to-SQL 数据治理 MCP NVIDIA 国企投资视角">
+        <div class="post-card-image">📐</div>
+        <div class="post-card-body">
+          <div class="post-card-meta">
+            <span class="post-card-category cat-ai">AI</span><span>2026-11-10</span><span>⏱ 26 min</span>
+          </div>
+          <h3>【答案必须能被审】NVIDIA Auto-Ontology 深度解读：把企业数据编译成一层可认证的语义层</h3>
+          <p>11.0K 星、本周 +10,159（占总量 92%）、Apache-2.0——NVIDIA 把「AI 问数」拆成生成、认证、回答三段：先用元数据编译出 Term / SQL 属性 / 关系三种定义，让每个指标只有一个实现，再由人认证，最后才让 Agent 回答。查询阶段先用 sqlglot 做确定性静态检查（退化查询、空转聚合、缺失聚合、大小写折叠），再用有界重建兜底（最多 7 次、软检查 5 次后让路）。本文拆解六条生成期工程规则与 MCP「服务不持凭证、权限随人」的设计，并给出国企投资场景能抄与不能抄的清单。</p>
         </div>
       </a>
     </div>
