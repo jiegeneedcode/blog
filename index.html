@@ -669,6 +669,18 @@
       <div class="section-label" data-num="03">Blog</div>
       <h2 class="section-title"><span class="zh">最新文章</span><span class="en">Latest Posts</span></h2>
       <div class="posts-grid">
+        <a href="article.html?id=hot-20261112-1" class="post-card reveal">
+          <div class="post-card-image">🧠</div>
+          <div class="post-card-body">
+            <div class="post-card-meta">
+              <span class="post-card-category cat-ai">AI</span>
+              <span>2026-11-12</span>
+              <span>⏱ 24 min</span>
+            </div>
+            <h3>【17KB 的 markdown，1.1 万星】shadcn/improve 深度解读：把最贵的模型用在「智力复利」上</h3>
+            <p>10,921 星、MIT、17KB 仓库、5 位贡献者、22 次提交——shadcn 开源的 improve 不写一行代码，只写 markdown。它的主张只有一句：把最贵的模型用在「智力复利」的地方（理解代码库、判断什么值得做、写规格），执行交给便宜模型，计划的品质决定执行者能否成功。本文拆解五阶段流水线（Recon / Audit / Vet / Prioritize / Plan）、九个类目的审计手册、让计划可执行的三个属性、以及六个真正见功力的工程机制：杠杆排序、commit SHA 漂移检查、机器可判的完成标准、把执行者 diff 当不可信声明、两轮修订上限与 BLOCK、reconcile 清扫 backlog；也直说它对一行改动是纯负担，以及 1.1 万星背后 star 与工程量彻底脱钩这件事。</p>
+          </div>
+        </a>
         <a href="article.html?id=hot-20261111-1" class="post-card reveal">
           <div class="post-card-image">🎨</div>
           <div class="post-card-body">
@@ -691,18 +703,6 @@
             </div>
             <h3>【答案必须能被审】NVIDIA Auto-Ontology 深度解读：把企业数据编译成一层可认证的语义层</h3>
             <p>11.0K 星、本周 +10,159（占总量 92%）、Apache-2.0——NVIDIA 把「AI 问数」拆成生成、认证、回答三段：先用元数据编译出 Term / SQL 属性 / 关系三种定义，让每个指标只有一个实现，再由人认证，最后才让 Agent 回答。查询阶段先用 sqlglot 做确定性静态检查（退化查询、空转聚合、缺失聚合、大小写折叠），再用有界重建兜底（最多 7 次、软检查 5 次后让路）。本文拆解六条生成期工程规则与 MCP「服务不持凭证、权限随人」的设计，并给出国企投资场景能抄与不能抄的清单。</p>
-          </div>
-        </a>
-        <a href="article.html?id=hot-20261109-1" class="post-card reveal">
-          <div class="post-card-image">🌳</div>
-          <div class="post-card-body">
-            <div class="post-card-meta">
-              <span class="post-card-category cat-ai">AI</span>
-              <span>2026-11-09</span>
-              <span>⏱ 24 min</span>
-            </div>
-            <h3>「并行不是多开几个 Agent」worktrunk 深度解读：隔离的单位不是分支，是工作目录</h3>
-            <p>12.1K 星、5,516 commits、154 tags、Rust——worktrunk 把 git worktree 变成像分支一样好用的东西，专门服务并行 AI Agent。本文拆解三层架构（shell 函数 / Rust 二进制 / 共享对象库）、三条铁律（隔离单位是目录不是分支、共享不可变与隔离可变、进程改不了父进程的 cwd）、reflink 写时复制把 Rust 首次构建从 68 秒压到 3 秒、pre 阻塞与 post 后台的钩子二分法，以及项目配置审批的失败关闭语义。最后给投资视角：边际成本从「复制资产」变成「按写入付费」。</p>
           </div>
         </a>
         <a href="article.html?id=ai-agent" class="post-card reveal">
