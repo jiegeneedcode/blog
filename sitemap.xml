@@ -4,13 +4,13 @@
     <loc>https://jiegeneedcode.github.io/blog/</loc>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
-    <lastmod>2026-11-19</lastmod>
+    <lastmod>2026-11-20</lastmod>
   </url>
 <url>
     <loc>https://jiegeneedcode.github.io/blog/posts.html</loc>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
-    <lastmod>2026-11-19</lastmod>
+    <lastmod>2026-11-20</lastmod>
   </url>
 <url>
     <loc>https://jiegeneedcode.github.io/blog/diary.html</loc>
@@ -558,6 +558,12 @@
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
     <lastmod>2026-11-19</lastmod>
+  </url>
+<url>
+    <loc>https://jiegeneedcode.github.io/blog/article.html?id=hot-20261120-1</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <lastmod>2026-11-20</lastmod>
   </url>
 </urlset>
 
